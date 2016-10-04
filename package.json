@@ -1,0 +1,41 @@
+{
+  "name": "markserv",
+  "version": "0.0.20",
+  "description": "markserv serves Markdown files as GitHub style HTML and LiveReloads your files in the browser as you edit.",
+  "keywords": [
+    "markdown",
+    "livereload",
+    "server",
+    "github"
+  ],
+  "bin": {
+    "markserv": "server.js"
+  },
+  "author": "Alistair MacDonald <al@pwn.io>",
+  "email": "al@pwn.io",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/f1lt3r/markserv.git"
+  },
+  "dependencies": {
+    "ansi": "^0.3.0",
+    "bluebird": "^2.3.11",
+    "commander": "^2.5.1",
+    "connect": "^3.3.3",
+    "connect-livereload": "^0.5.3",
+    "jsdom": "^8.0.0",
+    "less": "^2.4.0",
+    "livereload": "^0.3.6",
+    "livereload-js": "^2.2.2",
+    "marked": "git://github.com/f1lt3r/marked#master",
+    "mime": "^1.2.11",
+    "open": "0.0.5",
+    "openport": "0.0.3",
+    "send": "^0.10.1"
+  },
+  "devDependencies": {
+    "connect-livereload": "^0.5.3",
+    "livereload": "^0.3.7"
+  }
+}
