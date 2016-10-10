@@ -115,6 +115,21 @@ You can change the HTTP Port like this:
 markserv -p 80
 ```
 
+### Making it available to external networks
+
+In some cases `localhost` might be the address on which the server is listening, in which case it is hard to make the site available to external networks even with the right IP. Use the following as an example to make sure the server is accessible from external networks:
+
+```shell
+markserv -p 8642 -a 0.0.0.0
+```
+
+Above example runs the server on port `8642` and it can be accessed from external networks using public IP of the machine on which the server is running. If you want the server to keep running in a seperate thread even when you log out, use this:
+
+```shell
+nohup markserv -p 8642 -a 0.0.0.0 &
+```
+
+This will make the server instance persistent and will be available to access even when you log out or even when your ssh session closes (in case you are accessing a remote machine through ssh to set up `markserv` server)
 
 
 ## Pre-Requisites
