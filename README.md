@@ -2,7 +2,7 @@
 
 `markserv` serves Markdown files as GitHub style HTML and LiveReloads your changes in the browser as you edit.
 
-![Live editing example](http://i.imgur.com/D4MFCMr.gif)
+[![http://imgur.com/a/b8Cje](http://i.imgur.com/FrO2ilv.png)](http://i.imgur.com/D4MFCMr.gif)
 
 
 ## Why Does It Exist?
@@ -65,8 +65,7 @@ Watch your CLI for server hints:
 
 Edit your markdown file, and you should now see the page reloading as you save your Markdown file. It should save your scroll position, which helps when editing extemely large documents.
 
-![Live editing example](http://i.imgur.com/D4MFCMr.gif)
-
+[![http://imgur.com/a/b8Cje](http://i.imgur.com/FrO2ilv.png)](http://i.imgur.com/D4MFCMr.gif)
 
 ### Linking to an external Markdown file
 
