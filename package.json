@@ -36,6 +36,19 @@
   },
   "devDependencies": {
     "connect-livereload": "^0.5.3",
-    "livereload": "^0.3.7"
+    "livereload": "^0.3.7",
+    "xo": "^0.17.0"
+  },
+  "xo": {
+    "esnext": true,
+    "space": 2,
+    "globals": [
+      "it",
+      "describe",
+      "beforeEach"
+    ],
+    "rules": {
+      "no-use-extend-native": 0
+    }
   }
 }
