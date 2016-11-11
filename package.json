@@ -8,6 +8,9 @@
     "server",
     "github"
   ],
+  "scripts": {
+    "test": "xo"
+  },
   "bin": {
     "markserv": "server.js"
   },

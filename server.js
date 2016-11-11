@@ -1,7 +1,4 @@
 #!/usr/bin/env node
-const getPathFromUrl = url => {
-  return url.split(/[?#]/)[0];
-};
 
 // Markdown Extension Types
 const markdownExtensions = [
@@ -94,7 +91,7 @@ const errormsg = type => cursor
   .write(' ')
   .fg.black()
   .bg.red()
-  .write(' ' + type +': ')
+  .write(' ' + type + ': ')
   .reset()
   .fg.red()
   .write(' ');
@@ -492,7 +489,7 @@ findOpenPort(PORT_RANGE.LIVE_RELOAD)
   .then(startConnectApp)
   .then(() => {
     if (flags.port === null) {
-      return findOpenPort(PORT_RANGE.HTTP)
+      return findOpenPort(PORT_RANGE.HTTP);
     }
     return flags.port;
   })
