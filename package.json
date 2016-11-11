@@ -1,6 +1,6 @@
 {
   "name": "markserv",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "description": "markserv serves Markdown files as GitHub style HTML and LiveReloads your files in the browser as you edit.",
   "keywords": [
     "markdown",
@@ -8,6 +8,9 @@
     "server",
     "github"
   ],
+  "scripts": {
+    "test": "xo"
+  },
   "bin": {
     "markserv": "server.js"
   },

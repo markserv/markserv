@@ -91,7 +91,7 @@ const errormsg = type => cursor
   .write(' ')
   .fg.black()
   .bg.red()
-  .write(' ' + type +': ')
+  .write(' ' + type + ': ')
   .reset()
   .fg.red()
   .write(' ');
@@ -108,11 +108,6 @@ const hasMarkdownExtension = path => {
   });
 
   return extensionMatch;
-};
-
-// Remove URL params from file being fetched
-const getPathFromUrl = url => {
-  return url.split(/[?#]/)[0];
 };
 
 // getFile: reads utf8 content from a file
@@ -343,15 +338,22 @@ const compileAndSendDirectoryListing = (path, res) => {
   });
 };
 
+// Remove URL params from file being fetched
+const getPathFromUrl = url => {
+  return url.split(/[?#]/)[0];
+};
+
 // http_request_handler: handles all the browser requests
 const httpRequestHandler = (req, res) => {
+  const originalUrl = getPathFromUrl(req.originalUrl);
+
   if (flags.verbose) {
     msg('request')
-     .write(unescape(dir) + unescape(req.originalUrl))
+     .write(unescape(dir) + unescape(originalUrl))
      .reset().write('\n');
   }
 
-  const path = unescape(dir) + unescape(req.originalUrl);
+  const path = unescape(dir) + unescape(originalUrl);
 
   let stat;
   let isDir;
@@ -494,7 +496,7 @@ findOpenPort(PORT_RANGE.LIVE_RELOAD)
   .then(startConnectApp)
   .then(() => {
     if (flags.port === null) {
-      return findOpenPort(PORT_RANGE.HTTP)
+      return findOpenPort(PORT_RANGE.HTTP);
     }
     return flags.port;
   })
