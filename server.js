@@ -1,7 +1,4 @@
 #!/usr/bin/env node
-const getPathFromUrl = url => {
-  return url.split(/[?#]/)[0];
-};
 
 // Markdown Extension Types
 const markdownExtensions = [
@@ -111,6 +108,11 @@ const hasMarkdownExtension = path => {
   });
 
   return extensionMatch;
+};
+
+// Remove URL params from file being fetched
+const getPathFromUrl = url => {
+  return url.split(/[?#]/)[0];
 };
 
 // getFile: reads utf8 content from a file
