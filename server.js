@@ -416,7 +416,6 @@ const setLiveReloadPort = port => new Promise(resolve => {
 
 const setHTTPPort = port => new Promise(resolve => {
   HTTP_PORT = port;
-  console.log(port);
   resolve(port);
 });
 
