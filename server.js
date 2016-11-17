@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-'Use strict';
+'use strict';
 
 // Markdown Extension Types
 const markdownExtensions = [
