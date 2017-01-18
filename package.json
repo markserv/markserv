@@ -19,7 +19,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "http://github.com/f1lt3r/markserv.git"
+    "url": "http://github.com/f1lt3r/markserv-legacy.git"
   },
   "dependencies": {
     "ansi": "^0.3.0",
