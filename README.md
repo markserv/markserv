@@ -20,6 +20,7 @@ I purchased [Marked2](http://marked2app.com/) after seeing a colleage use it to 
  - Markdown rendered with GitHub style syntax highlighting
  - LiveReload updates the view when your files change
  - Links to external Markdown files are re-written and followed by the server
+ - MathJax equations ([example](examples/mathjax.md))
 
 ## Installing
 
