@@ -241,7 +241,7 @@ const buildHTMLFromMarkDown = markdownPath => new Promise(resolve => {
             <link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/github-gist.css">
             <script type="text/x-mathjax-config">
             MathJax.Hub.Config({
-              tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+              tex2jax: {inlineMath: [['$','$']]}
             });
             </script>
             <script type="text/javascript" async
@@ -265,7 +265,7 @@ const buildHTMLFromMarkDown = markdownPath => new Promise(resolve => {
             <style>${css}</style>
             <script type="text/x-mathjax-config">
             MathJax.Hub.Config({
-              tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+              tex2jax: {inlineMath: [['$','$']]}
             });
             </script>
             <script type="text/javascript" async
