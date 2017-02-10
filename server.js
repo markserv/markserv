@@ -240,13 +240,13 @@ const buildHTMLFromMarkDown = markdownPath => new Promise(resolve => {
             <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
             <link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/github-gist.css">
             <script type="text/x-mathjax-config">
-            MathJax.Hub.Config({
-              tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
-            });
-            </script>
-            <script type="text/javascript" async
-              src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
-            </script>
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$']]}
+});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
           </head>
           <body>
             <article class="markdown-body">${htmlBody}</article>
@@ -264,13 +264,13 @@ const buildHTMLFromMarkDown = markdownPath => new Promise(resolve => {
             <meta charset="utf-8">
             <style>${css}</style>
             <script type="text/x-mathjax-config">
-            MathJax.Hub.Config({
-              tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
-            });
-            </script>
-            <script type="text/javascript" async
-              src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
-            </script>
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$']]}
+});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
           </head>
           <body>
             <div class="container">
@@ -502,7 +502,7 @@ const serversActivated = () => {
 
   if (flags.file) {
     open(serveURL + '/' + flags.file);
-  } else if (flags.x === false) {
+  } else if (!flags.x) {
     open(serveURL);
   }
 };
