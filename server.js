@@ -363,7 +363,7 @@ const getPathFromUrl = url => {
 
 // http_request_handler: handles all the browser requests
 const httpRequestHandler = (req, res) => {
-  const originalUrl = getPathFromUrl(req.originalUrl);
+  const originalUrl = getPathFromUrl(decodeURIComponent(req.originalUrl));
 
   if (flags.verbose) {
     msg('request')
