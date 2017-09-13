@@ -32,6 +32,7 @@
     "less": "^2.4.0",
     "livereload": "^0.3.6",
     "livereload-js": "^2.2.2",
+    "markdown-it": "^8.4.0",
     "mime": "^1.2.11",
     "open": "0.0.5",
     "openport": "0.0.4",

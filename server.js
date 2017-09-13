@@ -40,7 +40,7 @@ const fs = require('fs');
 const open = require('open');
 const Promise = require('bluebird');
 const connect = require('connect');
-const commonmark = require('commonmark');
+const MarkdownIt = require('markdown-it');
 const less = require('less');
 const send = require('send');
 const jsdom = require('jsdom');
@@ -60,8 +60,9 @@ const GitHubStyle = path.join(__dirname, 'less/github.less');
 
 // Common mark utilities
 
-const commonmarkReader = new commonmark.Parser();
-const commonmarkRenderer = new commonmark.HtmlRenderer();
+const md = new MarkdownIt({
+    linkify: true
+});
 
 // Options
 flags.version(pkg.version)
@@ -141,8 +142,7 @@ const buildStyleSheet = cssPath =>
 // markdownToHTML: turns a Markdown file into HTML content
 const markdownToHTML = markdownText => new Promise((resolve, reject) => {
   try {
-    const parsed = commonmarkReader.parse(markdownText);
-    const data = commonmarkRenderer.render(parsed);
+    const data = md.render(markdownText)
     resolve(data);
   } catch (err) {
     return reject(err);
