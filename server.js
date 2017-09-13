@@ -40,7 +40,7 @@ const fs = require('fs');
 const open = require('open');
 const Promise = require('bluebird');
 const connect = require('connect');
-const marked = require('marked');
+const MarkdownIt = require('markdown-it');
 const less = require('less');
 const send = require('send');
 const jsdom = require('jsdom');
@@ -55,7 +55,14 @@ const cursor = ansi(process.stdout);
 const pkg = require('./package.json');
 
 // Path Variables
+
 const GitHubStyle = path.join(__dirname, 'less/github.less');
+
+// Common mark utilities
+
+const md = new MarkdownIt({
+    linkify: true
+});
 
 // Options
 flags.version(pkg.version)
@@ -134,12 +141,12 @@ const buildStyleSheet = cssPath =>
 
 // markdownToHTML: turns a Markdown file into HTML content
 const markdownToHTML = markdownText => new Promise((resolve, reject) => {
-  marked(markdownText, (err, data) => {
-    if (err) {
-      return reject(err);
-    }
+  try {
+    const data = md.render(markdownText)
     resolve(data);
-  });
+  } catch (err) {
+    return reject(err);
+  }
 });
 
 // linkify: converts github style wiki markdown links to .md links
