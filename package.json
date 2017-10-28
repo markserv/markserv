@@ -31,6 +31,7 @@
     "less": "^2.4.0",
     "livereload": "^0.3.6",
     "livereload-js": "^2.2.2",
+    "lunr": "^2.1.4",
     "marked": "git://github.com/f1lt3r/marked#master",
     "mime": "^1.2.11",
     "open": "0.0.5",
@@ -39,8 +40,6 @@
     "websocket.io": "git://github.com/LearnBoost/websocket.io#5f0b3799f50944bc4d1eb58acdef61c38883d6cf"
   },
   "devDependencies": {
-    "connect-livereload": "^0.6.0",
-    "livereload": "^0.6.0",
     "xo": "^0.17.0"
   },
   "xo": {
