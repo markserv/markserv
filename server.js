@@ -49,6 +49,8 @@ const liveReload = require('livereload')
 const openPort = require('openport')
 const connectLiveReload = require('connect-livereload')
 const ansi = require('ansi')
+const find = require('./find')
+const lunr = require('lunr')
 
 const cursor = ansi(process.stdout)
 
@@ -122,6 +124,62 @@ const getFile = path => new Promise((resolve, reject) => {
     resolve(data)
   })
 })
+
+let searchIndex
+
+const loadAllSearchFiles = fileList => new Promise((resolve, reject) => {
+    const promises = []
+
+    fileList.forEach(filepath => {
+        promises.push(getFile(filepath))
+    })
+
+    Promise.all(promises).then(contents => {
+        const documents = []
+
+        // console.log(contents)
+
+        contents.forEach((fileContent, idx) => {
+            const fileName = fileList[idx]
+            documents.push({
+              id: fileName,
+              title: fileName,
+              body: fileContent
+            })
+        })
+
+        searchIndex = lunr(function () {
+          this.ref('id')
+          this.field('title')
+          this.field('body')
+
+          documents.forEach(function (document) {
+            this.add(document)
+          }, this)
+        })
+        // console.log(searchIndex)
+
+        const searchResults = searchIndex.search('LiveReload')
+        console.log(searchResults)
+
+        resolve(searchIndex)
+    }).catch(err => {
+        reject(err)
+    })
+})
+
+const setupSearchFeature = () => new Promise((resolve, reject) => {
+    const rootPath = dir
+    const filePattern = './**/*.md'
+
+    find(rootPath, filePattern)
+    .then(loadAllSearchFiles)
+    .catch(err => {
+        reject(err)
+    })
+})
+
+setupSearchFeature()
 
 // Get Custom Less CSS to use in all Markdown files
 const buildStyleSheet = cssPath =>
@@ -273,7 +331,6 @@ const buildHTMLFromMarkDown = markdownPath => new Promise(resolve => {
           <head>
             <title>${title}</title>
             <script>${searchbarLunrJs}</script>
-            <script>${searchbarScript}</script>
             <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
             <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
             <link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/github-gist.css">
@@ -289,6 +346,7 @@ const buildHTMLFromMarkDown = markdownPath => new Promise(resolve => {
               ${(footer ? '<footer>' + footer + '</footer>' : '')}
             </div>
           </body>
+          <script>${searchbarScript}</script>
           <script src="http://localhost:35729/livereload.js?snipver=1"></script>
           <script>hljs.initHighlightingOnLoad();</script>`
     }

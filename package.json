@@ -33,6 +33,7 @@
     "livereload-js": "^2.2.2",
     "lunr": "^2.1.4",
     "marked": "git://github.com/f1lt3r/marked#master",
+    "micromatch": "^3.1.3",
     "mime": "^1.2.11",
     "open": "0.0.5",
     "openport": "0.0.4",
