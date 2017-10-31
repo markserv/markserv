@@ -41,7 +41,7 @@ const fs = require('fs')
 const open = require('open')
 const Promise = require('bluebird')
 const connect = require('connect')
-const marked = require('marked')
+const commonmark = require('commonmark')
 const less = require('less')
 const send = require('send')
 const jsdom = require('jsdom')
@@ -202,12 +202,18 @@ const buildStyleSheet = cssPath =>
 
 // markdownToHTML: turns a Markdown file into HTML content
 const markdownToHTML = markdownText => new Promise((resolve, reject) => {
-  marked(markdownText, (err, data) => {
-    if (err) {
-      return reject(err)
-    }
-    resolve(data)
-  })
+  let result
+
+  try {
+    const reader = new commonmark.Parser()
+    const writer = new commonmark.HtmlRenderer()
+    const parsed = reader.parse(markdownText)
+    result = writer.render(parsed)
+  } catch (err) {
+    return reject(err)
+  }
+
+  resolve(result)
 })
 
 // linkify: converts github style wiki markdown links to .md links
