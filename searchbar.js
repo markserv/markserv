@@ -1,13 +1,12 @@
-// var searchInput = document.getElementsByName('search')[0]
+function start () {
+  var searchInput = document.getElementsByName('search')[0]
+  console.log(searchInput)
 
-// // var searchIndex = lunr(function () {
-// //   this.ref('id')
-// //   this.field('title')
-// //   this.field('body')
+  var socket = io('http://127.0.0.1:34567')
+  console.log(socket)
 
-// //   documents.forEach(function (document) {
-// //     this.add(document)
-// //   }, this)
-// // })
+  //socket.emit('add user', username);
+  // socket.on('login', function (data) {
+}
 
-// // console.log(idx.search("study"))
+document.addEventListener('DOMContentLoaded', start)

@@ -30,7 +30,8 @@ const watchExtensions = markdownExtensions.concat([
 
 const PORT_RANGE = {
   HTTP: [8000, 8100],
-  LIVE_RELOAD: [35729, 35829]
+  LIVE_RELOAD: [35729, 35829],
+  WEBSOCKETS: [3000, 4000]
 }
 
 const http = require('http')
@@ -49,8 +50,9 @@ const liveReload = require('livereload')
 const openPort = require('openport')
 const connectLiveReload = require('connect-livereload')
 const ansi = require('ansi')
-const find = require('./find')
+const io = require('socket.io')()
 const lunr = require('lunr')
+const find = require('./find')
 
 const cursor = ansi(process.stdout)
 
@@ -100,6 +102,13 @@ const errormsg = type => cursor
   .reset()
   .fg.red()
   .write(' ')
+
+const clients = {}
+
+io.on('connection', client => {
+  console.log(client.id)
+})
+io.listen(34567)
 
 // hasMarkdownExtension: check whether a file is Markdown type
 const hasMarkdownExtension = path => {
@@ -267,12 +276,14 @@ const buildHTMLFromMarkDown = markdownPath => new Promise(resolve => {
     flags.searchbar &&
         getFile(path.join(__dirname, 'searchbar.html')),
 
-    // Search Bar Script
+    // Search Bar Scripts
     flags.searchbar &&
         getFile(path.join(__dirname, 'searchbar.js')),
-
     flags.searchbar &&
-        getFile(path.join(__dirname, 'node_modules', 'lunr', 'lunr.js'))
+        getFile(path.join(__dirname, 'node_modules', 'lunr', 'lunr.js')),
+    flags.searchbar &&
+        getFile(path.join(__dirname,
+            'node_modules', 'socket.io-client', 'dist', 'socket.io.js'))
   ]
 
   Promise.all(stack).then(data => {
@@ -287,6 +298,7 @@ const buildHTMLFromMarkDown = markdownPath => new Promise(resolve => {
     let searchbarTemplate
     let searchbarScript
     let searchbarLunrJs
+    let socketIoClientJs
 
     let outputHtml
 
@@ -306,6 +318,7 @@ const buildHTMLFromMarkDown = markdownPath => new Promise(resolve => {
       searchbarTemplate = data[5]
       searchbarScript = data[6]
       searchbarLunrJs = data[7]
+      socketIoClientJs = data[8]
     }
 
     if (flags.less === GitHubStyle) {
@@ -331,6 +344,7 @@ const buildHTMLFromMarkDown = markdownPath => new Promise(resolve => {
           <head>
             <title>${title}</title>
             <script>${searchbarLunrJs}</script>
+            ${(flags.searchbar ? `<script>${socketIoClientJs}</script>` : '')}
             <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
             <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
             <link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/github-gist.css">
@@ -341,7 +355,7 @@ const buildHTMLFromMarkDown = markdownPath => new Promise(resolve => {
             <div class="container">
               ${(header ? '<header>' + header + '</header>' : '')}
               ${(navigation ? '<nav>' + navigation + '</nav>' : '')}
-              ${(searchbarTemplate ? '<div id="search-bar">' + searchbarTemplate + '</div>' : '')}
+              ${(flags.searchbar ? '<div id="search-bar">' + searchbarTemplate + '</div>' : '')}
               <article>${htmlBody}</article>
               ${(footer ? '<footer>' + footer + '</footer>' : '')}
             </div>

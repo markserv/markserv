@@ -38,6 +38,7 @@
     "open": "0.0.5",
     "openport": "0.0.4",
     "send": "^0.14.1",
+    "socket.io": "^2.0.4",
     "websocket.io": "git://github.com/LearnBoost/websocket.io#5f0b3799f50944bc4d1eb58acdef61c38883d6cf"
   },
   "devDependencies": {
@@ -49,7 +50,10 @@
     "globals": [
       "it",
       "describe",
-      "beforeEach"
+      "beforeEach",
+      "document",
+      "io",
+      "var"
     ],
     "rules": {
       "no-use-extend-native": 0
