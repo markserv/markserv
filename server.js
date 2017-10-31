@@ -128,55 +128,55 @@ const getFile = path => new Promise((resolve, reject) => {
 let searchIndex
 
 const loadAllSearchFiles = fileList => new Promise((resolve, reject) => {
-    const promises = []
+  const promises = []
 
-    fileList.forEach(filepath => {
-        promises.push(getFile(filepath))
+  fileList.forEach(filepath => {
+    promises.push(getFile(filepath))
+  })
+
+  Promise.all(promises).then(contents => {
+    const documents = []
+
+    // console.log(contents)
+
+    contents.forEach((fileContent, idx) => {
+      const fileName = fileList[idx]
+      documents.push({
+        id: fileName,
+        title: fileName,
+        body: fileContent
+      })
     })
 
-    Promise.all(promises).then(contents => {
-        const documents = []
+    searchIndex = lunr(function () {
+      this.ref('id')
+      this.field('title')
+      this.field('body')
 
-        // console.log(contents)
-
-        contents.forEach((fileContent, idx) => {
-            const fileName = fileList[idx]
-            documents.push({
-              id: fileName,
-              title: fileName,
-              body: fileContent
-            })
-        })
-
-        searchIndex = lunr(function () {
-          this.ref('id')
-          this.field('title')
-          this.field('body')
-
-          documents.forEach(function (document) {
-            this.add(document)
-          }, this)
-        })
-        // console.log(searchIndex)
-
-        const searchResults = searchIndex.search('LiveReload')
-        console.log(searchResults)
-
-        resolve(searchIndex)
-    }).catch(err => {
-        reject(err)
+      documents.forEach(function (document) {
+        this.add(document)
+      }, this)
     })
+    // console.log(searchIndex)
+
+    const searchResults = searchIndex.search('LiveReload')
+    console.log(searchResults)
+
+    resolve(searchIndex)
+  }).catch(err => {
+    reject(err)
+  })
 })
 
 const setupSearchFeature = () => new Promise((resolve, reject) => {
-    const rootPath = dir
-    const filePattern = './**/*.md'
+  const rootPath = dir
+  const filePattern = './**/*.md'
 
-    find(rootPath, filePattern)
-    .then(loadAllSearchFiles)
-    .catch(err => {
-        reject(err)
-    })
+  find(rootPath, filePattern)
+  .then(loadAllSearchFiles)
+  .catch(err => {
+    reject(err)
+  })
 })
 
 setupSearchFeature()
