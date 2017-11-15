@@ -36,7 +36,7 @@
     "open": "0.0.5",
     "openport": "0.0.4",
     "send": "^0.14.1",
-    "websocket.io": "git://github.com/LearnBoost/websocket.io#5f0b3799f50944bc4d1eb58acdef61c38883d6cf"
+    "websocket.io": "git://github.com/kewisch/websocket.io#require-events"
   },
   "devDependencies": {
     "connect-livereload": "^0.6.0",
