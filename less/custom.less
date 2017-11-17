@@ -1,5 +1,3 @@
-
-
 /*NIGHTTIME*/
 @background: #131313;
 @dominant: #AA0;
@@ -302,12 +300,64 @@ aside{
 }
 
 
+#searchBar {
+  z-index: 999;
+  background: #fff;
+  box-shadow: 8px 0px 16px rgba(0, 0, 0, 0.25);
+  width: 50%;
+  padding: 16px;
+  margin: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
 
+  #closeButton {
+    cursor: pointer;
+    &:after {
+      top: 0px;
+      right: 8px;
+      position: absolute;
+      font-family: "Arial Black", Gadget, sans-serif;
+      content: "\2716";
+      font-size: 24px;
+      color: #444;
+    }
+  }
 
+  &&.closed {
+    margin-left: -50%;
+    #closeButton {
+      &:after {
+        content: "\27A1";
+      }
+    }
+  }
 
+  .result {
+    padding: 8px 0;
+    font-size: 60%;
 
+    a {
+      display: block;
+      font-family: auto;
 
+      &.title {
+        font-weight: bold;
+        text-decoration: none;
+      }
+    }
 
+    .content {
+      font-family: auto;
+    }
+  }
 
+  .result + .result {
+    border-top: 1px solid black;
+  }
+}
 
-
+html, body {
+  min-height: 100%;
+}

@@ -103,13 +103,6 @@ const errormsg = type => cursor
   .fg.red()
   .write(' ')
 
-const clients = {}
-
-io.on('connection', client => {
-  console.log(client.id)
-})
-io.listen(34567)
-
 // hasMarkdownExtension: check whether a file is Markdown type
 const hasMarkdownExtension = path => {
   const fileExtension = path.substr(path.length - 3).toLowerCase()
@@ -135,6 +128,7 @@ const getFile = path => new Promise((resolve, reject) => {
 })
 
 let searchIndex
+const loadedMarkdownFiles = {}
 
 const loadAllSearchFiles = fileList => new Promise((resolve, reject) => {
   const promises = []
@@ -144,17 +138,24 @@ const loadAllSearchFiles = fileList => new Promise((resolve, reject) => {
   })
 
   Promise.all(promises).then(contents => {
-    const documents = []
-
     // console.log(contents)
+
+    const documents = []
 
     contents.forEach((fileContent, idx) => {
       const fileName = fileList[idx]
-      documents.push({
+      const title = path.basename(fileName)
+      const href = fileName
+
+      const documentObject = {
         id: fileName,
-        title: fileName,
+        title,
+        href,
         body: fileContent
-      })
+      }
+
+      documents.push(documentObject)
+      loadedMarkdownFiles[fileName] = documentObject
     })
 
     searchIndex = lunr(function () {
@@ -168,14 +169,40 @@ const loadAllSearchFiles = fileList => new Promise((resolve, reject) => {
     })
     // console.log(searchIndex)
 
-    const searchResults = searchIndex.search('LiveReload')
-    console.log(searchResults)
-
     resolve(searchIndex)
   }).catch(err => {
     reject(err)
   })
 })
+
+const clients = {}
+
+io.on('connection', client => {
+  console.log(client.id)
+  clients[client.id] = client
+
+  client.on('search', term => {
+    if (typeof searchIndex !== 'object') {
+      client.emit('search_results', false)
+      return
+    }
+
+    console.log(`searching for: ${term}`)
+    const lunrSearchResults = searchIndex.search(term)
+
+    lunrSearchResults.map(result => {
+      const fileName = result.ref
+      result.content = loadedMarkdownFiles[fileName]
+      // console.log(result)
+      return result
+    })
+
+    client.emit('search_results', lunrSearchResults)
+    // console.log(lunrSearchResults)
+  })
+})
+
+io.listen(34567)
 
 const setupSearchFeature = () => new Promise((resolve, reject) => {
   const rootPath = dir
@@ -361,7 +388,7 @@ const buildHTMLFromMarkDown = markdownPath => new Promise(resolve => {
             <div class="container">
               ${(header ? '<header>' + header + '</header>' : '')}
               ${(navigation ? '<nav>' + navigation + '</nav>' : '')}
-              ${(flags.searchbar ? '<div id="search-bar">' + searchbarTemplate + '</div>' : '')}
+              ${(flags.searchbar ? searchbarTemplate : '')}
               <article>${htmlBody}</article>
               ${(footer ? '<footer>' + footer + '</footer>' : '')}
             </div>
