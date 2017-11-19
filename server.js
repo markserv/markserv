@@ -52,6 +52,8 @@ const connectLiveReload = require('connect-livereload')
 const ansi = require('ansi')
 const io = require('socket.io')()
 const lunr = require('lunr')
+const cheerio = require('cheerio')
+
 const find = require('./find')
 
 const cursor = ansi(process.stdout)
@@ -117,6 +119,131 @@ const hasMarkdownExtension = path => {
   return extensionMatch
 }
 
+// markdownToHTML: turns a Markdown file into HTML content
+const markdownToHTML = markdownText => new Promise((resolve, reject) => {
+  let result
+
+  try {
+    const reader = new commonmark.Parser()
+    const writer = new commonmark.HtmlRenderer()
+    const parsed = reader.parse(markdownText)
+    result = writer.render(parsed)
+  } catch (err) {
+    return reject(err)
+  }
+
+  resolve(result)
+})
+
+const separators = [
+  ' ',
+  '-',
+  '-'
+].join('|')
+
+const highlight = (tokens, content) => {
+  let hlResult = ''
+  const foundTokens = {}
+  const contentLower = content.toLowerCase()
+
+  tokens.forEach(token => {
+    if (token.length < 2) {
+      return
+    }
+
+    const foundIdx = contentLower.indexOf(token)
+    const found = foundIdx > -1
+
+    if (found) {
+      foundTokens[token] = true
+    }
+  })
+
+  if (Reflect.ownKeys(foundTokens).length >= 0) {
+    const hlLine = content.replace(
+      new RegExp(tokens.join('|'), 'gi'), str => {
+        return `<span class="shl">${str}</span>`
+      }
+    )
+
+    // Only add the highlighted lines
+    if (hlLine !== content) {
+      hlResult = hlLine
+    }
+  }
+  // console.log(hlResult)
+
+  return hlResult
+}
+
+const filter = (node) => {
+  if (node.type === 'text') {
+  // console.log(node.type)
+  }
+    // node.text
+  //   const text = cheerio(node).text()
+  //   const hlText = highlight(tokens, text)
+
+  //   if (hlText.length > 0) {
+  //     // console.log(hlText)
+  //     // node.replace(hlText)
+  //     node.text(hlText)
+  //   // } else {
+  //   //   // node.parent.remove()
+  //   }
+
+  if (Reflect.has(node, 'children')) {
+    node.children = node.children.map(child => {
+      return filter(child)
+    })
+  }
+
+  return node
+}
+
+const mdToHtmlHighlighted = (tokens, mdContent) => new Promise((resolve, reject) => {
+  let result
+
+  try {
+    const reader = new commonmark.Parser()
+
+    const writer = new commonmark.HtmlRenderer({
+      safe: true
+    })
+
+    const parsed = reader.parse(mdContent)
+    const html = writer.render(parsed)
+    const $ = cheerio.load(html)._root
+    const hlContent = filter($)
+    // console.log(typeof hlContent)
+
+    // const walker = parsed.walker()
+    // let event
+
+    // while ((event = walker.next())) {
+    //   const node = event.node
+    //   // console.log(node)
+    //   if (event.entering && node.type === 'text') {
+    //     const text = node.literal
+    //     const hlText = highlight(tokens, text)
+    //     if (hlText.length > 0) {
+    //       node.literal = hlText
+    //       // node.text_content = hlText
+    //     } else {
+    //       node.unlink()
+    //     }
+    //   }
+    // }
+
+    // console.log(writer.render(parsed))
+    result = hlContent
+  } catch (err) {
+    return reject(err)
+  }
+
+  resolve(result)
+})
+
 // getFile: reads utf8 content from a file
 const getFile = path => new Promise((resolve, reject) => {
   fs.readFile(path, 'utf8', (err, data) => {
@@ -151,7 +278,8 @@ const loadAllSearchFiles = fileList => new Promise((resolve, reject) => {
         id: fileName,
         title,
         href,
-        body: fileContent
+        body: fileContent,
+        bodyHl: ''
       }
 
       documents.push(documentObject)
@@ -187,13 +315,28 @@ io.on('connection', client => {
       return
     }
 
+    if (term.length < 2) {
+      return
+    }
+
     console.log(`searching for: ${term}`)
     const lunrSearchResults = searchIndex.search(term)
 
     lunrSearchResults.map(result => {
+      const tokenList = term.toLowerCase().split(new RegExp(separators, 'g'))
+      const tokens = []
+      tokenList.forEach(token => {
+        if (token.length > 2) {
+          tokens.push(token)
+        }
+      })
+
       const fileName = result.ref
+      const mdContent = loadedMarkdownFiles[fileName].body
+
+      const hlHtml = mdToHtmlHighlighted(tokens, mdContent)
       result.content = loadedMarkdownFiles[fileName]
-      // console.log(result)
+      result.content.hl = hlHtml
       return result
     })
 
@@ -226,22 +369,6 @@ const buildStyleSheet = cssPath =>
       )
     )
   )
-
-// markdownToHTML: turns a Markdown file into HTML content
-const markdownToHTML = markdownText => new Promise((resolve, reject) => {
-  let result
-
-  try {
-    const reader = new commonmark.Parser()
-    const writer = new commonmark.HtmlRenderer()
-    const parsed = reader.parse(markdownText)
-    result = writer.render(parsed)
-  } catch (err) {
-    return reject(err)
-  }
-
-  resolve(result)
-})
 
 // linkify: converts github style wiki markdown links to .md links
 const linkify = body => new Promise((resolve, reject) => {

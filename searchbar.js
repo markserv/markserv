@@ -29,7 +29,7 @@ function start() {
       resultElem.appendChild(filepath)
 
       var content = document.createElement('div')
-      content.innerHTML = result.content.body
+      content.innerHTML = result.content.hl
       content.className = 'content'
       resultElem.appendChild(content)
 
