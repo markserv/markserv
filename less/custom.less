@@ -26,10 +26,6 @@
 @strong:@foreground - #111;
 @imgBorder:@foreground+#888;
 
-
-.shl {background: #0FF}
-
-
 /* FONT IMPORTS */
 @import url(http://fonts.googleapis.com/css?family=Josefin+Slab:100,300,600,300italic,600italic);
 @import url(http://fonts.googleapis.com/css?family=Source+Code+Pro:300,600);
@@ -289,11 +285,12 @@ article.markdown-body {
 
   .result {
     padding: 8px 0;
-    font-size: 60%;
 
-    a {
+    > a {
       display: block;
       font-family: auto;
+      background: rgba(0,0,0,0.15);
+      padding: 8px;
 
       &.title {
         font-weight: bold;
@@ -307,6 +304,10 @@ article.markdown-body {
         display: none!important;
         width: 100%;
         opacity: 0.5;
+      }
+
+      .highlight {
+        background: #FF0
       }
     }
   }

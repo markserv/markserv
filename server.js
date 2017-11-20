@@ -147,7 +147,7 @@ const highlight = (tokens, content) => {
   const contentLower = content.toLowerCase()
 
   tokens.forEach(token => {
-    if (token.length < 2) {
+    if (token.length < 1) {
       return
     }
 
@@ -162,7 +162,7 @@ const highlight = (tokens, content) => {
   if (Reflect.ownKeys(foundTokens).length >= 0) {
     const hlLine = content.replace(
       new RegExp(tokens.join('|'), 'gi'), str => {
-        return `<span class="shl">${str}</span>`
+        return `<span class="highlight">${str}</span>`
       }
     )
 
@@ -176,73 +176,40 @@ const highlight = (tokens, content) => {
   return hlResult
 }
 
-const filter = (node) => {
-  if (node.type === 'text') {
-  // console.log(node.type)
+const mdToHtmlHighlighted = (tokens, mdContent) => {
+  const reader = new commonmark.Parser()
+  const writer = new commonmark.HtmlRenderer()
+  const parsed = reader.parse(mdContent)
+  const html = writer.render(parsed)
+
+  const found = []
+
+  const filter = (node, tokens) => {
+    if (node.type === 'text') {
+      const text = node.data
+      const hlText = highlight(tokens, text)
+      const parentNode = cheerio.load(node.parent)
+      const tagName = node.parent.name
+      if (hlText.length > 0 && tagName !== null) {
+        const $tag = cheerio.load(parentNode.html())
+        $tag(tagName).empty().prepend(hlText)
+        const elemHtml = $tag(tagName).parent().html()
+        found.push(elemHtml)
+      }
+    }
+
+    if (Reflect.has(node, 'children')) {
+      node.children.forEach(child => {
+        filter(child, tokens)
+      })
+    }
   }
-    // node.text
-  //   const text = cheerio(node).text()
-  //   const hlText = highlight(tokens, text)
 
-  //   if (hlText.length > 0) {
-  //     // console.log(hlText)
-  //     // node.replace(hlText)
-  //     node.text(hlText)
-  //   // } else {
-  //   //   // node.parent.remove()
-  //   }
-
-  if (Reflect.has(node, 'children')) {
-    node.children = node.children.map(child => {
-      return filter(child)
-    })
-  }
-
-  return node
+  const $ = cheerio.load(html)._root
+  filter($, tokens)
+  const result = found.join('\n')
+  return result
 }
-
-const mdToHtmlHighlighted = (tokens, mdContent) => new Promise((resolve, reject) => {
-  let result
-
-  try {
-    const reader = new commonmark.Parser()
-
-    const writer = new commonmark.HtmlRenderer({
-      safe: true
-    })
-
-    const parsed = reader.parse(mdContent)
-    const html = writer.render(parsed)
-    const $ = cheerio.load(html)._root
-    const hlContent = filter($)
-    // console.log(typeof hlContent)
-
-    // const walker = parsed.walker()
-    // let event
-
-    // while ((event = walker.next())) {
-    //   const node = event.node
-    //   // console.log(node)
-    //   if (event.entering && node.type === 'text') {
-    //     const text = node.literal
-    //     const hlText = highlight(tokens, text)
-    //     if (hlText.length > 0) {
-    //       node.literal = hlText
-    //       // node.text_content = hlText
-    //     } else {
-    //       node.unlink()
-    //     }
-    //   }
-    // }
-
-    // console.log(writer.render(parsed))
-    result = hlContent
-  } catch (err) {
-    return reject(err)
-  }
-
-  resolve(result)
-})
 
 // getFile: reads utf8 content from a file
 const getFile = path => new Promise((resolve, reject) => {
@@ -341,7 +308,6 @@ io.on('connection', client => {
     })
 
     client.emit('search_results', lunrSearchResults)
-    // console.log(lunrSearchResults)
   })
 })
 
@@ -402,7 +368,6 @@ const linkify = body => new Promise((resolve, reject) => {
     }
 
     const html = window.document.getElementsByTagName('body')[0].innerHTML
-
     resolve(html)
   })
 })

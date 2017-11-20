@@ -10,17 +10,15 @@ function start() {
   socket.on('search_results', function(results) {
     searchResults.innerHTML = ''
 
+    if (results.length < 1) {
+      searchResults.innerHTML = `<div class="no-results">No results found for: ${searchTerm.value}.</div>`
+    }
+
     results.forEach(result => {
       console.log(result)
 
       var resultElem = document.createElement('div')
       resultElem.className = 'result'
-
-      var title = document.createElement('a')
-      title.innerHTML = result.content.title
-      title.setAttribute('href', result.content.href)
-      title.className = 'title'
-      resultElem.appendChild(title)
 
       var filepath = document.createElement('a')
       filepath.innerHTML = result.content.id
