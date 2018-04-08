@@ -235,43 +235,44 @@ const buildHTMLFromMarkDown = markdownPath => new Promise(resolve => {
 		}
 
 		if (flags.less === GitHubStyle) {
-			outputHtml = `
-				<!DOCTYPE html>
-					<head>
-						<title>${title}</title>
-						<meta charset="utf-8">
-						<style>${css}</style>
-						<link rel="stylesheet" href="//sindresorhus.com/github-markdown-css/github-markdown.css">
-						<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-						<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
-						<link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/github-gist.css">
-					</head>
-					<body>
-						<article class="markdown-body">${htmlBody}</article>
-					</body>
-					<script src="http://localhost:35729/livereload.js?snipver=1"></script>
-					<script>hljs.initHighlightingOnLoad();</script>`
+	        outputHtml = `<!DOCTYPE html>
+	          <head>
+	            <title>${title}</title>
+	            <meta charset="utf-8">
+	            <style>${css}</style>
+	            <link rel="stylesheet" href="//sindresorhus.com/github-markdown-css/github-markdown.css">
+	            <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+	            <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+	            <link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/github-gist.css">
+	            <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});</script><script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	          </head>
+	          <body>
+	            <article class="markdown-body">${htmlBody}</article>
+	          </body>
+	          <script src="http://localhost:35729/livereload.js?snipver=1"></script>
+	          <script>hljs.initHighlightingOnLoad();</script>`
 		} else {
 			outputHtml = `
-				<!DOCTYPE html>
-					<head>
-						<title>${title}</title>
-						<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-						<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
-						<link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/github-gist.css">
-						<meta charset="utf-8">
-						<style>${css}</style>
-					</head>
-					<body>
-						<div class="container">
-							${(header ? '<header>' + header + '</header>' : '')}
-							${(navigation ? '<nav>' + navigation + '</nav>' : '')}
-							<article>${htmlBody}</article>
-							${(footer ? '<footer>' + footer + '</footer>' : '')}
-						</div>
-					</body>
-					<script src="http://localhost:35729/livereload.js?snipver=1"></script>
-					<script>hljs.initHighlightingOnLoad();</script>`
+	        <!DOCTYPE html>
+	          <head>
+	            <title>${title}</title>
+	            <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+	            <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+	            <link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/github-gist.css">
+	            <meta charset="utf-8">
+	            <style>${css}</style>
+	            <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});</script><script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	          </head>
+	          <body>
+	            <div class="container">
+	              ${(header ? '<header>' + header + '</header>' : '')}
+	              ${(navigation ? '<nav>' + navigation + '</nav>' : '')}
+	              <article>${htmlBody}</article>
+	              ${(footer ? '<footer>' + footer + '</footer>' : '')}
+	            </div>
+	          </body>
+	          <script src="http://localhost:35729/livereload.js?snipver=1"></script>
+	          <script>hljs.initHighlightingOnLoad();</script>`
 		}
 		resolve(outputHtml)
 	})
@@ -452,50 +453,50 @@ const startLiveReloadServer = () => new Promise(resolve => {
 })
 
 const serversActivated = () => {
-	const serveURL = 'http://' + flags.address + ':' + HTTP_PORT
+  const serveURL = 'http://' + flags.address + ':' + HTTP_PORT;
 
-	msg('start')
-		.write('serving content from ')
-		.fg.white().write(path.resolve(flags.dir)).reset()
-		.write(' on port: ')
-		.fg.white().write(String(HTTP_PORT)).reset()
-		.write('\n')
+  msg('start')
+   .write('serving content from ')
+   .fg.white().write(path.resolve(flags.dir)).reset()
+   .write(' on port: ')
+   .fg.white().write(String(HTTP_PORT)).reset()
+   .write('\n');
 
-	msg('address')
-		.underline().fg.white()
-		.write(serveURL).reset()
-		.write('\n')
+  msg('address')
+   .underline().fg.white()
+   .write(serveURL).reset()
+   .write('\n');
 
-	msg('less')
-		.write('using style from ')
-		.fg.white().write(flags.less).reset()
-		.write('\n')
+  msg('less')
+   .write('using style from ')
+   .fg.white().write(flags.less).reset()
+   .write('\n');
 
-	msg('livereload')
-		.write('communicating on port: ')
-		.fg.white().write(String(LIVE_RELOAD_PORT)).reset()
-		.write('\n')
+  msg('livereload')
+    .write('communicating on port: ')
+    .fg.white().write(String(LIVE_RELOAD_PORT)).reset()
+    .write('\n');
 
-	if (process.pid) {
-		msg('process')
-			.write('your pid is: ')
-			.fg.white().write(String(process.pid)).reset()
-			.write('\n')
+  if (process.pid) {
+    msg('process')
+      .write('your pid is: ')
+      .fg.white().write(String(process.pid)).reset()
+      .write('\n');
 
-		msg('info')
-			.write('to stop this server, press: ')
-			.fg.white().write('[Ctrl + C]').reset()
-			.write(', or type: ')
-			.fg.white().write('"kill ' + process.pid + '"').reset()
-			.write('\n')
-	}
+    msg('info')
+      .write('to stop this server, press: ')
+      .fg.white().write('[Ctrl + C]').reset()
+      .write(', or type: ')
+      .fg.white().write('"kill ' + process.pid + '"').reset()
+      .write('\n');
+  }
 
-	if (flags.file) {
-		open(serveURL + '/' + flags.file)
-	} else if (flags.x === false) {
-		open(serveURL)
-	}
-}
+  if (flags.file) {
+    open(serveURL + '/' + flags.file);
+  } else if (!flags.x) {
+    open(serveURL);
+  }
+};
 
 // Initialize MarkServ
 findOpenPort(PORT_RANGE.LIVE_RELOAD)
