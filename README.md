@@ -2,6 +2,8 @@
 
 `markserv` serves Markdown files as GitHub style HTML and LiveReloads your changes in the browser as you edit.
 
+[![Known Vulnerabilities](https://snyk.io/test/github/f1lt3r/markserv-legacy/badge.svg)](https://snyk.io/test/github/f1lt3r/markserv-legacy)
+
 [![http://imgur.com/a/b8Cje](http://i.imgur.com/FrO2ilv.png)](http://i.imgur.com/D4MFCMr.gif)
 
 
