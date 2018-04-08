@@ -24,7 +24,8 @@ const recursiveRead = (dir, filePattern) => new Promise((resolve, reject) => {
     const stat = filepath => new Promise((resolve, reject) => {
         fs.stat(filepath, (err, stat) => {
             if (err) {
-                return reject(err)
+                // return reject(err)
+                return resolve(false)
             }
 
             resolve(stat)
@@ -45,6 +46,9 @@ const recursiveRead = (dir, filePattern) => new Promise((resolve, reject) => {
 
             results.forEach((stat, idx) => {
                 const filepath = path.join(dir, files[idx])
+                if (!stat) {
+                  return
+                }
 
                 if (stat.isFile()) {
                     const matches = micromatch([filepath], filePattern, {dot: true})

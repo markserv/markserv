@@ -320,6 +320,7 @@ const setupSearchFeature = () => new Promise((resolve, reject) => {
   find(rootPath, filePattern)
   .then(loadAllSearchFiles)
   .catch(err => {
+    console.err(err)
     reject(err)
   })
 })
