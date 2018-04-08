@@ -50,11 +50,6 @@ const liveReload = require('livereload')
 const openPort = require('openport')
 const connectLiveReload = require('connect-livereload')
 const ansi = require('ansi')
-const cheerio = require('cheerio')
-
-// const io = require('socket.io')()
-// const lunr = require('lunr')
-// const find = require('./find')
 
 const pkg = require('./package.json')
 
@@ -68,7 +63,6 @@ flags.version(pkg.version)
 	.option('-d, --dir [type]', 'Serve from directory [dir]', './')
 	.option('-p, --port [type]', 'Serve on port [port]', null)
 	.option('-h, --header [type]', 'Header template .md file', null)
-	// .option('-e, --searchbar', 'Turn on Lunr.js Search Bar for Markdown files', false)
 	.option('-r, --footer [type]', 'Footer template .md file', null)
 	.option('-n, --navigation [type]', 'Navigation .md file', null)
 	.option('-a, --address [type]', 'Serve on ip/address [address]', 'localhost')
@@ -105,7 +99,7 @@ const errormsg = type => cursor
 	.fg.red()
 	.write(' ')
 
-// hasMarkdownExtension: check whether a file is Markdown type
+// HasMarkdownExtension: check whether a file is Markdown type
 const hasMarkdownExtension = path => {
 	const fileExtension = path.substr(path.length - 3).toLowerCase()
 	let extensionMatch = false
@@ -119,7 +113,7 @@ const hasMarkdownExtension = path => {
 	return extensionMatch
 }
 
-// markdownToHTML: turns a Markdown file into HTML content
+// MarkdownToHTML: turns a Markdown file into HTML content
 const markdownToHTML = markdownText => new Promise((resolve, reject) => {
 	let result
 
@@ -135,83 +129,7 @@ const markdownToHTML = markdownText => new Promise((resolve, reject) => {
 	resolve(result)
 })
 
-// const separators = [
-// 	' ',
-// 	'-',
-// 	'-'
-// ].join('|')
-
-// const highlight = (tokens, content) => {
-// 	let hlResult = ''
-// 	const foundTokens = {}
-// 	const contentLower = content.toLowerCase()
-
-// 	tokens.forEach(token => {
-// 		if (token.length < 1) {
-// 			return
-// 		}
-
-// 		const foundIdx = contentLower.indexOf(token)
-// 		const found = foundIdx > -1
-
-// 		if (found) {
-// 			foundTokens[token] = true
-// 		}
-// 	})
-
-// 	if (Reflect.ownKeys(foundTokens).length >= 0) {
-// 		const hlLine = content.replace(
-// 			new RegExp(tokens.join('|'), 'gi'), str => {
-// 				return `<span class="highlight">${str}</span>`
-// 			}
-// 		)
-
-// 		// Only add the highlighted lines
-// 		if (hlLine !== content) {
-// 			hlResult = hlLine
-// 		}
-// 	}
-// 	// console.log(hlResult)
-
-// 	return hlResult
-// }
-
-// const mdToHtmlHighlighted = (tokens, mdContent) => {
-// 	const reader = new commonmark.Parser()
-// 	const writer = new commonmark.HtmlRenderer()
-// 	const parsed = reader.parse(mdContent)
-// 	const html = writer.render(parsed)
-
-// 	const found = []
-
-// 	const filter = (node, tokens) => {
-// 		if (node.type === 'text') {
-// 			const text = node.data
-// 			const hlText = highlight(tokens, text)
-// 			const parentNode = cheerio.load(node.parent)
-// 			const tagName = node.parent.name
-// 			if (hlText.length > 0 && tagName !== null) {
-// 				const $tag = cheerio.load(parentNode.html())
-// 				$tag(tagName).empty().prepend(hlText)
-// 				const elemHtml = $tag(tagName).parent().html()
-// 				found.push(elemHtml)
-// 			}
-// 		}
-
-// 		if (Reflect.has(node, 'children')) {
-// 			node.children.forEach(child => {
-// 				filter(child, tokens)
-// 			})
-// 		}
-// 	}
-
-// 	const $ = cheerio.load(html)._root
-// 	filter($, tokens)
-// 	const result = found.join('\n')
-// 	return result
-// }
-
-// getFile: reads utf8 content from a file
+// GetFile: reads utf8 content from a file
 const getFile = path => new Promise((resolve, reject) => {
 	fs.readFile(path, 'utf8', (err, data) => {
 		if (err) {
@@ -220,112 +138,6 @@ const getFile = path => new Promise((resolve, reject) => {
 		resolve(data)
 	})
 })
-
-// let searchIndex
-// const loadedMarkdownFiles = {}
-
-// const loadAllSearchFiles = fileList => new Promise((resolve, reject) => {
-//   const promises = []
-
-//   fileList.forEach(filepath => {
-//     promises.push(getFile(filepath))
-//   })
-
-//   Promise.all(promises).then(contents => {
-//     // console.log(contents)
-
-//     const documents = []
-
-//     contents.forEach((fileContent, idx) => {
-//       const fileName = fileList[idx]
-//       const title = path.basename(fileName)
-//       const href = fileName
-
-//       const documentObject = {
-//         id: fileName,
-//         title,
-//         href,
-//         body: fileContent,
-//         bodyHl: ''
-//       }
-
-//       documents.push(documentObject)
-//       loadedMarkdownFiles[fileName] = documentObject
-//     })
-
-//     searchIndex = lunr(function () {
-//       this.ref('id')
-//       this.field('title')
-//       this.field('body')
-
-//       documents.forEach(function (document) {
-//         this.add(document)
-//       }, this)
-//     })
-//     // console.log(searchIndex)
-
-//     resolve(searchIndex)
-//   }).catch(err => {
-//     reject(err)
-//   })
-// })
-
-// const clients = {}
-
-// io.on('connection', client => {
-//   console.log(client.id)
-//   clients[client.id] = client
-
-//   client.on('search', term => {
-//     if (typeof searchIndex !== 'object') {
-//       client.emit('search_results', false)
-//       return
-//     }
-
-//     if (term.length < 2) {
-//       return
-//     }
-
-//     console.log(`searching for: ${term}`)
-//     const lunrSearchResults = searchIndex.search(term)
-
-//     lunrSearchResults.map(result => {
-//       const tokenList = term.toLowerCase().split(new RegExp(separators, 'g'))
-//       const tokens = []
-//       tokenList.forEach(token => {
-//         if (token.length > 2) {
-//           tokens.push(token)
-//         }
-//       })
-
-//       const fileName = result.ref
-//       const mdContent = loadedMarkdownFiles[fileName].body
-
-//       const hlHtml = mdToHtmlHighlighted(tokens, mdContent)
-//       result.content = loadedMarkdownFiles[fileName]
-//       result.content.hl = hlHtml
-//       return result
-//     })
-
-//     client.emit('search_results', lunrSearchResults)
-//   })
-// })
-
-// io.listen(34567)
-
-// const setupSearchFeature = () => new Promise((resolve, reject) => {
-//   const rootPath = dir
-//   const filePattern = './**/*.md'
-
-//   find(rootPath, filePattern)
-//   .then(loadAllSearchFiles)
-//   .catch(err => {
-//     console.err(err)
-//     reject(err)
-//   })
-// })
-
-// setupSearchFeature()
 
 // Get Custom Less CSS to use in all Markdown files
 const buildStyleSheet = cssPath =>
@@ -337,7 +149,7 @@ const buildStyleSheet = cssPath =>
 		)
 	)
 
-// linkify: converts github style wiki markdown links to .md links
+// Linkify: converts github style wiki markdown links to .md links
 const linkify = body => new Promise((resolve, reject) => {
 	jsdom.env(body, (err, window) => {
 		if (err) {
@@ -396,20 +208,7 @@ const buildHTMLFromMarkDown = markdownPath => new Promise(resolve => {
 		// Navigation
 		flags.navigation && getFile(flags.navigation)
 			.then(markdownToHTML)
-			.then(linkify),
-
-		// // Search Bar Template
-		// flags.searchbar &&
-		//     getFile(path.join(__dirname, 'searchbar.html')),
-
-		// // Search Bar Scripts
-		// flags.searchbar &&
-		//     getFile(path.join(__dirname, 'searchbar.js')),
-		// flags.searchbar &&
-		//     getFile(path.join(__dirname, 'node_modules', 'lunr', 'lunr.js')),
-		// flags.searchbar &&
-		//     getFile(path.join(__dirname,
-		//         'node_modules', 'socket.io-client', 'dist', 'socket.io.js'))
+			.then(linkify)
 	]
 
 	Promise.all(stack).then(data => {
@@ -421,11 +220,6 @@ const buildHTMLFromMarkDown = markdownPath => new Promise(resolve => {
 		let header
 		let footer
 		let navigation
-		// let searchbarTemplate
-		// let searchbarScript
-		// let searchbarLunrJs
-		// let socketIoClientJs
-
 		let outputHtml
 
 		if (flags.header) {
@@ -439,13 +233,6 @@ const buildHTMLFromMarkDown = markdownPath => new Promise(resolve => {
 		if (flags.navigation) {
 			navigation = data[4]
 		}
-
-		// if (flags.searchbar) {
-		// 	searchbarTemplate = data[5]
-		// 	searchbarScript = data[6]
-		// 	searchbarLunrJs = data[7]
-		// 	socketIoClientJs = data[8]
-		// }
 
 		if (flags.less === GitHubStyle) {
 			outputHtml = `
@@ -465,31 +252,6 @@ const buildHTMLFromMarkDown = markdownPath => new Promise(resolve => {
 					<script src="http://localhost:35729/livereload.js?snipver=1"></script>
 					<script>hljs.initHighlightingOnLoad();</script>`
 		} else {
-			// outputHtml = `
-			// 	<!DOCTYPE html>
-			// 		<head>
-			// 			<title>${title}</title>
-			// 			<script>${searchbarLunrJs}</script>
-			// 			${(flags.searchbar ? `<script>${socketIoClientJs}</script>` : '')}
-			// 			<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-			// 			<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
-			// 			<link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/github-gist.css">
-			// 			<meta charset="utf-8">
-			// 			<style>${css}</style>
-			// 		</head>
-			// 		<body>
-			// 			<div class="container">
-			// 				${(header ? '<header>' + header + '</header>' : '')}
-			// 				${(navigation ? '<nav>' + navigation + '</nav>' : '')}
-			// 				${(flags.searchbar ? searchbarTemplate : '')}
-			// 				<article>${htmlBody}</article>
-			// 				${(footer ? '<footer>' + footer + '</footer>' : '')}
-			// 			</div>
-			// 		</body>
-			// 		<script>${searchbarScript}</script>
-			// 		<script src="http://localhost:35729/livereload.js?snipver=1"></script>
-			// 		<script>hljs.initHighlightingOnLoad();</script>`
-
 			outputHtml = `
 				<!DOCTYPE html>
 					<head>
@@ -515,7 +277,7 @@ const buildHTMLFromMarkDown = markdownPath => new Promise(resolve => {
 	})
 })
 
-// markItDown: begins the Markdown compilation process, then sends result when done...
+// MarkItDown: begins the Markdown compilation process, then sends result when done...
 const compileAndSendMarkdown = (path, res) => buildHTMLFromMarkDown(path)
 	.then(html => {
 		res.writeHead(200)
@@ -524,8 +286,8 @@ const compileAndSendMarkdown = (path, res) => buildHTMLFromMarkDown(path)
 	// Catch if something breaks...
 	}).catch(err => {
 		msg('error')
-		.write('Can\'t build HTML: ', err)
-		.reset().write('\n')
+			.write('Can\'t build HTML: ', err)
+			.reset().write('\n')
 	})
 
 const compileAndSendDirectoryListing = (path, res) => {
@@ -589,14 +351,14 @@ const getPathFromUrl = url => {
 	return url.split(/[?#]/)[0]
 }
 
-// http_request_handler: handles all the browser requests
+// Http_request_handler: handles all the browser requests
 const httpRequestHandler = (req, res) => {
 	const originalUrl = getPathFromUrl(req.originalUrl)
 
 	if (flags.verbose) {
 		msg('request')
-		 .write(unescape(dir) + unescape(originalUrl))
-		 .reset().write('\n')
+			.write(unescape(dir) + unescape(originalUrl))
+			.reset().write('\n')
 	}
 
 	const path = unescape(dir) + unescape(originalUrl)
@@ -700,14 +462,14 @@ const serversActivated = () => {
 		.write('\n')
 
 	msg('address')
-	 .underline().fg.white()
-	 .write(serveURL).reset()
-	 .write('\n')
+		.underline().fg.white()
+		.write(serveURL).reset()
+		.write('\n')
 
 	msg('less')
-	 .write('using style from ')
-	 .fg.white().write(flags.less).reset()
-	 .write('\n')
+		.write('using style from ')
+		.fg.white().write(flags.less).reset()
+		.write('\n')
 
 	msg('livereload')
 		.write('communicating on port: ')
