@@ -1,6 +1,6 @@
 {
   "name": "markserv",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "markserv serves Markdown files as GitHub style HTML and LiveReloads your files in the browser as you edit.",
   "keywords": [
     "markdown",
@@ -30,8 +30,8 @@
     "connect-livereload": "^0.6.0",
     "jsdom": "^9.9.1",
     "less": "^2.7.2",
-    "livereload": "^0.6.3",
-    "livereload-js": "^2.2.2",
+    "livereload": "^0.7.0",
+    "livereload-js": "^2.3.0",
     "micromatch": "^3.1.3",
     "mime": "^1.4.1",
     "open": "0.0.5",
@@ -43,12 +43,12 @@
   "devDependencies": {
     "xo": "^0.20.3"
   },
-	"xo": {
-		"esnext": true,
-		"semicolon": false,
-		"rules": {
-			"space-before-function-paren": 0
-		}
-	},
+  "xo": {
+    "esnext": true,
+    "semicolon": false,
+    "rules": {
+      "space-before-function-paren": 0
+    }
+  },
   "snyk": true
 }
