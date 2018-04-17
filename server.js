@@ -4,28 +4,28 @@
 
 // Markdown Extension Types
 const markdownExtensions = [
-	'.markdown',
-	'.mdown',
-	'.mkdn',
-	'.md',
-	'.mkd',
-	'.mdwn',
-	'.mdtxt',
-	'.mdtext',
-	'.text'
+	'markdown',
+	'mdown',
+	'mkdn',
+	'md',
+	'mkd',
+	'mdwn',
+	'mdtxt',
+	'mdtext',
+	'text'
 ]
 
 const watchExtensions = markdownExtensions.concat([
-	'.less',
-	'.js',
-	'.css',
-	'.html',
-	'.htm',
-	'.json',
-	'.gif',
-	'.png',
-	'.jpg',
-	'.jpeg'
+	'less',
+	'js',
+	'css',
+	'html',
+	'htm',
+	'json',
+	'gif',
+	'png',
+	'jpg',
+	'jpeg'
 ])
 
 const PORT_RANGE = {
@@ -105,7 +105,7 @@ const hasMarkdownExtension = path => {
 	let extensionMatch = false
 
 	markdownExtensions.forEach(extension => {
-		if (extension === fileExtension) {
+		if (`.${extension}` === fileExtension) {
 			extensionMatch = true
 		}
 	})
@@ -447,7 +447,7 @@ const startLiveReloadServer = () => new Promise(resolve => {
 	LIVE_RELOAD_SERVER = liveReload.createServer({
 		exts: watchExtensions,
 		port: LIVE_RELOAD_PORT
-	}).watch(flags.dir)
+	}).watch(path.resolve(flags.dir))
 
 	resolve(LIVE_RELOAD_SERVER)
 })
