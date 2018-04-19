@@ -1,12 +1,17 @@
 # markserv
 
+<img src="markserv-logo.png" width="188" align="left">
+
 > `markserv` serves Markdown files as GitHub style HTML and LiveReloads your changes in the browser while you edit
 
-## Support
+[![Build Status](https://travis-ci.org/F1LT3R/markserv)](https://travis-ci.org/F1LT3R/markserv)
+[![Coverage Status](https://coveralls.io/repos/github/F1LT3R/markserv/badge.svg?branch=master)](https://coveralls.io/github/F1LT3R/markserv?branch=master)
+[![Npm Version](https://img.shields.io/npm/v/chromafi.svg)](https://www.npmjs.com/package/markserv)
+[![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)
 
-Support the development of Markserv by becoming a patreon.
+Support the development of Markserv.
 
-<a href="https://patreon.com/bePatron?u=9720216"><img width="120" src="https://f1lt3r.io/content/images/2018/04/become_a_patron_button@2x.png"></a>
+<a href="https://patreon.com/bePatron?u=9720216"><img width="160" src="https://f1lt3r.io/content/images/2018/04/become_a_patron_button@2x.png"></a>
 
 ## Features
 
@@ -17,6 +22,10 @@ Support the development of Markserv by becoming a patreon.
  - LiveReload updates the view when your files change
  - Links to external Markdown files are re-written and followed by the server
  - MathJax equations ([example](examples/mathjax.md))
+
+## Example
+
+Click this image to see the animated example:
 
 [![http://imgur.com/a/b8Cje](http://i.imgur.com/FrO2ilv.png)](http://i.imgur.com/D4MFCMr.gif)
 
@@ -32,11 +41,15 @@ npm install markserv -g
 
 Change to the directory of your CLI
 
-    cd path/to/serve/from
+```shell
+cd path/to/serve/from
+```
 
 Start the HTTP markdown server in the current directory on port 8080
 
-    markserv
+```shell
+markserv
+```
 
 You should see something like this:
 
@@ -59,7 +72,6 @@ Watch your CLI for server hints:
 
 ![markserv CLI being chatty](http://i.imgur.com/TuO78gt.png)
 
-
 ### Realtime/Live editing
 
 Edit your markdown file, and you should now see the page reloading as you save your Markdown file. It should save your scroll position, which helps when editing extemely large documents.
@@ -72,22 +84,13 @@ You can link to an external Markdown file in the same way that you use GitHub Wi
 
 Example code:
 
-```md
+```markdown
 [Skateboarding Dog!](Linked-Markdown-Example.md)
 ```
 
 Example link:
 
 [Skateboarding Dog!](Linked-Markdown-Example.md)
-
-
-### Using With Auto-Save for SublimeText
-
-Coming soon...
-
-https://packagecontrol.io/packages/auto-save
-
-
 
 ## Options/Flags
 
@@ -136,8 +139,6 @@ This will make the server instance persistent and will be available to access ev
  - Web Browser
  - Text Editor
 
-
-
 ## How does it work?
 
 markserv watches for file updates to the markdown file, and to the CSS directory, and automatically reloads the Markdown page via LiveReload. markserv remembers the scroll position you were at in the web browser, and reloads the page with the same scroll position when you make changes.
@@ -151,11 +152,9 @@ markserv is designed to replace a Apache + Marked2 workflow.
 
 I purchased [Marked2](http://marked2app.com/) after seeing a colleage use it to edit markdown content. It looked awesome, but it felt clunky. And it didn't integrate with my almost constant CLI usage. While I found Marked2 to have a very well-rounded feature set, it was simply too slow, and too memory intensive.
 
-
 ## Credits
 
 ### Logo Credits
-
 
 ![Markdown Icon](https://cdn0.iconfinder.com/data/icons/octicons/1024/markdown-32.png)
 
