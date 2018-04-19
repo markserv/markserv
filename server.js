@@ -53,7 +53,7 @@ const chalk = require('chalk')
 // Terminal Output Messages
 const log = str => console.log(str)
 const msg = (type, msg) => log(chalk`{bgGreen.black  Markserv } {white  ${type}: }` + msg)
-const errormsg = (type, msg) => log(chalk`{bgRed.black  Markserv  } {red  ${type}: }` + msg)
+const errormsg = (type, msg) => log(chalk`{bgRed.black  Markserv } {red  ${type}: }` + msg)
 
 // HasMarkdownExtension: check whether a file is Markdown type
 const hasMarkdownExtension = path => {
@@ -106,7 +106,7 @@ const buildStyleSheet = cssPath =>
 	)
 
 // Linkify: converts github style wiki markdown links to .md links
-const linkify = body => new Promise((resolve, reject) => {
+const linkify = (body, flags) => new Promise((resolve, reject) => {
 	jsdom.env(body, (err, window) => {
 		if (err) {
 			return reject(err)
@@ -149,22 +149,22 @@ const buildHTMLFromMarkDown = (markdownPath, flags) => new Promise(resolve => {
 		// Article
 		getFile(markdownPath)
 			.then(markdownToHTML)
-			.then(linkify),
+			.then(html => linkify(html, flags)),
 
 		// Header
 		flags.header && getFile(flags.header)
 			.then(markdownToHTML)
-			.then(linkify),
+			.then(html => linkify(html, flags)),
 
 		// Footer
 		flags.footer && getFile(flags.footer)
 			.then(markdownToHTML)
-			.then(linkify),
+			.then(html => linkify(html, flags)),
 
 		// Navigation
 		flags.navigation && getFile(flags.navigation)
 			.then(markdownToHTML)
-			.then(linkify)
+			.then(html => linkify(html, flags))
 	]
 
 	Promise.all(stack).then(data => {
@@ -190,8 +190,8 @@ const buildHTMLFromMarkDown = (markdownPath, flags) => new Promise(resolve => {
 			navigation = data[4]
 		}
 
-		if (flags.less === flags.$markserv.gitHubStylePath) {
-	        outputHtml = `<!DOCTYPE html>
+		if (flags.less === flags.$markserv.githubStylePath) {
+			outputHtml = `<!DOCTYPE html>
 	          <head>
 	            <title>${title}</title>
 	            <meta charset="utf-8">
@@ -205,7 +205,6 @@ const buildHTMLFromMarkDown = (markdownPath, flags) => new Promise(resolve => {
 	          <body>
 	            <article class="markdown-body">${htmlBody}</article>
 	          </body>
-	          <script src="http://localhost:35729/livereload.js?snipver=1"></script>
 	          <script>hljs.initHighlightingOnLoad();</script>`
 		} else {
 			outputHtml = `
@@ -227,7 +226,6 @@ const buildHTMLFromMarkDown = (markdownPath, flags) => new Promise(resolve => {
 	              ${(footer ? '<footer>' + footer + '</footer>' : '')}
 	            </div>
 	          </body>
-	          <script src="http://localhost:35729/livereload.js?snipver=1"></script>
 	          <script>hljs.initHighlightingOnLoad();</script>`
 		}
 		resolve(outputHtml)

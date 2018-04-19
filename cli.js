@@ -1,9 +1,9 @@
 const path = require('path')
-
 const flags = require('commander')
 const markserv = require('./server')
 
 const pkg = require('./package.json')
+
 const githubStylePath = path.join(__dirname, 'less/github.less')
 
 flags.version(pkg.version)
