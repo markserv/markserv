@@ -5,7 +5,7 @@
   "preferGlobal": true,
   "scripts": {
 		"test": "xo && npm run cover",
-		"cover": "nyc --reporter=lcov --reporter=html --reporter=text ava *.test.js",
+		"cover": "nyc --reporter=lcov --reporter=html --reporter=text ava **/*.test.js",
 		"coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls -v"
   },
   "keywords": [
