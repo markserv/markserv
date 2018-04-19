@@ -1,6 +1,6 @@
-# markserv
+<img src="markserv-logo.png" width="188">
 
-<img src="markserv-logo.png" width="188" align="left">
+# markserv
 
 > `markserv` serves Markdown files as GitHub style HTML and LiveReloads your changes in the browser while you edit
 
