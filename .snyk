@@ -1,0 +1,14 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.7.0
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:debug:20170905':
+    - livereload > websocket.io > debug:
+        patched: '2017-10-31T01:44:49.036Z'
+  'npm:ms:20170412':
+    - livereload > websocket.io > debug > ms:
+        patched: '2017-10-31T01:44:49.036Z'
+  'npm:ws:20160104':
+    - livereload > websocket.io > ws:
+        patched: '2017-10-31T01:44:49.036Z'

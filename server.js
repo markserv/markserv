@@ -1,523 +1,448 @@
-#!/usr/bin/env node
-
-'use strict';
+'use strict'
 
 // Markdown Extension Types
 const markdownExtensions = [
-  '.markdown',
-  '.mdown',
-  '.mkdn',
-  '.md',
-  '.mkd',
-  '.mdwn',
-  '.mdtxt',
-  '.mdtext',
-  '.text'
-];
+	'markdown',
+	'mdown',
+	'mkdn',
+	'md',
+	'mkd',
+	'mdwn',
+	'mdtxt',
+	'mdtext',
+	'text'
+]
 
 const watchExtensions = markdownExtensions.concat([
-  '.less',
-  '.js',
-  '.css',
-  '.html',
-  '.htm',
-  '.json',
-  '.gif',
-  '.png',
-  '.jpg',
-  '.jpeg'
-]);
+	'less',
+	'js',
+	'css',
+	'html',
+	'htm',
+	'json',
+	'gif',
+	'png',
+	'jpg',
+	'jpeg'
+])
 
 const PORT_RANGE = {
-  HTTP: [8000, 8100],
-  LIVE_RELOAD: [35729, 35829]
-};
+	HTTP: [8000, 8100],
+	LIVE_RELOAD: [35729, 35829],
+	WEBSOCKETS: [3000, 4000]
+}
 
-const http = require('http');
-const path = require('path');
-const fs = require('fs');
+const http = require('http')
+const path = require('path')
+const fs = require('fs')
+const open = require('open')
+const Promise = require('bluebird')
+const connect = require('connect')
+const less = require('less')
+const jsdom = require('jsdom')
+const send = require('send')
+const liveReload = require('livereload')
+const openPort = require('openport')
+const connectLiveReload = require('connect-livereload')
+const chalk = require('chalk')
 
-const open = require('open');
-const Promise = require('bluebird');
-const connect = require('connect');
-const marked = require('marked');
-const less = require('less');
-const send = require('send');
-const jsdom = require('jsdom');
-const flags = require('commander');
-const liveReload = require('livereload');
-const openPort = require('openport');
-const connectLiveReload = require('connect-livereload');
-const ansi = require('ansi');
+const MarkdownIt = require('markdown-it')
+const markdownItAnchor = require('markdown-it-anchor')
 
-const cursor = ansi(process.stdout);
+const {JSDOM} = jsdom
 
-const pkg = require('./package.json');
+const md = new MarkdownIt({
+	linkify: true,
+	html: true
+}).use(markdownItAnchor)
 
-// Path Variables
-const GitHubStyle = path.join(__dirname, 'less/github.less');
+// eslint-disable-next-line no-console
+const log = str => console.log(str)
+const msg = (type, msg) => log(chalk`{bgGreen.black  Markserv } {white  ${type}: }` + msg)
+const errormsg = (type, msg) => log(chalk`{bgRed.black  Markserv } {red  ${type}: }` + msg)
 
-// Options
-flags.version(pkg.version)
-  .option('-d, --dir [type]', 'Serve from directory [dir]', './')
-  .option('-p, --port [type]', 'Serve on port [port]', null)
-  .option('-h, --header [type]', 'Header .md file', null)
-  .option('-r, --footer [type]', 'Footer .md file', null)
-  .option('-n, --navigation [type]', 'Navigation .md file', null)
-  .option('-a, --address [type]', 'Serve on ip/address [address]', 'localhost')
-  .option('-s, --less [type]', 'Path to Less styles [less]', GitHubStyle)
-  .option('-f, --file [type]', 'Open specific file in browser [file]')
-  .option('-x, --x', 'Don\'t open browser on run.')
-  .option('-v, --verbose', 'verbose output')
-  .parse(process.argv);
-
-const dir = flags.dir;
-const cssPath = flags.less;
-
-// Terminal Output Messages
-
-const msg = type => cursor
-  .bg.green()
-  .fg.black()
-  .write(' Markserv ')
-  .reset()
-  .fg.white()
-  .write(' ' + type + ': ')
-  .reset();
-
-const errormsg = type => cursor
-  .bg.red()
-  .fg.black()
-  .write(' Markserv ')
-  .reset()
-  .write(' ')
-  .fg.black()
-  .bg.red()
-  .write(' ' + type + ': ')
-  .reset()
-  .fg.red()
-  .write(' ');
-
-// hasMarkdownExtension: check whether a file is Markdown type
+// HasMarkdownExtension: check whether a file is Markdown type
 const hasMarkdownExtension = path => {
-  const fileExtension = path.substr(path.length - 3).toLowerCase();
-  let extensionMatch = false;
+	const fileExtension = path.substr(path.length - 3).toLowerCase()
+	let extensionMatch = false
 
-  markdownExtensions.forEach(extension => {
-    if (extension === fileExtension) {
-      extensionMatch = true;
-    }
-  });
+	markdownExtensions.forEach(extension => {
+		if (`.${extension}` === fileExtension) {
+			extensionMatch = true
+		}
+	})
 
-  return extensionMatch;
-};
+	return extensionMatch
+}
 
-// getFile: reads utf8 content from a file
+// MarkdownToHTML: turns a Markdown file into HTML content
+const markdownToHTML = markdownText => new Promise((resolve, reject) => {
+	let result
+
+	try {
+		result = md.render(markdownText)
+	} catch (err) {
+		return reject(err)
+	}
+
+	resolve(result)
+})
+
+// GetFile: reads utf8 content from a file
 const getFile = path => new Promise((resolve, reject) => {
-  fs.readFile(path, 'utf8', (err, data) => {
-    if (err) {
-      return reject(err);
-    }
-    resolve(data);
-  });
-});
+	fs.readFile(path, 'utf8', (err, data) => {
+		if (err) {
+			return reject(err)
+		}
+		resolve(data)
+	})
+})
 
 // Get Custom Less CSS to use in all Markdown files
 const buildStyleSheet = cssPath =>
-  new Promise(resolve =>
-    getFile(cssPath).then(data =>
-      less.render(data).then(data =>
-        resolve(data.css)
-      )
-    )
-  );
+	new Promise(resolve =>
+		getFile(cssPath).then(data =>
+			less.render(data).then(data =>
+				resolve(data.css)
+			)
+		)
+	)
 
-// markdownToHTML: turns a Markdown file into HTML content
-const markdownToHTML = markdownText => new Promise((resolve, reject) => {
-  marked(markdownText, (err, data) => {
-    if (err) {
-      return reject(err);
-    }
-    resolve(data);
-  });
-});
+// Linkify: converts github style wiki markdown links to .md links
+const linkify = (body, flags) => new Promise((resolve, reject) => {
+	const dom = new JSDOM(body)
 
-// linkify: converts github style wiki markdown links to .md links
-const linkify = body => new Promise((resolve, reject) => {
-  jsdom.env(body, (err, window) => {
-    if (err) {
-      return reject(err);
-    }
+	if (!dom) {
+		return reject(dom)
+	}
 
-    const links = window.document.getElementsByTagName('a');
-    const l = links.length;
+	const {window} = dom
 
-    let href;
-    let link;
-    let markdownFile;
-    let mdFileExists;
-    let relativeURL;
-    let isFileHref;
+	const links = window.document.getElementsByTagName('a')
+	const l = links.length
 
-    for (let i = 0; i < l; i++) {
-      link = links[i];
-      href = link.href;
-      isFileHref = href.substr(0, 8) === 'file:///';
+	let href
+	let link
+	let markdownFile
+	let mdFileExists
+	let relativeURL
+	let isFileHref
 
-      markdownFile = href.replace(path.join('file://', __dirname), flags.dir) + '.md';
-      mdFileExists = fs.existsSync(markdownFile);
+	for (let i = 0; i < l; i++) {
+		link = links[i]
+		href = link.href
+		isFileHref = href.substr(0, 8) === 'file:///'
 
-      if (isFileHref && mdFileExists) {
-        relativeURL = href.replace(path.join('file://', __dirname), '') + '.md';
-        link.href = relativeURL;
-      }
-    }
+		markdownFile = href.replace(path.join('file://', __dirname), flags.dir) + '.md'
+		mdFileExists = fs.existsSync(markdownFile)
 
-    const html = window.document.getElementsByTagName('body')[0].innerHTML;
+		if (isFileHref && mdFileExists) {
+			relativeURL = href.replace(path.join('file://', __dirname), '') + '.md'
+			link.href = relativeURL
+		}
+	}
 
-    resolve(html);
-  });
-});
+	const html = window.document.getElementsByTagName('body')[0].innerHTML
+	resolve(html)
+})
 
-// buildHTMLFromMarkDown: compiles the final HTML/CSS output from Markdown/Less files, includes JS
-const buildHTMLFromMarkDown = markdownPath => new Promise(resolve => {
-  const stack = [
-    buildStyleSheet(cssPath),
+// BuildHTMLFromMarkDown: compiles the final HTML/CSS output from Markdown/Less files, includes JS
+const buildHTMLFromMarkDown = (markdownPath, flags) => new Promise(resolve => {
+	const stack = [
+		buildStyleSheet(flags.less),
 
-    // Article
-    getFile(markdownPath)
-      .then(markdownToHTML)
-      .then(linkify),
+		// Article
+		getFile(markdownPath)
+			.then(markdownToHTML)
+			.then(html => linkify(html, flags)),
 
-    // Header
-    flags.header && getFile(flags.header)
-      .then(markdownToHTML)
-      .then(linkify),
+		// Header
+		flags.header && getFile(flags.header)
+			.then(markdownToHTML)
+			.then(html => linkify(html, flags)),
 
-    // Footer
-    flags.footer && getFile(flags.footer)
-      .then(markdownToHTML)
-      .then(linkify),
+		// Footer
+		flags.footer && getFile(flags.footer)
+			.then(markdownToHTML)
+			.then(html => linkify(html, flags)),
 
-    // Navigation
-    flags.navigation && getFile(flags.navigation)
-      .then(markdownToHTML)
-      .then(linkify)
-  ];
+		// Navigation
+		flags.navigation && getFile(flags.navigation)
+			.then(markdownToHTML)
+			.then(html => linkify(html, flags))
+	]
 
-  Promise.all(stack).then(data => {
-    const css = data[0];
-    const htmlBody = data[1];
-    const dirs = markdownPath.split('/');
-    const title = dirs[dirs.length - 1].split('.md')[0];
+	Promise.all(stack).then(data => {
+		const css = data[0]
+		const htmlBody = data[1]
+		const dirs = markdownPath.split('/')
+		const title = dirs[dirs.length - 1].split('.md')[0]
 
-    let header;
-    let footer;
-    let navigation;
-    let outputHtml;
+		let header
+		let footer
+		let navigation
+		let outputHtml
 
-    if (flags.header) {
-      header = data[2];
-    }
+		if (flags.header) {
+			header = data[2]
+		}
 
-    if (flags.footer) {
-      footer = data[3];
-    }
+		if (flags.footer) {
+			footer = data[3]
+		}
 
-    if (flags.navigation) {
-      navigation = data[4];
-    }
+		if (flags.navigation) {
+			navigation = data[4]
+		}
 
-    if (flags.less === GitHubStyle) {
-      outputHtml = `
-        <!DOCTYPE html>
-          <head>
-            <title>${title}</title>
-            <meta charset="utf-8">
-            <style>${css}</style>
-            <link rel="stylesheet" href="//sindresorhus.com/github-markdown-css/github-markdown.css">
-            <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-            <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
-            <link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/github-gist.css">
-            <script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-  tex2jax: {inlineMath: [['$','$']]}
-});
-</script>
-<script type="text/javascript" async
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
-          </head>
-          <body>
-            <article class="markdown-body">${htmlBody}</article>
-          </body>
-          <script src="http://localhost:35729/livereload.js?snipver=1"></script>
-          <script>hljs.initHighlightingOnLoad();</script>`;
-    } else {
-      outputHtml = `
-        <!DOCTYPE html>
-          <head>
-            <title>${title}</title>
-            <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-            <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
-            <link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/github-gist.css">
-            <meta charset="utf-8">
-            <style>${css}</style>
-            <script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-  tex2jax: {inlineMath: [['$','$']]}
-});
-</script>
-<script type="text/javascript" async
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
-          </head>
-          <body>
-            <div class="container">
-              ${(header ? '<header>' + header + '</header>' : '')}
-              ${(navigation ? '<nav>' + navigation + '</nav>' : '')}
-              <article>${htmlBody}</article>
-              ${(footer ? '<footer>' + footer + '</footer>' : '')}
-            </div>
-          </body>
-          <script src="http://localhost:35729/livereload.js?snipver=1"></script>
-          <script>hljs.initHighlightingOnLoad();</script>`;
-    }
-    resolve(outputHtml);
-  });
-});
+		if (flags.less === flags.$markserv.githubStylePath) {
+			outputHtml = `<!DOCTYPE html>
+	          <head>
+	            <title>${title}</title>
+	            <meta charset="utf-8">
+	            <style>${css}</style>
+	            <link rel="stylesheet" href="//sindresorhus.com/github-markdown-css/github-markdown.css">
+	            <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+	            <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+	            <link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/github-gist.css">
+	            <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});</script><script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	          </head>
+	          <body>
+	            <article class="markdown-body">${htmlBody}</article>
+	          </body>
+	          <script>hljs.initHighlightingOnLoad();</script>`
+		} else {
+			outputHtml = `
+	        <!DOCTYPE html>
+	          <head>
+	            <title>${title}</title>
+	            <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+	            <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+	            <link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/github-gist.css">
+	            <meta charset="utf-8">
+	            <style>${css}</style>
+	            <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});</script><script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	          </head>
+	          <body>
+	            <div class="container">
+	              ${(header ? '<header>' + header + '</header>' : '')}
+	              ${(navigation ? '<nav>' + navigation + '</nav>' : '')}
+	              <article>${htmlBody}</article>
+	              ${(footer ? '<footer>' + footer + '</footer>' : '')}
+	            </div>
+	          </body>
+	          <script>hljs.initHighlightingOnLoad();</script>`
+		}
+		resolve(outputHtml)
+	})
+})
 
-// markItDown: begins the Markdown compilation process, then sends result when done...
-const compileAndSendMarkdown = (path, res) => buildHTMLFromMarkDown(path)
-  .then(html => {
-    res.writeHead(200);
-    res.end(html);
+// MarkItDown: begins the Markdown compilation process, then sends result when done...
+const compileAndSendMarkdown = (path, res, flags) => buildHTMLFromMarkDown(path, flags)
+	.then(html => {
+		res.writeHead(200)
+		res.end(html)
 
-  // Catch if something breaks...
-  }).catch(err => {
-    msg('error')
-    .write('Can\'t build HTML: ', err)
-    .reset().write('\n');
-  });
+	// Catch if something breaks...
+	}).catch(err => {
+		msg('error', 'Can\'t build HTML')
+		// eslint-disable-next-line no-console
+		console.error(err)
+	})
 
-const compileAndSendDirectoryListing = (path, res) => {
-  const urls = fs.readdirSync(path);
-  let list = '<ul>\n';
+const compileAndSendDirectoryListing = (path, res, flags) => {
+	const urls = fs.readdirSync(path)
+	let list = '<ul>\n'
 
-  urls.forEach(subPath => {
-    const dir = fs.statSync(path + subPath).isDirectory();
-    let href;
-    if (dir) {
-      href = subPath + '/';
-      list += `\t<li class="dir"><a href="${href}">${href}</a></li> \n`;
-    } else {
-      href = subPath;
-      if (subPath.split('.md')[1] === '') {
-        list += `\t<li class="md"><a href="${href}">${href}</a></li> \n`;
-      } else {
-        list += `\t<li class="file"><a href="${href}">${href}</a></li> \n`;
-      }
-    }
-  });
+	urls.forEach(subPath => {
+		const dir = fs.statSync(path + subPath).isDirectory()
+		let href
+		if (dir) {
+			href = subPath + '/'
+			list += `\t<li class="dir"><a href="${href}">${href}</a></li> \n`
+		} else {
+			href = subPath
+			if (subPath.split('.md')[1] === '') {
+				list += `\t<li class="md"><a href="${href}">${href}</a></li> \n`
+			} else {
+				list += `\t<li class="file"><a href="${href}">${href}</a></li> \n`
+			}
+		}
+	})
 
-  list += '</ul>\n';
+	list += '</ul>\n'
 
-  buildStyleSheet(cssPath).then(css => {
-    const html = `
-      <!DOCTYPE html>
-        <head>
-          <title>${path.slice(2)}</title>
-          <meta charset="utf-8">
-          <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-          <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
-          <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
-          <link rel="stylesheet" href="//highlightjs.org/static/demo/styles/github-gist.css">
-          <link rel="shortcut icon" type="image/x-icon" href="https://cdn0.iconfinder.com/data/icons/octicons/1024/markdown-128.png" />
-          <style>${css}</style>
-        </head>
-        <body>
-          <article class="markdown-body">
-            <h1>Index of ${path.slice(2)}</h1>${list}
-            <sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: ${process.pid}</sup>
-          </article>
-        </body>
-        <script src="http://localhost:35729/livereload.js?snipver=1"></script>`;
+	buildStyleSheet(flags.less).then(css => {
+		const html = `
+			<!DOCTYPE html>
+				<head>
+					<title>${path.slice(2)}</title>
+					<meta charset="utf-8">
+					<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+					<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+					<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
+					<link rel="stylesheet" href="//highlightjs.org/static/demo/styles/github-gist.css">
+					<link rel="shortcut icon" type="image/x-icon" href="https://cdn0.iconfinder.com/data/icons/octicons/1024/markdown-128.png" />
+					<style>${css}</style>
+				</head>
+				<body>
+					<article class="markdown-body">
+						<h1>Index of ${path.slice(2)}</h1>${list}
+						<sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: ${process.pid}</sup>
+					</article>
+				</body>
+				<script src="http://localhost:35729/livereload.js?snipver=1"></script>`
 
-    // Log if verbose
+		// Log if verbose
 
-    if (flags.verbose) {
-      msg('index').write(path).reset().write('\n');
-    }
+		if (flags.verbose) {
+			msg('index').write(path).reset().write('\n')
+		}
 
-    // Send file
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    res.write(html);
-    res.end();
-  });
-};
+		// Send file
+		res.writeHead(200, {'Content-Type': 'text/html'})
+		res.write(html)
+		res.end()
+	})
+}
 
 // Remove URL params from file being fetched
 const getPathFromUrl = url => {
-  return url.split(/[?#]/)[0];
-};
+	return url.split(/[?#]/)[0]
+}
 
-// http_request_handler: handles all the browser requests
-const httpRequestHandler = (req, res) => {
-  const originalUrl = getPathFromUrl(decodeURIComponent(req.originalUrl));
+// Http_request_handler: handles all the browser requests
+const createRequestHandler = flags => {
+	const dir = flags.dir
 
-  if (flags.verbose) {
-    msg('request')
-     .write(unescape(dir) + unescape(originalUrl))
-     .reset().write('\n');
-  }
+	return (req, res) => {
+		const decodedUrl = getPathFromUrl(decodeURIComponent(req.originalUrl))
 
-  const path = unescape(dir) + unescape(originalUrl);
+		if (flags.verbose) {
+			msg('request')
+				.write(unescape(dir) + unescape(decodedUrl))
+				.reset().write('\n')
+		}
 
-  let stat;
-  let isDir;
-  let isMarkdown;
+		const filePath = unescape(dir) + unescape(decodedUrl)
+		const prettyPath = filePath.slice(2)
 
-  try {
-    stat = fs.statSync(path);
-    isDir = stat.isDirectory();
-    isMarkdown = false;
-    if (!isDir) {
-      isMarkdown = hasMarkdownExtension(path);
-    }
-  } catch (err) {
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    errormsg('404').write(path.slice(2)).reset().write('\n');
-    res.write('404 :\'(');
-    res.end();
-    return;
-  }
+		let stat
+		let isDir
+		let isMarkdown
 
-  // Markdown: Browser is requesting a Markdown file
-  if (isMarkdown) {
-    msg('markdown').write(path.slice(2)).reset().write('\n');
-    compileAndSendMarkdown(path, res);
-  } else if (isDir) {
-    // Index: Browser is requesting a Directory Index
-    msg('dir').write(path.slice(2)).reset().write('\n');
-    compileAndSendDirectoryListing(path, res);
-  } else {
-    // Other: Browser requests other MIME typed file (handled by 'send')
-    msg('file').write(path.slice(2)).reset().write('\n');
-    send(req, path, {root: dir}).pipe(res);
-  }
-};
+		try {
+			stat = fs.statSync(filePath)
+			isDir = stat.isDirectory()
+			isMarkdown = false
+			if (!isDir) {
+				isMarkdown = hasMarkdownExtension(filePath)
+			}
+		} catch (err) {
+			res.writeHead(200, {'Content-Type': 'text/html'})
+			errormsg('404', prettyPath)
+			res.write(`404 :'( for ${prettyPath}`)
+			res.end()
+			return
+		}
 
-let LIVE_RELOAD_PORT;
-let LIVE_RELOAD_SERVER;
-let HTTP_PORT;
-let HTTP_SERVER;
-let CONNECT_APP;
+		// Markdown: Browser is requesting a Markdown file
+		if (isMarkdown) {
+			msg('markdown', prettyPath)
+			compileAndSendMarkdown(filePath, res, flags)
+		} else if (isDir) {
+			// Index: Browser is requesting a Directory Index
+			msg('dir', prettyPath)
+			compileAndSendDirectoryListing(filePath, res, flags)
+		} else {
+			// Other: Browser requests other MIME typed file (handled by 'send')
+			msg('file', prettyPath)
+			send(req, filePath, {root: dir}).pipe(res)
+		}
+	}
+}
 
 const findOpenPort = range => new Promise((resolve, reject) => {
-  const props = {
-    startingPort: range[0],
-    endingPort: range[1]
-  };
+	const props = {
+		startingPort: range[0],
+		endingPort: range[1]
+	}
 
-  openPort.find(props, (err, port) => {
-    if (err) {
-      return reject(err);
-    }
-    resolve(port);
-  });
-});
+	openPort.find(props, (err, port) => {
+		if (err) {
+			return reject(err)
+		}
+		resolve(port)
+	})
+})
 
-const setLiveReloadPort = port => new Promise(resolve => {
-  LIVE_RELOAD_PORT = port;
-  resolve(port);
-});
+const startConnectApp = (liveReloadPort, httpRequestHandler) => connect()
+	.use('/', httpRequestHandler)
+	.use(connectLiveReload({
+		port: liveReloadPort
+	}))
 
-const setHTTPPort = port => new Promise(resolve => {
-  HTTP_PORT = port;
-  resolve(port);
-});
+const startHTTPServer = (connectApp, port, flags) => {
+	const httpServer = http.createServer(connectApp)
+	httpServer.listen(port, flags.address)
+	return httpServer
+}
 
-const startConnectApp = () => new Promise(resolve => {
-  CONNECT_APP = connect()
-    .use('/', httpRequestHandler)
-    .use(connectLiveReload({
-      port: LIVE_RELOAD_PORT
-    }));
-  resolve(CONNECT_APP);
-});
+const startLiveReloadServer = (liveReloadPort, flags) => liveReload.createServer({
+	exts: watchExtensions,
+	port: liveReloadPort
+}).watch(path.resolve(flags.dir))
 
-const startHTTPServer = () => new Promise(resolve => {
-  HTTP_SERVER = http.createServer(CONNECT_APP);
-  HTTP_SERVER.listen(HTTP_PORT, flags.address);
-  resolve(HTTP_SERVER);
-});
+const logActiveServerInfo = (httpPort, liveReloadPort, flags) => {
+	const serveURL = 'http://' + flags.address + ':' + httpPort
+	const dir = path.resolve(flags.dir)
 
-const startLiveReloadServer = () => new Promise(resolve => {
-  LIVE_RELOAD_SERVER = liveReload.createServer({
-    exts: watchExtensions,
-    port: LIVE_RELOAD_PORT
-  }).watch(flags.dir);
+	msg('start', chalk`serving content from {white ${dir}} on port: {white ${httpPort}}`)
+	msg('address', chalk`{underline.white ${serveURL}}`)
+	msg('less', chalk`using style from {white ${flags.less}}`)
+	msg('livereload', chalk`communicating on port: {white ${liveReloadPort}}`)
 
-  resolve(LIVE_RELOAD_SERVER);
-});
+	if (process.pid) {
+		msg('process', chalk`your pid is: {white ${process.pid}}`)
+		msg('info', chalk`to stop this server, press: {white [Ctrl + C]}, or type: {white "kill ${process.pid}"}`)
+	}
 
-const serversActivated = () => {
-  const serveURL = 'http://' + flags.address + ':' + HTTP_PORT;
+	if (flags.file) {
+		open(serveURL + '/' + flags.file)
+	} else if (!flags.x) {
+		open(serveURL)
+	}
+}
 
-  msg('start')
-   .write('serving content from ')
-   .fg.white().write(path.resolve(flags.dir)).reset()
-   .write(' on port: ')
-   .fg.white().write(String(HTTP_PORT)).reset()
-   .write('\n');
+const init = async flags => {
+	const liveReloadPort = await findOpenPort(PORT_RANGE.LIVE_RELOAD)
+	const httpRequestHandler = createRequestHandler(flags)
+	const connectApp = startConnectApp(liveReloadPort, httpRequestHandler)
 
-  msg('address')
-   .underline().fg.white()
-   .write(serveURL).reset()
-   .write('\n');
+	let httpPort
+	if (flags.port === null) {
+		httpPort = await findOpenPort(PORT_RANGE.HTTP)
+	} else {
+		httpPort = flags.port
+	}
+	const httpServer = await startHTTPServer(connectApp, httpPort, flags)
 
-  msg('less')
-   .write('using style from ')
-   .fg.white().write(flags.less).reset()
-   .write('\n');
+	const liveReloadServer = await startLiveReloadServer(liveReloadPort, flags)
 
-  msg('livereload')
-    .write('communicating on port: ')
-    .fg.white().write(String(LIVE_RELOAD_PORT)).reset()
-    .write('\n');
+	// Log server info to CLI
+	logActiveServerInfo(httpPort, liveReloadPort, flags)
 
-  if (process.pid) {
-    msg('process')
-      .write('your pid is: ')
-      .fg.white().write(String(process.pid)).reset()
-      .write('\n');
+	const service = {
+		httpServer,
+		liveReloadServer,
+		connectApp
+	}
 
-    msg('info')
-      .write('to stop this server, press: ')
-      .fg.white().write('[Ctrl + C]').reset()
-      .write(', or type: ')
-      .fg.white().write('"kill ' + process.pid + '"').reset()
-      .write('\n');
-  }
+	return service
+}
 
-  if (flags.file) {
-    open(serveURL + '/' + flags.file);
-  } else if (!flags.x) {
-    open(serveURL);
-  }
-};
-
-// Initialize MarkServ
-findOpenPort(PORT_RANGE.LIVE_RELOAD)
-  .then(setLiveReloadPort)
-  .then(startConnectApp)
-  .then(() => {
-    if (flags.port === null) {
-      return findOpenPort(PORT_RANGE.HTTP);
-    }
-    return flags.port;
-  })
-  .then(setHTTPPort)
-  .then(startHTTPServer)
-  .then(startLiveReloadServer)
-  .then(serversActivated);
+module.exports = {
+	getFile,
+	markdownToHTML,
+	init
+}
