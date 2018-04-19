@@ -2,6 +2,7 @@
   "name": "markserv",
   "version": "0.2.0",
   "description": "markserv serves Markdown files as GitHub style HTML and LiveReloads your files in the browser as you edit.",
+  "preferGlobal": true,
   "keywords": [
     "markdown",
     "livereload",
@@ -9,11 +10,17 @@
     "github"
   ],
   "scripts": {
-    "test": "xo"
+    "test": "xo && ava"
   },
   "bin": {
-    "markserv": "server.js"
+    "markserv": "cli.js"
   },
+  "files": [
+    "server.js",
+    "cli.js",
+    "less/github.less",
+    "less/custom.less"
+  ],
   "author": "Alistair MacDonald <al@pwn.io>",
   "email": "al@pwn.io",
   "license": "MIT",
@@ -22,7 +29,6 @@
     "url": "http://github.com/f1lt3r/markserv.git"
   },
   "dependencies": {
-    "ansi": "^0.3.0",
     "bluebird": "^3.4.7",
     "commander": "^2.5.1",
     "commonmark": "^0.28.1",
@@ -36,10 +42,12 @@
     "open": "0.0.5",
     "openport": "0.0.4",
     "pretty": "^2.0.0",
-    "send": "^0.16.0",
-    "snyk": "^1.26.1"
+    "send": "^0.16.0"
   },
   "devDependencies": {
+    "ava": "^0.25.0",
+    "chalk": "^2.4.0",
+    "husky": "^0.14.3",
     "xo": "^0.20.3"
   },
   "xo": {
@@ -48,6 +56,5 @@
     "rules": {
       "space-before-function-paren": 0
     }
-  },
-  "snyk": true
+  }
 }
