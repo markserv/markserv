@@ -1,3 +1,7 @@
+#!/usr/bin/env node
+
+'use strict'
+
 const path = require('path')
 const flags = require('commander')
 const markserv = require('./server')
