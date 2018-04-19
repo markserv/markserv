@@ -1,5 +1,7 @@
 # markserv
 
+<img src="markserv-logo.png" width="188" align="left">
+
 > `markserv` serves Markdown files as GitHub style HTML and LiveReloads your changes in the browser while you edit
 
 [![Build Status](https://travis-ci.org/F1LT3R/markserv)](https://travis-ci.org/F1LT3R/markserv)
@@ -7,9 +9,7 @@
 [![Npm Version](https://img.shields.io/npm/v/chromafi.svg)](https://www.npmjs.com/package/markserv)
 [![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)
 
-## Support
-
-Support the development of Markserv by becoming a patreon.
+Support the development of Markserv.
 
 <a href="https://patreon.com/bePatron?u=9720216"><img width="160" src="https://f1lt3r.io/content/images/2018/04/become_a_patron_button@2x.png"></a>
 
@@ -22,6 +22,10 @@ Support the development of Markserv by becoming a patreon.
  - LiveReload updates the view when your files change
  - Links to external Markdown files are re-written and followed by the server
  - MathJax equations ([example](examples/mathjax.md))
+
+## Example
+
+Click this image to see the animated example:
 
 [![http://imgur.com/a/b8Cje](http://i.imgur.com/FrO2ilv.png)](http://i.imgur.com/D4MFCMr.gif)
 
