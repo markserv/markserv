@@ -37,20 +37,28 @@ const PORT_RANGE = {
 const http = require('http')
 const path = require('path')
 const fs = require('fs')
-
 const open = require('open')
 const Promise = require('bluebird')
 const connect = require('connect')
-const commonmark = require('commonmark')
 const less = require('less')
-const send = require('send')
 const jsdom = require('jsdom')
+const send = require('send')
 const liveReload = require('livereload')
 const openPort = require('openport')
 const connectLiveReload = require('connect-livereload')
 const chalk = require('chalk')
 
-// Terminal Output Messages
+const MarkdownIt = require('markdown-it')
+const markdownItAnchor = require('markdown-it-anchor')
+
+const {JSDOM} = jsdom
+
+const md = new MarkdownIt({
+	linkify: true,
+	html: true
+}).use(markdownItAnchor)
+
+// eslint-disable-next-line no-console
 const log = str => console.log(str)
 const msg = (type, msg) => log(chalk`{bgGreen.black  Markserv } {white  ${type}: }` + msg)
 const errormsg = (type, msg) => log(chalk`{bgRed.black  Markserv } {red  ${type}: }` + msg)
@@ -74,10 +82,7 @@ const markdownToHTML = markdownText => new Promise((resolve, reject) => {
 	let result
 
 	try {
-		const reader = new commonmark.Parser()
-		const writer = new commonmark.HtmlRenderer()
-		const parsed = reader.parse(markdownText)
-		result = writer.render(parsed)
+		result = md.render(markdownText)
 	} catch (err) {
 		return reject(err)
 	}
@@ -107,41 +112,43 @@ const buildStyleSheet = cssPath =>
 
 // Linkify: converts github style wiki markdown links to .md links
 const linkify = (body, flags) => new Promise((resolve, reject) => {
-	jsdom.env(body, (err, window) => {
-		if (err) {
-			return reject(err)
+	const dom = new JSDOM(body)
+
+	if (!dom) {
+		return reject(dom)
+	}
+
+	const {window} = dom
+
+	const links = window.document.getElementsByTagName('a')
+	const l = links.length
+
+	let href
+	let link
+	let markdownFile
+	let mdFileExists
+	let relativeURL
+	let isFileHref
+
+	for (let i = 0; i < l; i++) {
+		link = links[i]
+		href = link.href
+		isFileHref = href.substr(0, 8) === 'file:///'
+
+		markdownFile = href.replace(path.join('file://', __dirname), flags.dir) + '.md'
+		mdFileExists = fs.existsSync(markdownFile)
+
+		if (isFileHref && mdFileExists) {
+			relativeURL = href.replace(path.join('file://', __dirname), '') + '.md'
+			link.href = relativeURL
 		}
+	}
 
-		const links = window.document.getElementsByTagName('a')
-		const l = links.length
-
-		let href
-		let link
-		let markdownFile
-		let mdFileExists
-		let relativeURL
-		let isFileHref
-
-		for (let i = 0; i < l; i++) {
-			link = links[i]
-			href = link.href
-			isFileHref = href.substr(0, 8) === 'file:///'
-
-			markdownFile = href.replace(path.join('file://', __dirname), flags.dir) + '.md'
-			mdFileExists = fs.existsSync(markdownFile)
-
-			if (isFileHref && mdFileExists) {
-				relativeURL = href.replace(path.join('file://', __dirname), '') + '.md'
-				link.href = relativeURL
-			}
-		}
-
-		const html = window.document.getElementsByTagName('body')[0].innerHTML
-		resolve(html)
-	})
+	const html = window.document.getElementsByTagName('body')[0].innerHTML
+	resolve(html)
 })
 
-// CuildHTMLFromMarkDown: compiles the final HTML/CSS output from Markdown/Less files, includes JS
+// BuildHTMLFromMarkDown: compiles the final HTML/CSS output from Markdown/Less files, includes JS
 const buildHTMLFromMarkDown = (markdownPath, flags) => new Promise(resolve => {
 	const stack = [
 		buildStyleSheet(flags.less),
@@ -240,8 +247,8 @@ const compileAndSendMarkdown = (path, res, flags) => buildHTMLFromMarkDown(path,
 
 	// Catch if something breaks...
 	}).catch(err => {
-		console.error(err)
 		msg('error', 'Can\'t build HTML')
+		// eslint-disable-next-line no-console
 		console.error(err)
 	})
 

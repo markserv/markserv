@@ -6,7 +6,7 @@
 
 Support the development of Markserv by becoming a patreon.
 
-<a href="https://patreon.com/bePatron?u=9720216"><img src="https://f1lt3r.io/content/images/2018/04/become_a_patron_button@2x.png"></a>
+<a href="https://patreon.com/bePatron?u=9720216"><img width="160" src="https://f1lt3r.io/content/images/2018/04/become_a_patron_button@2x.png"></a>
 
 ## Features
 
