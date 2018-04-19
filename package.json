@@ -3,6 +3,11 @@
   "version": "0.2.0",
   "description": "markserv serves Markdown files as GitHub style HTML and LiveReloads your files in the browser as you edit.",
   "preferGlobal": true,
+  "scripts": {
+		"test": "xo && npm run cover",
+		"cover": "nyc --reporter=lcov --reporter=html --reporter=text ava *.test.js",
+		"coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls -v"
+  },
   "keywords": [
     "markdown",
     "livereload",
@@ -15,10 +20,6 @@
     "links",
     "markdown-it"
   ],
-  "scripts": {
-		"test": "xo && nyc --reporter=html --reporter=lcov ava",
-		"coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls -v"
-  },
   "husky": {
     "hooks": {
       "pre-commit": "npm test"
