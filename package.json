@@ -7,14 +7,21 @@
     "markdown",
     "livereload",
     "server",
-    "github"
+    "github",
+    "realtime",
+    "highlighting",
+    "code",
+    "syntax highlighting",
+    "links",
+    "markdown-it"
   ],
   "scripts": {
-    "test": "xo && ava"
+		"test": "xo && nyc --reporter=html --reporter=lcov ava",
+		"coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls -v"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn test"
+      "pre-commit": "npm test"
     }
   },
   "bin": {

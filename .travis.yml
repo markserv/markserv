@@ -3,8 +3,8 @@ language: node_js
 node_js:
   - "9"
 install:
-  - "yarn install"
+  - "npm install"
 test:
-  - "yarn test"
+  - "npm test"
 notifications:
-after_success: 'yarn run coveralls'
+after_success: 'npm run coveralls'
