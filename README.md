@@ -1,12 +1,12 @@
-# markserv
+<img src="markserv-logo.png" width="188">
 
-<img src="markserv-logo.png" width="188" align="left">
+# markserv
 
 > `markserv` serves Markdown files as GitHub style HTML and LiveReloads your changes in the browser while you edit
 
 [![Build Status](https://travis-ci.org/F1LT3R/markserv)](https://travis-ci.org/F1LT3R/markserv)
 [![Coverage Status](https://coveralls.io/repos/github/F1LT3R/markserv/badge.svg?branch=master)](https://coveralls.io/github/F1LT3R/markserv?branch=master)
-[![Npm Version](https://img.shields.io/npm/v/chromafi.svg)](https://www.npmjs.com/package/markserv)
+[![Npm Version](https://img.shields.io/npm/v/markserv.svg)](https://www.npmjs.com/package/markserv)
 [![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)
 
 Support the development of Markserv.
