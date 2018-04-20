@@ -26,12 +26,6 @@ const watchExtensions = markdownExtensions.concat([
 	'jpeg'
 ])
 
-const PORT_RANGE = {
-	HTTP: [8000, 8100],
-	LIVE_RELOAD: [35729, 35829],
-	WEBSOCKETS: [3000, 4000]
-}
-
 const http = require('http')
 const path = require('path')
 const fs = require('fs')
@@ -42,7 +36,6 @@ const less = require('less')
 const jsdom = require('jsdom')
 const send = require('send')
 const liveReload = require('livereload')
-const openPort = require('openport')
 const connectLiveReload = require('connect-livereload')
 const chalk = require('chalk')
 
@@ -196,42 +189,43 @@ const buildHTMLFromMarkDown = (markdownPath, flags) => new Promise(resolve => {
 		}
 
 		if (flags.less === flags.$markserv.githubStylePath) {
-			outputHtml = `<!DOCTYPE html>
-	          <head>
-	            <title>${title}</title>
-	            <meta charset="utf-8">
-	            <style>${css}</style>
-	            <link rel="stylesheet" href="//sindresorhus.com/github-markdown-css/github-markdown.css">
-	            <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-	            <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
-	            <link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/github-gist.css">
-	            <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});</script><script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-	          </head>
-	          <body>
-	            <article class="markdown-body">${htmlBody}</article>
-	          </body>
-	          <script>hljs.initHighlightingOnLoad();</script>`
+			outputHtml = `
+<!DOCTYPE html>
+<head>
+	<title>${title}</title>
+		<meta charset="utf-8">
+		<style>${css}</style>
+		<link rel="stylesheet" href="//sindresorhus.com/github-markdown-css/github-markdown.css">
+		<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+		<link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/github-gist.css">
+		<script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});</script><script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	</head>
+<body>
+	<article class="markdown-body">${htmlBody}</article>
+	<script>hljs.initHighlightingOnLoad();</script>
+</body>`
 		} else {
 			outputHtml = `
-	        <!DOCTYPE html>
-	          <head>
-	            <title>${title}</title>
-	            <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-	            <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
-	            <link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/github-gist.css">
-	            <meta charset="utf-8">
-	            <style>${css}</style>
-	            <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});</script><script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-	          </head>
-	          <body>
-	            <div class="container">
-	              ${(header ? '<header>' + header + '</header>' : '')}
-	              ${(navigation ? '<nav>' + navigation + '</nav>' : '')}
-	              <article>${htmlBody}</article>
-	              ${(footer ? '<footer>' + footer + '</footer>' : '')}
-	            </div>
-	          </body>
-	          <script>hljs.initHighlightingOnLoad();</script>`
+<!DOCTYPE html>
+<head>
+	<title>${title}</title>
+	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+	<link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/github-gist.css">
+	<meta charset="utf-8">
+	<style>${css}</style>
+	<script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});</script><script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</head>
+<body>
+	<div class="container">
+		${(header ? '<header>' + header + '</header>' : '')}
+		${(navigation ? '<nav>' + navigation + '</nav>' : '')}
+		<article>${htmlBody}</article>
+		${(footer ? '<footer>' + footer + '</footer>' : '')}
+	</div>
+<script>hljs.initHighlightingOnLoad();</script>
+</body>`
 		}
 		resolve(outputHtml)
 	})
@@ -274,24 +268,23 @@ const compileAndSendDirectoryListing = (path, res, flags) => {
 
 	buildStyleSheet(flags.less).then(css => {
 		const html = `
-			<!DOCTYPE html>
-				<head>
-					<title>${path.slice(2)}</title>
-					<meta charset="utf-8">
-					<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-					<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
-					<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
-					<link rel="stylesheet" href="//highlightjs.org/static/demo/styles/github-gist.css">
-					<link rel="shortcut icon" type="image/x-icon" href="https://cdn0.iconfinder.com/data/icons/octicons/1024/markdown-128.png" />
-					<style>${css}</style>
-				</head>
-				<body>
-					<article class="markdown-body">
-						<h1>Index of ${path.slice(2)}</h1>${list}
-						<sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: ${process.pid}</sup>
-					</article>
-				</body>
-				<script src="http://localhost:35729/livereload.js?snipver=1"></script>`
+<!DOCTYPE html>
+<head>
+	<title>${path.slice(2)}</title>
+	<meta charset="utf-8">
+	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
+	<link rel="stylesheet" href="//highlightjs.org/static/demo/styles/github-gist.css">
+	<link rel="shortcut icon" type="image/x-icon" href="https://cdn0.iconfinder.com/data/icons/octicons/1024/markdown-128.png" />
+	<style>${css}</style>
+</head>
+<body>
+	<article class="markdown-body">
+		<h1>Index of ${path.slice(2)}</h1>${list}
+		<sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: ${process.pid}</sup>
+		</article>
+</body>`
 
 		// Log if verbose
 
@@ -325,7 +318,8 @@ const createRequestHandler = flags => {
 		}
 
 		const filePath = unescape(dir) + unescape(decodedUrl)
-		const prettyPath = filePath.slice(2)
+		// Needed? const prettyPath = filePath.slice(2)
+		const prettyPath = filePath
 
 		let stat
 		let isDir
@@ -361,20 +355,6 @@ const createRequestHandler = flags => {
 		}
 	}
 }
-
-const findOpenPort = range => new Promise((resolve, reject) => {
-	const props = {
-		startingPort: range[0],
-		endingPort: range[1]
-	}
-
-	openPort.find(props, (err, port) => {
-		if (err) {
-			return reject(err)
-		}
-		resolve(port)
-	})
-})
 
 const startConnectApp = (liveReloadPort, httpRequestHandler) => connect()
 	.use('/', httpRequestHandler)
@@ -415,18 +395,12 @@ const logActiveServerInfo = (httpPort, liveReloadPort, flags) => {
 }
 
 const init = async flags => {
-	const liveReloadPort = await findOpenPort(PORT_RANGE.LIVE_RELOAD)
+	const liveReloadPort = flags.livereloadport
+	const httpPort = flags.port
+
 	const httpRequestHandler = createRequestHandler(flags)
 	const connectApp = startConnectApp(liveReloadPort, httpRequestHandler)
-
-	let httpPort
-	if (flags.port === null) {
-		httpPort = await findOpenPort(PORT_RANGE.HTTP)
-	} else {
-		httpPort = flags.port
-	}
 	const httpServer = await startHTTPServer(connectApp, httpPort, flags)
-
 	const liveReloadServer = await startLiveReloadServer(liveReloadPort, flags)
 
 	// Log server info to CLI
