@@ -10,7 +10,7 @@ test.cb('start service and receive tables markdown', t => {
 
 	const expected = String(
 		fs.readFileSync(
-			path.join(__dirname, 'service.expected.html')
+			path.join(__dirname, 'dir.expected.html')
 		)
 	)
 
@@ -24,11 +24,11 @@ test.cb('start service and receive tables markdown', t => {
 			dir,
 			port,
 			livereloadport: false,
+			open: false,
 			header: null,
 			footer: null,
 			navigation: null,
 			address: 'localhost',
-			open: false,
 			less,
 			$markserv: {githubStylePath: less}
 		}
@@ -43,7 +43,7 @@ test.cb('start service and receive tables markdown', t => {
 			}
 
 			const opts = {
-				url: `http://localhost:${port}tests/tables.md`,
+				url: `http://localhost:${port}/tests/testdir/`,
 				timeout: 1000 * 2
 			}
 
@@ -53,7 +53,8 @@ test.cb('start service and receive tables markdown', t => {
 					closeServer()
 				}
 
-				t.is(body, expected)
+				console.log(body)
+				t.is(body, '')
 				t.is(res.statusCode, 200)
 				t.pass()
 				closeServer()

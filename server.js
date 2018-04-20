@@ -244,12 +244,21 @@ const compileAndSendMarkdown = (path, res, flags) => buildHTMLFromMarkDown(path,
 		console.error(err)
 	})
 
-const compileAndSendDirectoryListing = (path, res, flags) => {
-	const urls = fs.readdirSync(path)
+const compileAndSendDirectoryListing = (filepath, res, flags) => {
+	const urls = fs.readdirSync(filepath)
 	let list = '<ul>\n'
 
+	let prettyPath = '/' + path.relative(process.cwd(), filepath)
+	if (prettyPath[prettyPath.length] !== '/') {
+		prettyPath += '/'
+	}
+
+	if (prettyPath.substr(prettyPath.length - 2, 2) === '//') {
+		prettyPath = prettyPath.substr(0, prettyPath.length - 1)
+	}
+
 	urls.forEach(subPath => {
-		const dir = fs.statSync(path + subPath).isDirectory()
+		const dir = fs.statSync(filepath + subPath).isDirectory()
 		let href
 		if (dir) {
 			href = subPath + '/'
@@ -270,7 +279,7 @@ const compileAndSendDirectoryListing = (path, res, flags) => {
 		const html = `
 <!DOCTYPE html>
 <head>
-	<title>${path.slice(2)}</title>
+	<title>${prettyPath}</title>
 	<meta charset="utf-8">
 	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
@@ -281,7 +290,7 @@ const compileAndSendDirectoryListing = (path, res, flags) => {
 </head>
 <body>
 	<article class="markdown-body">
-		<h1>Index of ${path.slice(2)}</h1>${list}
+		<h1>Index of ${prettyPath}</h1>${list}
 		<sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: ${process.pid}</sup>
 		</article>
 </body>`
@@ -306,19 +315,18 @@ const getPathFromUrl = url => {
 
 // Http_request_handler: handles all the browser requests
 const createRequestHandler = flags => {
-	const dir = flags.dir
+	let dir = flags.dir
 
 	return (req, res) => {
 		const decodedUrl = getPathFromUrl(decodeURIComponent(req.originalUrl))
+		const filePath = path.normalize(unescape(dir) + unescape(decodedUrl))
 
 		if (flags.verbose) {
 			msg('request')
-				.write(unescape(dir) + unescape(decodedUrl))
+				.write(filePath)
 				.reset().write('\n')
 		}
 
-		const filePath = unescape(dir) + unescape(decodedUrl)
-		// Needed? const prettyPath = filePath.slice(2)
 		const prettyPath = filePath
 
 		let stat
@@ -334,7 +342,7 @@ const createRequestHandler = flags => {
 			}
 		} catch (err) {
 			res.writeHead(200, {'Content-Type': 'text/html'})
-			errormsg('404', prettyPath)
+			errormsg('404', path)
 			res.write(`404 :'( for ${prettyPath}`)
 			res.end()
 			return
@@ -351,27 +359,38 @@ const createRequestHandler = flags => {
 		} else {
 			// Other: Browser requests other MIME typed file (handled by 'send')
 			msg('file', prettyPath)
-			send(req, filePath, {root: dir}).pipe(res)
+			send(req, filePath).pipe(res)
 		}
 	}
 }
 
-const startConnectApp = (liveReloadPort, httpRequestHandler) => connect()
-	.use('/', httpRequestHandler)
-	.use(connectLiveReload({
+const startConnectApp = (liveReloadPort, httpRequestHandler) => {
+	const connectApp = connect().use('/', httpRequestHandler)
+	connectApp.use(connectLiveReload({
 		port: liveReloadPort
 	}))
 
+	return connectApp
+}
+
 const startHTTPServer = (connectApp, port, flags) => {
-	const httpServer = http.createServer(connectApp)
+	let httpServer
+
+	if (connectApp) {
+		httpServer = http.createServer(connectApp)
+	} else {
+		httpServer = http.createServer()
+	}
+
 	httpServer.listen(port, flags.address)
 	return httpServer
 }
 
-const startLiveReloadServer = (liveReloadPort, flags) => liveReload.createServer({
-	exts: watchExtensions,
-	port: liveReloadPort
-}).watch(path.resolve(flags.dir))
+const startLiveReloadServer = (liveReloadPort, flags) =>
+	liveReload.createServer({
+		exts: watchExtensions,
+		port: liveReloadPort
+	}).watch(path.resolve(flags.dir))
 
 const logActiveServerInfo = (httpPort, liveReloadPort, flags) => {
 	const serveURL = 'http://' + flags.address + ':' + httpPort
@@ -387,10 +406,8 @@ const logActiveServerInfo = (httpPort, liveReloadPort, flags) => {
 		msg('info', chalk`to stop this server, press: {white [Ctrl + C]}, or type: {white "kill ${process.pid}"}`)
 	}
 
-	if (flags.file) {
-		open(serveURL + '/' + flags.file)
-	} else if (!flags.x) {
-		open(serveURL)
+	if (flags.open) {
+		open(serveURL + '/' + flags.open)
 	}
 }
 
@@ -401,7 +418,11 @@ const init = async flags => {
 	const httpRequestHandler = createRequestHandler(flags)
 	const connectApp = startConnectApp(liveReloadPort, httpRequestHandler)
 	const httpServer = await startHTTPServer(connectApp, httpPort, flags)
-	const liveReloadServer = await startLiveReloadServer(liveReloadPort, flags)
+
+	let liveReloadServer
+	if (liveReloadPort) {
+		liveReloadServer = await startLiveReloadServer(liveReloadPort, flags)
+	}
 
 	// Log server info to CLI
 	logActiveServerInfo(httpPort, liveReloadPort, flags)
