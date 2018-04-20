@@ -316,15 +316,15 @@ const createRequestHandler = flags => {
 	const dir = flags.dir
 
 	return (req, res) => {
-		const originalUrl = getPathFromUrl(req.originalUrl)
+		const decodedUrl = getPathFromUrl(decodeURIComponent(req.originalUrl))
 
 		if (flags.verbose) {
 			msg('request')
-				.write(unescape(dir) + unescape(originalUrl))
+				.write(unescape(dir) + unescape(decodedUrl))
 				.reset().write('\n')
 		}
 
-		const filePath = unescape(dir) + unescape(originalUrl)
+		const filePath = unescape(dir) + unescape(decodedUrl)
 		const prettyPath = filePath.slice(2)
 
 		let stat
