@@ -49,10 +49,18 @@ const md = new MarkdownIt({
 	html: true
 }).use(markdownItAnchor)
 
-// eslint-disable-next-line no-console
-const log = str => console.log(str)
-const msg = (type, msg) => log(chalk`{bgGreen.black  Markserv } {white  ${type}: }` + msg)
-const errormsg = (type, msg) => log(chalk`{bgRed.black  Markserv } {red  ${type}: }` + msg)
+const log = (str, flags) => {
+	if (flags.silent) {
+		return
+	}
+	// eslint-disable-next-line no-console
+	console.log(str)
+}
+const msg = (type, msg, flags) =>
+	log(chalk`{bgGreen.black  Markserv } {white  ${type}: }` + msg, flags)
+
+const errormsg = (type, msg, flags) =>
+	log(chalk`{bgRed.black  Markserv } {red  ${type}: }` + msg, flags)
 
 // HasMarkdownExtension: check whether a file is Markdown type
 const hasMarkdownExtension = path => {
@@ -239,7 +247,7 @@ const compileAndSendMarkdown = (path, res, flags) => buildHTMLFromMarkDown(path,
 
 	// Catch if something breaks...
 	}).catch(err => {
-		msg('error', 'Can\'t build HTML')
+		msg('error', 'Can\'t build HTML', flags)
 		// eslint-disable-next-line no-console
 		console.error(err)
 	})
@@ -298,7 +306,7 @@ const compileAndSendDirectoryListing = (filepath, res, flags) => {
 		// Log if verbose
 
 		if (flags.verbose) {
-			msg('index').write(path).reset().write('\n')
+			msg('index', path, flags)
 		}
 
 		// Send file
@@ -315,16 +323,14 @@ const getPathFromUrl = url => {
 
 // Http_request_handler: handles all the browser requests
 const createRequestHandler = flags => {
-	let dir = flags.dir
+	const dir = flags.dir
 
 	return (req, res) => {
 		const decodedUrl = getPathFromUrl(decodeURIComponent(req.originalUrl))
 		const filePath = path.normalize(unescape(dir) + unescape(decodedUrl))
 
 		if (flags.verbose) {
-			msg('request')
-				.write(filePath)
-				.reset().write('\n')
+			msg('request', filePath, flags)
 		}
 
 		const prettyPath = filePath
@@ -342,7 +348,7 @@ const createRequestHandler = flags => {
 			}
 		} catch (err) {
 			res.writeHead(200, {'Content-Type': 'text/html'})
-			errormsg('404', path)
+			errormsg('404', path, flags)
 			res.write(`404 :'( for ${prettyPath}`)
 			res.end()
 			return
@@ -350,15 +356,15 @@ const createRequestHandler = flags => {
 
 		// Markdown: Browser is requesting a Markdown file
 		if (isMarkdown) {
-			msg('markdown', prettyPath)
+			msg('markdown', prettyPath, flags)
 			compileAndSendMarkdown(filePath, res, flags)
 		} else if (isDir) {
 			// Index: Browser is requesting a Directory Index
-			msg('dir', prettyPath)
+			msg('dir', prettyPath, flags)
 			compileAndSendDirectoryListing(filePath, res, flags)
 		} else {
 			// Other: Browser requests other MIME typed file (handled by 'send')
-			msg('file', prettyPath)
+			msg('file', prettyPath, flags)
 			send(req, filePath).pipe(res)
 		}
 	}
@@ -396,14 +402,14 @@ const logActiveServerInfo = (httpPort, liveReloadPort, flags) => {
 	const serveURL = 'http://' + flags.address + ':' + httpPort
 	const dir = path.resolve(flags.dir)
 
-	msg('start', chalk`serving content from {white ${dir}} on port: {white ${httpPort}}`)
-	msg('address', chalk`{underline.white ${serveURL}}`)
-	msg('less', chalk`using style from {white ${flags.less}}`)
-	msg('livereload', chalk`communicating on port: {white ${liveReloadPort}}`)
+	msg('start', chalk`serving content from {white ${dir}} on port: {white ${httpPort}}`, flags)
+	msg('address', chalk`{underline.white ${serveURL}}`, flags)
+	msg('less', chalk`using style from {white ${flags.less}}`, flags)
+	msg('livereload', chalk`communicating on port: {white ${liveReloadPort}}`, flags)
 
 	if (process.pid) {
-		msg('process', chalk`your pid is: {white ${process.pid}}`)
-		msg('info', chalk`to stop this server, press: {white [Ctrl + C]}, or type: {white "kill ${process.pid}"}`)
+		msg('process', chalk`your pid is: {white ${process.pid}}`, flags)
+		msg('info', chalk`to stop this server, press: {white [Ctrl + C]}, or type: {white "kill ${process.pid}"}`, flags)
 	}
 
 	if (flags.open) {
@@ -428,6 +434,7 @@ const init = async flags => {
 	logActiveServerInfo(httpPort, liveReloadPort, flags)
 
 	const service = {
+		pid: process.pid,
 		httpServer,
 		liveReloadServer,
 		connectApp

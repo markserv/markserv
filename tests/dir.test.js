@@ -18,18 +18,16 @@ test.cb('start service and receive tables markdown', t => {
 	const less = path.join(__dirname, '..', 'less', 'github.less')
 
 	getPort().then(port => {
-		console.log(port)
-
 		const flags = {
 			dir,
 			port,
 			livereloadport: false,
-			open: false,
 			header: null,
 			footer: null,
 			navigation: null,
 			address: 'localhost',
 			less,
+			silent: true,
 			$markserv: {githubStylePath: less}
 		}
 
@@ -53,8 +51,7 @@ test.cb('start service and receive tables markdown', t => {
 					closeServer()
 				}
 
-				console.log(body)
-				t.is(body, '')
+				t.is(body, expected.replace('{{PID}}', service.pid))
 				t.is(res.statusCode, 200)
 				t.pass()
 				closeServer()

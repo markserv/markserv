@@ -18,8 +18,6 @@ test.cb('start service and receive tables markdown', t => {
 	const less = path.join(__dirname, '..', 'less', 'github.less')
 
 	getPort().then(port => {
-		console.log(port)
-
 		const flags = {
 			dir,
 			port,
@@ -28,7 +26,7 @@ test.cb('start service and receive tables markdown', t => {
 			footer: null,
 			navigation: null,
 			address: 'localhost',
-			open: false,
+			silent: true,
 			less,
 			$markserv: {githubStylePath: less}
 		}
@@ -43,7 +41,7 @@ test.cb('start service and receive tables markdown', t => {
 			}
 
 			const opts = {
-				url: `http://localhost:${port}tests/tables.md`,
+				url: `http://localhost:${port}/tests/tables.md`,
 				timeout: 1000 * 2
 			}
 
