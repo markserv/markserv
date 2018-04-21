@@ -44,8 +44,8 @@ const fileTypes = {
 		'.jpeg'
 	],
 
-	exlcusions: [
-		'node_modules/',
+	exclusions: [
+		'node_modules/'
 	]
 }
 
@@ -391,10 +391,13 @@ const startLiveReloadServer = (liveReloadPort, flags) => {
 	}
 
 	const exts = fileTypes.watch.map(type => type.substr(1))
-	console.log(fileTypes.exlcusions)
+	const exclusions = fileTypes.exclusions.map(exPath => {
+		return path.join(dir, exPath)
+	})
+
 	return liveReload.createServer({
 		exts,
-		exclusions: fileTypes.exlcusions,
+		exclusions,
 		port: liveReloadPort
 	}).watch(path.resolve(dir))
 }
