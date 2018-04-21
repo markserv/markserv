@@ -1,5 +1,18 @@
 'use strict'
 
+const http = require('http')
+const path = require('path')
+const fs = require('fs')
+const chalk = require('chalk')
+
+const style = {
+	link: chalk.blueBright.underline.italic,
+	patreon: chalk.rgb(249, 104, 84).underline.italic,
+	address: chalk.greenBright.underline.italic,
+	port: chalk.reset.cyanBright,
+	pid: chalk.reset.cyanBright
+}
+
 // Markdown Extension Types
 const fileTypes = {
 	markdown: [
@@ -34,9 +47,6 @@ fileTypes.watch = fileTypes.watch
 	.concat(fileTypes.markdown)
 	.concat(fileTypes.html)
 
-const http = require('http')
-const path = require('path')
-const fs = require('fs')
 const open = require('open')
 const Promise = require('bluebird')
 const connect = require('connect')
@@ -44,19 +54,15 @@ const less = require('less')
 const send = require('send')
 const liveReload = require('livereload')
 const connectLiveReload = require('connect-livereload')
-const chalk = require('chalk')
 const implant = require('implant')
 const deepmerge = require('deepmerge')
 const handlebars = require('handlebars')
+const termImg = require('term-img')
 
 const MarkdownIt = require('markdown-it')
 const mdItAnchor = require('markdown-it-anchor')
 const mdItTaskLists = require('markdown-it-task-lists')
 const mdItHLJS = require('markdown-it-highlightjs')
-
-// JSDOM
-// const jsdom = require('jsdom')
-// const {JSDOM} = jsdom
 
 const md = new MarkdownIt({
 	linkify: true,
@@ -80,8 +86,12 @@ const log = (str, flags, err) => {
 		console.error(err)
 	}
 }
-const msg = (type, msg, flags) =>
-	log(chalk`{bgGreen.black  Markserv } {white  ${type}: }` + msg, flags)
+const msg = (type, msg, flags) => {
+	if (type === 'patreon') {
+		return log(chalk`{bgRgb(249, 104, 84).white.bold  {black |}● PATREON }  ` + msg, flags)
+	}
+	log(chalk`{bgGreen.black   Markserv  } {white  ${type}: }` + msg, flags)
+}
 
 const errormsg = (type, msg, flags, err) =>
 	log(chalk`{bgRed.black  Markserv } {red  ${type}: }` + msg, flags, err)
@@ -123,45 +133,6 @@ const buildLessStyleSheet = cssPath =>
 			)
 		)
 	)
-
-// // Linkify: converts github style wiki markdown links to .md links
-// const linkify = (body, flags) => new Promise((resolve, reject) => {
-// 	const dom = new JSDOM(body)
-
-// 	if (!dom) {
-// 		return reject(dom)
-// 	}
-
-// 	const {window} = dom
-
-// 	const links = window.document.getElementsByTagName('a')
-// 	const l = links.length
-
-// 	let href
-// 	let link
-// 	let markdownFile
-// 	let mdFileExists
-// 	let relativeURL
-// 	let isFileHref
-
-// 	for (let i = 0; i < l; i++) {
-// 		link = links[i]
-// 		href = link.href
-// 		isFileHref = href.substr(0, 8) === 'file:///'
-
-// 		markdownFile = href.replace(path.join('file://', __dirname), flags.dir) + '.md'
-// 		mdFileExists = fs.existsSync(markdownFile)
-
-// 		if (isFileHref && mdFileExists) {
-// 			relativeURL = href.replace(path.join('file://', __dirname), '') + '.md'
-// 			link.href = relativeURL
-// 		}
-// 	}
-
-// 	const html = window.document.getElementsByTagName('body')[0].innerHTML
-// 	resolve(html)
-// })
-// .then(html => linkify(html, flags))
 
 const baseTemplate = (templateUrl, handebarData) => new Promise((resolve, reject) => {
 	getFile(templateUrl).then(source => {
@@ -227,53 +198,39 @@ const createRequestHandler = flags => {
 	const implantHandlers = {
 		less: (url, opts) => new Promise(resolve => {
 			const absUrl = path.join(opts.baseDir, url)
-			console.log('LESS')
-			console.log(absUrl)
-
 			buildLessStyleSheet(absUrl)
 				.then(data => {
-					msg('include', absUrl, flags)
+					msg('implant < markdown <', style.link(absUrl), flags)
 					resolve(data)
 				})
 				.catch(err => {
-					errormsg('404', absUrl, flags, err)
+					errormsg('404', style.link(absUrl), flags, err)
 					resolve(false)
 				})
-
-			// getFile(absUrl).then(markdownToHTML)
-			// 	.then(data => {
-			// 		msg('include', absUrl, flags)
-			// 		resolve(data)
-			// 	})
-			// 	.catch(err => {
-			// 		errormsg('404', absUrl, flags, err)
-			// 		resolve(false)
-			// 	})
 		}),
 
 		markdown: (url, opts) => new Promise(resolve => {
 			const absUrl = path.join(opts.baseDir, url)
-
 			getFile(absUrl).then(markdownToHTML)
 				.then(data => {
-					msg('include', absUrl, flags)
+					msg('implant < markdown <', style.link(absUrl), flags)
 					resolve(data)
 				})
 				.catch(err => {
-					errormsg('404', absUrl, flags, err)
+					errormsg('404', style.link(absUrl), flags, err)
 					resolve(false)
 				})
 		}),
+
 		html: (url, opts) => new Promise(resolve => {
 			const absUrl = path.join(opts.baseDir, url)
-
 			getFile(absUrl)
 				.then(data => {
-					msg('include', absUrl, flags)
+					msg('implant < html <', style.link(absUrl), flags)
 					resolve(data)
 				})
 				.catch(err => {
-					errormsg('404', absUrl, flags, err)
+					errormsg('404', style.link(absUrl), flags, err)
 					resolve(false)
 				})
 		})
@@ -380,8 +337,12 @@ const createRequestHandler = flags => {
 				console.error(err)
 			})
 		} else {
-			// Other: Browser requests other MIME typed file (handled by 'send')
 			msg('file', prettyPath, flags)
+			const fileName = path.parse(filePath).base
+			if (fileName === 'favicon.ico') {
+				console.log('ICON!')
+			}
+			// Other: Browser requests other MIME typed file (handled by 'send')
 			send(req, filePath).pipe(res)
 		}
 	}
@@ -428,14 +389,22 @@ const logActiveServerInfo = (httpPort, liveReloadPort, flags) => {
 	const serveURL = 'http://' + flags.address + ':' + httpPort
 	const dir = path.resolve(flags.dir)
 
-	msg('start', chalk`serving content from {white ${dir}} on port: {white ${httpPort}}`, flags)
-	msg('address', chalk`{underline.white ${serveURL}}`, flags)
-	msg('less', chalk`using style from {white ${flags.less}}`, flags)
-	msg('livereload', chalk`communicating on port: {white ${liveReloadPort}}`, flags)
+	termImg('markserv-logo-term.png', {
+		width: 12,
+		fallback: () => {}
+	})
+
+	const patreonLink = `http://patreon.com/f1lt3r`
+
+	msg('patreon', chalk`{whiteBright.bold Love Markserv? Become a Patreon! ${style.patreon(patreonLink)}}`, flags)
+	msg('start', chalk`{grey serving content from ${style.link(dir)} on port: ${style.port(httpPort)}}`, flags)
+	msg('address', style.address(serveURL), flags)
+	msg('less', chalk`{grey using style from ${style.link(flags.less)}}`, flags)
+	msg('livereload', chalk`{grey communicating on port: ${style.port(liveReloadPort)}}`, flags)
 
 	if (process.pid) {
-		msg('process', chalk`your pid is: {white ${process.pid}}`, flags)
-		msg('info', chalk`to stop this server, press: {white [Ctrl + C]}, or type: {white "kill ${process.pid}"}`, flags)
+		msg('process', chalk`{grey your pid is: ${style.pid(process.pid)}}`, flags)
+		msg('info', chalk`{grey to stop this server, press: {white [Ctrl + C]}, or type: {white "kill ${process.pid}"}}`, flags)
 	}
 
 	if (flags.$openLocation) {
