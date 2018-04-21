@@ -72,6 +72,8 @@ const md = new MarkdownIt({
 	.use(mdItTaskLists)
 	.use(mdItHLJS)
 
+const faviconData = fs.readFileSync(path.join(__dirname, 'markserv-favicon-96x96.png'))
+
 const log = (str, flags, err) => {
 	if (flags.silent) {
 		return
@@ -200,7 +202,7 @@ const createRequestHandler = flags => {
 			const absUrl = path.join(opts.baseDir, url)
 			buildLessStyleSheet(absUrl)
 				.then(data => {
-					msg('implant < markdown <', style.link(absUrl), flags)
+					msg('implant', style.link(absUrl), flags)
 					resolve(data)
 				})
 				.catch(err => {
@@ -213,7 +215,7 @@ const createRequestHandler = flags => {
 			const absUrl = path.join(opts.baseDir, url)
 			getFile(absUrl).then(markdownToHTML)
 				.then(data => {
-					msg('implant < markdown <', style.link(absUrl), flags)
+					msg('implant', style.link(absUrl), flags)
 					resolve(data)
 				})
 				.catch(err => {
@@ -226,7 +228,7 @@ const createRequestHandler = flags => {
 			const absUrl = path.join(opts.baseDir, url)
 			getFile(absUrl)
 				.then(data => {
-					msg('implant < html <', style.link(absUrl), flags)
+					msg('implant', style.link(absUrl), flags)
 					resolve(data)
 				})
 				.catch(err => {
@@ -261,6 +263,14 @@ const createRequestHandler = flags => {
 				isHtml = isType(fileTypes.html, filePath)
 			}
 		} catch (err) {
+			const fileName = path.parse(filePath).base
+			if (fileName === 'favicon.ico') {
+				console.log('ICON!')
+				res.writeHead(200, {'Content-Type': 'image/x-icon'})
+				res.write(faviconData)
+				res.end()
+			}
+
 			res.writeHead(200, {'Content-Type': 'text/html'})
 			errormsg('404', filePath, flags, err)
 			res.write(`404 :'( for ${prettyPath}`)
@@ -337,12 +347,8 @@ const createRequestHandler = flags => {
 				console.error(err)
 			})
 		} else {
-			msg('file', prettyPath, flags)
-			const fileName = path.parse(filePath).base
-			if (fileName === 'favicon.ico') {
-				console.log('ICON!')
-			}
 			// Other: Browser requests other MIME typed file (handled by 'send')
+			msg('file', prettyPath, flags)
 			send(req, filePath).pipe(res)
 		}
 	}
