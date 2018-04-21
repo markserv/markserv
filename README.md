@@ -85,12 +85,12 @@ You can link to an external Markdown file in the same way that you use GitHub Wi
 Example code:
 
 ```markdown
-[Skateboarding Dog!](Linked-Markdown-Example.md)
+[Skateboarding Dog!](examples/Linked-Markdown-Example.md)
 ```
 
 Example link:
 
-[Skateboarding Dog!](Linked-Markdown-Example.md)
+[Skateboarding Dog!](examples/Linked-Markdown-Example.md)
 
 ## Options/Flags
 

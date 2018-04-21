@@ -1,30 +1,38 @@
 'use strict'
 
 // Markdown Extension Types
-const markdownExtensions = [
-	'markdown',
-	'mdown',
-	'mkdn',
-	'md',
-	'mkd',
-	'mdwn',
-	'mdtxt',
-	'mdtext',
-	'text'
-]
+const fileTypes = {
+	markdown: [
+		'.markdown',
+		'.mdown',
+		'.mkdn',
+		'.md',
+		'.mkd',
+		'.mdwn',
+		'.mdtxt',
+		'.mdtext',
+		'.text'
+	],
+	html: [
+		'.html',
+		'.htm'
+	],
+	watch: [
+		'.sass',
+		'.less',
+		'.js',
+		'.css',
+		'.json',
+		'.gif',
+		'.png',
+		'.jpg',
+		'.jpeg'
+	]
+}
 
-const watchExtensions = markdownExtensions.concat([
-	'less',
-	'js',
-	'css',
-	'html',
-	'htm',
-	'json',
-	'gif',
-	'png',
-	'jpg',
-	'jpeg'
-])
+fileTypes.watch = fileTypes.watch
+	.concat(fileTypes.markdown)
+	.concat(fileTypes.html)
 
 const http = require('http')
 const path = require('path')
@@ -38,42 +46,46 @@ const send = require('send')
 const liveReload = require('livereload')
 const connectLiveReload = require('connect-livereload')
 const chalk = require('chalk')
+const implant = require('implant')
 
 const MarkdownIt = require('markdown-it')
-const markdownItAnchor = require('markdown-it-anchor')
+const mdItAnchor = require('markdown-it-anchor')
+const mdItTaskLists = require('markdown-it-task-lists')
+const mdItHLJS = require('markdown-it-highlightjs')
 
 const {JSDOM} = jsdom
 
 const md = new MarkdownIt({
 	linkify: true,
 	html: true
-}).use(markdownItAnchor)
+})
+	.use(mdItAnchor)
+	.use(mdItTaskLists)
+	.use(mdItHLJS)
 
-const log = (str, flags) => {
+const log = (str, flags, err) => {
 	if (flags.silent) {
 		return
 	}
-	// eslint-disable-next-line no-console
-	console.log(str)
+	if (str) {
+		// eslint-disable-next-line no-console
+		console.log(str)
+	}
+
+	if (err) {
+		// eslint-disable-next-line no-console
+		console.error(err)
+	}
 }
 const msg = (type, msg, flags) =>
 	log(chalk`{bgGreen.black  Markserv } {white  ${type}: }` + msg, flags)
 
-const errormsg = (type, msg, flags) =>
-	log(chalk`{bgRed.black  Markserv } {red  ${type}: }` + msg, flags)
+const errormsg = (type, msg, flags, err) =>
+	log(chalk`{bgRed.black  Markserv } {red  ${type}: }` + msg, flags, err)
 
-// HasMarkdownExtension: check whether a file is Markdown type
-const hasMarkdownExtension = path => {
-	const fileExtension = path.substr(path.length - 3).toLowerCase()
-	let extensionMatch = false
-
-	markdownExtensions.forEach(extension => {
-		if (`.${extension}` === fileExtension) {
-			extensionMatch = true
-		}
-	})
-
-	return extensionMatch
+const isType = (exts, filePath) => {
+	const fileExt = path.parse(filePath).ext
+	return exts.includes(fileExt)
 }
 
 // MarkdownToHTML: turns a Markdown file into HTML content
@@ -82,6 +94,7 @@ const markdownToHTML = markdownText => new Promise((resolve, reject) => {
 
 	try {
 		result = md.render(markdownText)
+		console.log(result)
 	} catch (err) {
 		return reject(err)
 	}
@@ -109,43 +122,44 @@ const buildStyleSheet = cssPath =>
 		)
 	)
 
-// Linkify: converts github style wiki markdown links to .md links
-const linkify = (body, flags) => new Promise((resolve, reject) => {
-	const dom = new JSDOM(body)
+// // Linkify: converts github style wiki markdown links to .md links
+// const linkify = (body, flags) => new Promise((resolve, reject) => {
+// 	const dom = new JSDOM(body)
 
-	if (!dom) {
-		return reject(dom)
-	}
+// 	if (!dom) {
+// 		return reject(dom)
+// 	}
 
-	const {window} = dom
+// 	const {window} = dom
 
-	const links = window.document.getElementsByTagName('a')
-	const l = links.length
+// 	const links = window.document.getElementsByTagName('a')
+// 	const l = links.length
 
-	let href
-	let link
-	let markdownFile
-	let mdFileExists
-	let relativeURL
-	let isFileHref
+// 	let href
+// 	let link
+// 	let markdownFile
+// 	let mdFileExists
+// 	let relativeURL
+// 	let isFileHref
 
-	for (let i = 0; i < l; i++) {
-		link = links[i]
-		href = link.href
-		isFileHref = href.substr(0, 8) === 'file:///'
+// 	for (let i = 0; i < l; i++) {
+// 		link = links[i]
+// 		href = link.href
+// 		isFileHref = href.substr(0, 8) === 'file:///'
 
-		markdownFile = href.replace(path.join('file://', __dirname), flags.dir) + '.md'
-		mdFileExists = fs.existsSync(markdownFile)
+// 		markdownFile = href.replace(path.join('file://', __dirname), flags.dir) + '.md'
+// 		mdFileExists = fs.existsSync(markdownFile)
 
-		if (isFileHref && mdFileExists) {
-			relativeURL = href.replace(path.join('file://', __dirname), '') + '.md'
-			link.href = relativeURL
-		}
-	}
+// 		if (isFileHref && mdFileExists) {
+// 			relativeURL = href.replace(path.join('file://', __dirname), '') + '.md'
+// 			link.href = relativeURL
+// 		}
+// 	}
 
-	const html = window.document.getElementsByTagName('body')[0].innerHTML
-	resolve(html)
-})
+// 	const html = window.document.getElementsByTagName('body')[0].innerHTML
+// 	resolve(html)
+// })
+// .then(html => linkify(html, flags))
 
 // BuildHTMLFromMarkDown: compiles the final HTML/CSS output from Markdown/Less files, includes JS
 const buildHTMLFromMarkDown = (markdownPath, flags) => new Promise(resolve => {
@@ -155,22 +169,6 @@ const buildHTMLFromMarkDown = (markdownPath, flags) => new Promise(resolve => {
 		// Article
 		getFile(markdownPath)
 			.then(markdownToHTML)
-			.then(html => linkify(html, flags)),
-
-		// Header
-		flags.header && getFile(flags.header)
-			.then(markdownToHTML)
-			.then(html => linkify(html, flags)),
-
-		// Footer
-		flags.footer && getFile(flags.footer)
-			.then(markdownToHTML)
-			.then(html => linkify(html, flags)),
-
-		// Navigation
-		flags.navigation && getFile(flags.navigation)
-			.then(markdownToHTML)
-			.then(html => linkify(html, flags))
 	]
 
 	Promise.all(stack).then(data => {
@@ -183,18 +181,6 @@ const buildHTMLFromMarkDown = (markdownPath, flags) => new Promise(resolve => {
 		let footer
 		let navigation
 		let outputHtml
-
-		if (flags.header) {
-			header = data[2]
-		}
-
-		if (flags.footer) {
-			footer = data[3]
-		}
-
-		if (flags.navigation) {
-			navigation = data[4]
-		}
 
 		if (flags.less === flags.$markserv.githubStylePath) {
 			outputHtml = `
@@ -242,7 +228,7 @@ const buildHTMLFromMarkDown = (markdownPath, flags) => new Promise(resolve => {
 // MarkItDown: begins the Markdown compilation process, then sends result when done...
 const compileAndSendMarkdown = (path, res, flags) => buildHTMLFromMarkDown(path, flags)
 	.then(html => {
-		res.writeHead(200)
+		res.writeHead(200, {'Content-Type': 'text/html'})
 		res.end(html)
 
 	// Catch if something breaks...
@@ -254,6 +240,7 @@ const compileAndSendMarkdown = (path, res, flags) => buildHTMLFromMarkDown(path,
 
 const compileAndSendDirectoryListing = (filepath, res, flags) => {
 	const urls = fs.readdirSync(filepath)
+
 	let list = '<ul>\n'
 
 	let prettyPath = '/' + path.relative(process.cwd(), filepath)
@@ -323,11 +310,54 @@ const getPathFromUrl = url => {
 
 // Http_request_handler: handles all the browser requests
 const createRequestHandler = flags => {
-	const dir = flags.dir
+	let dir = flags.dir
+	const isDir = fs.statSync(dir).isDirectory()
+	if (!isDir) {
+		dir = path.parse(flags.dir).dir
+		flags.$openLocation = path.relative(dir, flags.dir)
+	}
+
+	console.log(333, dir)
+
+	const implantOpts = {
+		maxRecursion: 10
+	}
+
+	const implantHandlers = {
+		markdown: (url, opts) => new Promise(resolve => {
+			const absUrl = path.join(opts.baseDir, url)
+
+			getFile(absUrl)
+				.then(markdownToHTML)
+				.then(data => {
+					msg('include', absUrl, flags)
+					resolve(data)
+				})
+				.catch(err => {
+					errormsg('404', absUrl, flags, err)
+					resolve(false)
+				})
+		}),
+		html: (url, opts) => new Promise(resolve => {
+			const absUrl = path.join(opts.baseDir, url)
+
+			getFile(absUrl)
+				.then(data => {
+					msg('include', absUrl, flags)
+					resolve(data)
+				})
+				.catch(err => {
+					errormsg('404', absUrl, flags, err)
+					resolve(false)
+				})
+		})
+	}
 
 	return (req, res) => {
 		const decodedUrl = getPathFromUrl(decodeURIComponent(req.originalUrl))
 		const filePath = path.normalize(unescape(dir) + unescape(decodedUrl))
+		const baseDir = path.parse(filePath).dir
+		implantOpts.baseDir = baseDir
 
 		if (flags.verbose) {
 			msg('request', filePath, flags)
@@ -338,17 +368,18 @@ const createRequestHandler = flags => {
 		let stat
 		let isDir
 		let isMarkdown
+		let isHtml
 
 		try {
 			stat = fs.statSync(filePath)
 			isDir = stat.isDirectory()
-			isMarkdown = false
 			if (!isDir) {
-				isMarkdown = hasMarkdownExtension(filePath)
+				isMarkdown = isType(fileTypes.markdown, filePath)
+				isHtml = isType(fileTypes.html, filePath)
 			}
 		} catch (err) {
 			res.writeHead(200, {'Content-Type': 'text/html'})
-			errormsg('404', path, flags)
+			errormsg('404', filePath, flags, err)
 			res.write(`404 :'( for ${prettyPath}`)
 			res.end()
 			return
@@ -358,6 +389,30 @@ const createRequestHandler = flags => {
 		if (isMarkdown) {
 			msg('markdown', prettyPath, flags)
 			compileAndSendMarkdown(filePath, res, flags)
+			// markdownToHTML(filePath).then(html => {
+			// 	return implant(html, implantHandlers, implantOpts).then(output => {
+			// 		res.writeHead(200, {
+			// 			'content-type': 'text/html'
+			// 		})
+			// 		res.end(output)
+			// 	})
+			// }).catch(err => {
+			// 	// eslint-disable-next-line no-console
+			// 	console.error(err)
+			// })
+		} else if (isHtml) {
+			msg('html', prettyPath, flags)
+			getFile(filePath).then(html => {
+				return implant(html, implantHandlers, implantOpts).then(output => {
+					res.writeHead(200, {
+						'content-type': 'text/html'
+					})
+					res.end(output)
+				})
+			}).catch(err => {
+				// eslint-disable-next-line no-console
+				console.error(err)
+			})
 		} else if (isDir) {
 			// Index: Browser is requesting a Directory Index
 			msg('dir', prettyPath, flags)
@@ -392,11 +447,20 @@ const startHTTPServer = (connectApp, port, flags) => {
 	return httpServer
 }
 
-const startLiveReloadServer = (liveReloadPort, flags) =>
-	liveReload.createServer({
-		exts: watchExtensions,
+const startLiveReloadServer = (liveReloadPort, flags) => {
+	let dir = flags.dir
+	const isDir = fs.statSync(dir).isDirectory()
+	if (!isDir) {
+		dir = path.parse(flags.dir).dir
+	}
+
+	const exts = fileTypes.watch.map(type => type.substr(1))
+
+	return liveReload.createServer({
+		exts,
 		port: liveReloadPort
-	}).watch(path.resolve(flags.dir))
+	}).watch(path.resolve(dir))
+}
 
 const logActiveServerInfo = (httpPort, liveReloadPort, flags) => {
 	const serveURL = 'http://' + flags.address + ':' + httpPort
@@ -412,8 +476,8 @@ const logActiveServerInfo = (httpPort, liveReloadPort, flags) => {
 		msg('info', chalk`to stop this server, press: {white [Ctrl + C]}, or type: {white "kill ${process.pid}"}`, flags)
 	}
 
-	if (flags.open) {
-		open(serveURL + '/' + flags.open)
+	if (flags.$openLocation) {
+		open(serveURL + '/' + flags.$openLocation)
 	}
 }
 
