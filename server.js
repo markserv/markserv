@@ -41,19 +41,21 @@ const open = require('open')
 const Promise = require('bluebird')
 const connect = require('connect')
 const less = require('less')
-const jsdom = require('jsdom')
 const send = require('send')
 const liveReload = require('livereload')
 const connectLiveReload = require('connect-livereload')
 const chalk = require('chalk')
 const implant = require('implant')
+const deepmerge = require('deepmerge')
 
 const MarkdownIt = require('markdown-it')
 const mdItAnchor = require('markdown-it-anchor')
 const mdItTaskLists = require('markdown-it-task-lists')
 const mdItHLJS = require('markdown-it-highlightjs')
 
-// JSDOM const {JSDOM} = jsdom
+// JSDOM
+// const jsdom = require('jsdom')
+// const {JSDOM} = jsdom
 
 const md = new MarkdownIt({
 	linkify: true,
@@ -112,7 +114,7 @@ const getFile = path => new Promise((resolve, reject) => {
 })
 
 // Get Custom Less CSS to use in all Markdown files
-const buildStyleSheet = cssPath =>
+const buildLessStyleSheet = cssPath =>
 	new Promise(resolve =>
 		getFile(cssPath).then(data =>
 			less.render(data).then(data =>
@@ -160,82 +162,14 @@ const buildStyleSheet = cssPath =>
 // })
 // .then(html => linkify(html, flags))
 
-// BuildHTMLFromMarkDown: compiles the final HTML/CSS output from Markdown/Less files, includes JS
-const buildHTMLFromMarkDown = (markdownPath, flags) => new Promise(resolve => {
-	const stack = [
-		buildStyleSheet(flags.less),
-
-		// Article
-		getFile(markdownPath)
-			.then(markdownToHTML)
-	]
-
-	Promise.all(stack).then(data => {
-		const css = data[0]
-		const htmlBody = data[1]
-		const dirs = markdownPath.split('/')
-		const title = dirs[dirs.length - 1].split('.md')[0]
-
-		let header
-		let footer
-		let navigation
-		let outputHtml
-
-		if (flags.less === flags.$markserv.githubStylePath) {
-			outputHtml = `
-<!DOCTYPE html>
-<head>
-	<title>${title}</title>
-		<meta charset="utf-8">
-		<style>${css}</style>
-		<link rel="stylesheet" href="//sindresorhus.com/github-markdown-css/github-markdown.css">
-		<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
-		<link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/github-gist.css">
-		<script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});</script><script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-	</head>
-<body>
-	<article class="markdown-body">${htmlBody}</article>
-	<script>hljs.initHighlightingOnLoad();</script>
-</body>`
-		} else {
-			outputHtml = `
-<!DOCTYPE html>
-<head>
-	<title>${title}</title>
-	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
-	<link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/github-gist.css">
-	<meta charset="utf-8">
-	<style>${css}</style>
-	<script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});</script><script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-</head>
-<body>
-	<div class="container">
-		${(header ? '<header>' + header + '</header>' : '')}
-		${(navigation ? '<nav>' + navigation + '</nav>' : '')}
-		<article>${htmlBody}</article>
-		${(footer ? '<footer>' + footer + '</footer>' : '')}
-	</div>
-<script>hljs.initHighlightingOnLoad();</script>
-</body>`
-		}
-		resolve(outputHtml)
-	})
+const baseTemplate = (templateUrl, content, filename) => new Promise((resolve, reject) => {
+	getFile(templateUrl).then(template => {
+		const output = template
+			.replace('{{{content}}}', content)
+			.replace('{{{title}}}', filename)
+		resolve(output)
+	}).catch(reject)
 })
-
-// MarkItDown: begins the Markdown compilation process, then sends result when done...
-const compileAndSendMarkdown = (path, res, flags) => buildHTMLFromMarkDown(path, flags)
-	.then(html => {
-		res.writeHead(200, {'Content-Type': 'text/html'})
-		res.end(html)
-
-	// Catch if something breaks...
-	}).catch(err => {
-		msg('error', 'Can\'t build HTML', flags)
-		// eslint-disable-next-line no-console
-		console.error(err)
-	})
 
 const compileAndSendDirectoryListing = (filepath, res, flags) => {
 	const urls = fs.readdirSync(filepath)
@@ -269,7 +203,7 @@ const compileAndSendDirectoryListing = (filepath, res, flags) => {
 
 	list += '</ul>\n'
 
-	buildStyleSheet(flags.less).then(css => {
+	buildLessStyleSheet(flags.less).then(css => {
 		const html = `
 <!DOCTYPE html>
 <head>
@@ -316,13 +250,37 @@ const createRequestHandler = flags => {
 		flags.$openLocation = path.relative(dir, flags.dir)
 	}
 
-	console.log(333, dir)
-
 	const implantOpts = {
 		maxRecursion: 10
 	}
 
 	const implantHandlers = {
+		less: (url, opts) => new Promise(resolve => {
+			const absUrl = path.join(opts.baseDir, url)
+			console.log('LESS')
+			console.log(absUrl)
+
+			buildLessStyleSheet(absUrl)
+				.then(data => {
+					msg('include', absUrl, flags)
+					resolve(data)
+				})
+				.catch(err => {
+					errormsg('404', absUrl, flags, err)
+					resolve(false)
+				})
+
+			// getFile(absUrl).then(markdownToHTML)
+			// 	.then(data => {
+			// 		msg('include', absUrl, flags)
+			// 		resolve(data)
+			// 	})
+			// 	.catch(err => {
+			// 		errormsg('404', absUrl, flags, err)
+			// 		resolve(false)
+			// 	})
+		}),
+
 		markdown: (url, opts) => new Promise(resolve => {
 			const absUrl = path.join(opts.baseDir, url)
 
@@ -386,13 +344,20 @@ const createRequestHandler = flags => {
 		// Markdown: Browser is requesting a Markdown file
 		if (isMarkdown) {
 			msg('markdown', prettyPath, flags)
-			// compileAndSendMarkdown(filePath, res, flags)
 			getFile(filePath).then(markdownToHTML).then(filePath).then(html => {
 				return implant(html, implantHandlers, implantOpts).then(output => {
-					res.writeHead(200, {
-						'content-type': 'text/html'
+					const templateUrl = path.join(dir, 'templates/markdown.html')
+					const filename = path.parse(filePath).base
+					return baseTemplate(templateUrl, output, filename).then(final => {
+						const lvl2Dir = path.parse(templateUrl).dir
+						const lvl2Opts = deepmerge(implantOpts, {baseDir: lvl2Dir})
+						return implant(final, implantHandlers, lvl2Opts).then(output => {
+							res.writeHead(200, {
+								'content-type': 'text/html'
+							})
+							res.end(output)
+						})
 					})
-					res.end(output)
 				})
 			}).catch(err => {
 				// eslint-disable-next-line no-console
