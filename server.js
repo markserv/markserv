@@ -47,6 +47,7 @@ const connectLiveReload = require('connect-livereload')
 const chalk = require('chalk')
 const implant = require('implant')
 const deepmerge = require('deepmerge')
+const handlebars = require('handlebars')
 
 const MarkdownIt = require('markdown-it')
 const mdItAnchor = require('markdown-it-anchor')
@@ -162,21 +163,20 @@ const buildLessStyleSheet = cssPath =>
 // })
 // .then(html => linkify(html, flags))
 
-const baseTemplate = (templateUrl, content, filename) => new Promise((resolve, reject) => {
-	getFile(templateUrl).then(template => {
-		const output = template
-			.replace('{{{content}}}', content)
-			.replace('{{{title}}}', filename)
+const baseTemplate = (templateUrl, handebarData) => new Promise((resolve, reject) => {
+	getFile(templateUrl).then(source => {
+		const template = handlebars.compile(source)
+		const output = template(handebarData)
 		resolve(output)
 	}).catch(reject)
 })
 
-const compileAndSendDirectoryListing = (filepath, res, flags) => {
-	const urls = fs.readdirSync(filepath)
+const dirToHtml = filePath => {
+	const urls = fs.readdirSync(filePath)
 
 	let list = '<ul>\n'
 
-	let prettyPath = '/' + path.relative(process.cwd(), filepath)
+	let prettyPath = '/' + path.relative(process.cwd(), filePath)
 	if (prettyPath[prettyPath.length] !== '/') {
 		prettyPath += '/'
 	}
@@ -186,7 +186,7 @@ const compileAndSendDirectoryListing = (filepath, res, flags) => {
 	}
 
 	urls.forEach(subPath => {
-		const dir = fs.statSync(filepath + subPath).isDirectory()
+		const dir = fs.statSync(filePath + subPath).isDirectory()
 		let href
 		if (dir) {
 			href = subPath + '/'
@@ -203,37 +203,7 @@ const compileAndSendDirectoryListing = (filepath, res, flags) => {
 
 	list += '</ul>\n'
 
-	buildLessStyleSheet(flags.less).then(css => {
-		const html = `
-<!DOCTYPE html>
-<head>
-	<title>${prettyPath}</title>
-	<meta charset="utf-8">
-	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
-	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
-	<link rel="stylesheet" href="//highlightjs.org/static/demo/styles/github-gist.css">
-	<link rel="shortcut icon" type="image/x-icon" href="https://cdn0.iconfinder.com/data/icons/octicons/1024/markdown-128.png" />
-	<style>${css}</style>
-</head>
-<body>
-	<article class="markdown-body">
-		<h1>Index of ${prettyPath}</h1>${list}
-		<sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: ${process.pid}</sup>
-		</article>
-</body>`
-
-		// Log if verbose
-
-		if (flags.verbose) {
-			msg('index', path, flags)
-		}
-
-		// Send file
-		res.writeHead(200, {'Content-Type': 'text/html'})
-		res.write(html)
-		res.end()
-	})
+	return list
 }
 
 // Remove URL params from file being fetched
@@ -347,8 +317,14 @@ const createRequestHandler = flags => {
 			getFile(filePath).then(markdownToHTML).then(filePath).then(html => {
 				return implant(html, implantHandlers, implantOpts).then(output => {
 					const templateUrl = path.join(dir, 'templates/markdown.html')
-					const filename = path.parse(filePath).base
-					return baseTemplate(templateUrl, output, filename).then(final => {
+
+					const handlebarData = {
+						title: path.parse(filePath).base,
+						content: output,
+						pid: process.pid | 'N/A'
+					}
+
+					return baseTemplate(templateUrl, handlebarData).then(final => {
 						const lvl2Dir = path.parse(templateUrl).dir
 						const lvl2Opts = deepmerge(implantOpts, {baseDir: lvl2Dir})
 						return implant(final, implantHandlers, lvl2Opts).then(output => {
@@ -379,7 +355,30 @@ const createRequestHandler = flags => {
 		} else if (isDir) {
 			// Index: Browser is requesting a Directory Index
 			msg('dir', prettyPath, flags)
-			compileAndSendDirectoryListing(filePath, res, flags)
+			const templateUrl = path.join(dir, 'templates/directory.html')
+
+			const dirs = path.relative(dir, filePath).split('/')
+			const handlebarData = {
+				dirname: path.parse(filePath).dir,
+				content: dirToHtml(filePath),
+				pid: process.pid | 'N/A',
+				path: path.relative(dir, filePath) + '/',
+				dir: dirs[dirs.length - 1] + '/'
+			}
+
+			return baseTemplate(templateUrl, handlebarData).then(final => {
+				const lvl2Dir = path.parse(templateUrl).dir
+				const lvl2Opts = deepmerge(implantOpts, {baseDir: lvl2Dir})
+				return implant(final, implantHandlers, lvl2Opts).then(output => {
+					res.writeHead(200, {
+						'content-type': 'text/html'
+					})
+					res.end(output)
+				})
+			}).catch(err => {
+				// eslint-disable-next-line no-console
+				console.error(err)
+			})
 		} else {
 			// Other: Browser requests other MIME typed file (handled by 'send')
 			msg('file', prettyPath, flags)

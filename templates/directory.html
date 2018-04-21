@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <head>
-	<title>{{{title}}}</title>
+	<title>{{title}}</title>
 		<meta charset="utf-8">
 		<style>{less: github.less}</style>
 		<link rel="stylesheet" href="//sindresorhus.com/github-markdown-css/github-markdown.css">
 		<link rel="stylesheet" href="//highlightjs.org/static/demo/styles/github-gist.css">
 	</head>
 <body>
-	<article class="markdown-body">{{{content}}}</article>
-</body>`
+	<article class="markdown-body">
+		<h1>Index of {{path}}</h1>
+		{{{content}}}
+	</article>
+	<sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: {{pid}}</sup>
+</body>
