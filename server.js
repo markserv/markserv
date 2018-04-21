@@ -26,10 +26,12 @@ const fileTypes = {
 		'.mdtext',
 		'.text'
 	],
+
 	html: [
 		'.html',
 		'.htm'
 	],
+
 	watch: [
 		'.sass',
 		'.less',
@@ -40,6 +42,10 @@ const fileTypes = {
 		'.png',
 		'.jpg',
 		'.jpeg'
+	],
+
+	exlcusions: [
+		'node_modules/',
 	]
 }
 
@@ -265,10 +271,11 @@ const createRequestHandler = flags => {
 		} catch (err) {
 			const fileName = path.parse(filePath).base
 			if (fileName === 'favicon.ico') {
-				console.log('ICON!')
 				res.writeHead(200, {'Content-Type': 'image/x-icon'})
+				// Better? res.writeHead(200, {'Content-Type': 'image/png'})
 				res.write(faviconData)
 				res.end()
+				return
 			}
 
 			res.writeHead(200, {'Content-Type': 'text/html'})
@@ -384,9 +391,10 @@ const startLiveReloadServer = (liveReloadPort, flags) => {
 	}
 
 	const exts = fileTypes.watch.map(type => type.substr(1))
-
+	console.log(fileTypes.exlcusions)
 	return liveReload.createServer({
 		exts,
+		exclusions: fileTypes.exlcusions,
 		port: liveReloadPort
 	}).watch(path.resolve(dir))
 }
@@ -395,7 +403,8 @@ const logActiveServerInfo = (httpPort, liveReloadPort, flags) => {
 	const serveURL = 'http://' + flags.address + ':' + httpPort
 	const dir = path.resolve(flags.dir)
 
-	termImg('markserv-logo-term.png', {
+	const logoPath = path.join(__dirname, 'markserv-logo-term.png')
+	termImg(logoPath, {
 		width: 12,
 		fallback: () => {}
 	})
