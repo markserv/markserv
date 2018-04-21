@@ -287,7 +287,7 @@ const createRequestHandler = flags => {
 
 		// Markdown: Browser is requesting a Markdown file
 		if (isMarkdown) {
-			msg('markdown', prettyPath, flags)
+			msg('markdown', style.link(prettyPath), flags)
 			getFile(filePath).then(markdownToHTML).then(filePath).then(html => {
 				return implant(html, implantHandlers, implantOpts).then(output => {
 					const templateUrl = path.join(dir, 'templates/markdown.html')
@@ -314,7 +314,7 @@ const createRequestHandler = flags => {
 				console.error(err)
 			})
 		} else if (isHtml) {
-			msg('html', prettyPath, flags)
+			msg('html', style.link(prettyPath), flags)
 			getFile(filePath).then(html => {
 				return implant(html, implantHandlers, implantOpts).then(output => {
 					res.writeHead(200, {
@@ -328,7 +328,7 @@ const createRequestHandler = flags => {
 			})
 		} else if (isDir) {
 			// Index: Browser is requesting a Directory Index
-			msg('dir', prettyPath, flags)
+			msg('dir', style.link(prettyPath), flags)
 			const templateUrl = path.join(dir, 'templates/directory.html')
 
 			const dirs = path.relative(dir, filePath).split('/')
@@ -355,7 +355,7 @@ const createRequestHandler = flags => {
 			})
 		} else {
 			// Other: Browser requests other MIME typed file (handled by 'send')
-			msg('file', prettyPath, flags)
+			msg('file', style.link(prettyPath), flags)
 			send(req, filePath).pipe(res)
 		}
 	}
