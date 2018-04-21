@@ -53,7 +53,7 @@ const mdItAnchor = require('markdown-it-anchor')
 const mdItTaskLists = require('markdown-it-task-lists')
 const mdItHLJS = require('markdown-it-highlightjs')
 
-const {JSDOM} = jsdom
+// JSDOM const {JSDOM} = jsdom
 
 const md = new MarkdownIt({
 	linkify: true,
@@ -94,7 +94,6 @@ const markdownToHTML = markdownText => new Promise((resolve, reject) => {
 
 	try {
 		result = md.render(markdownText)
-		console.log(result)
 	} catch (err) {
 		return reject(err)
 	}
@@ -327,8 +326,7 @@ const createRequestHandler = flags => {
 		markdown: (url, opts) => new Promise(resolve => {
 			const absUrl = path.join(opts.baseDir, url)
 
-			getFile(absUrl)
-				.then(markdownToHTML)
+			getFile(absUrl).then(markdownToHTML)
 				.then(data => {
 					msg('include', absUrl, flags)
 					resolve(data)
@@ -388,18 +386,18 @@ const createRequestHandler = flags => {
 		// Markdown: Browser is requesting a Markdown file
 		if (isMarkdown) {
 			msg('markdown', prettyPath, flags)
-			compileAndSendMarkdown(filePath, res, flags)
-			// markdownToHTML(filePath).then(html => {
-			// 	return implant(html, implantHandlers, implantOpts).then(output => {
-			// 		res.writeHead(200, {
-			// 			'content-type': 'text/html'
-			// 		})
-			// 		res.end(output)
-			// 	})
-			// }).catch(err => {
-			// 	// eslint-disable-next-line no-console
-			// 	console.error(err)
-			// })
+			// compileAndSendMarkdown(filePath, res, flags)
+			getFile(filePath).then(markdownToHTML).then(filePath).then(html => {
+				return implant(html, implantHandlers, implantOpts).then(output => {
+					res.writeHead(200, {
+						'content-type': 'text/html'
+					})
+					res.end(output)
+				})
+			}).catch(err => {
+				// eslint-disable-next-line no-console
+				console.error(err)
+			})
 		} else if (isHtml) {
 			msg('html', prettyPath, flags)
 			getFile(filePath).then(html => {
