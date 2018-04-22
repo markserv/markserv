@@ -185,6 +185,29 @@ body .markdown-body {
 .markdown-body .octicon-link:before {
   content: '\f05c';
 }
+.markdown-body h1[id]:before,
+.markdown-body h2[id]:before,
+.markdown-body h3[id]:before,
+.markdown-body h4[id]:before,
+.markdown-body h5[id]:before,
+.markdown-body h6[id]:before {
+  font-family: octicons-anchor;
+  font-size: 16px;
+  outline: none;
+  content: '\f05c';
+  display: none;
+  position: absolute;
+  margin-left: -1.2em;
+  margin-top: .65em;
+}
+.markdown-body h1[id]:hover:before,
+.markdown-body h2[id]:hover:before,
+.markdown-body h3[id]:hover:before,
+.markdown-body h4[id]:hover:before,
+.markdown-body h5[id]:hover:before,
+.markdown-body h6[id]:hover:before {
+  display: block;
+}
 .markdown-body > *:first-child {
   margin-top: 0 !important;
 }
@@ -597,6 +620,6 @@ raw Markdown line up prettily. You can also use inline Markdown.</p>
 </tbody>
 </table>
 
-<sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: 10228</sup>
+<sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: 14856</sup>
 </article>
 </body>
