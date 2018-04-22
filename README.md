@@ -1,4 +1,4 @@
-<img src="markserv-logo.png" width="188">
+<img src="media/markserv-logo.png" width="188">
 
 # markserv
 
@@ -16,12 +16,12 @@ Support the development of Markserv.
 ## Features
 
  - Basic HTTP server that indexes directories
- - HTTP server renders Markdown files as HTML
+ - Render Markdown files as HTML on-the-fly
  - Markdown rendered with GitHub flavor CSS
- - Markdown rendered with GitHub style syntax highlighting
- - LiveReload updates the view when your files change
- - Links to external Markdown files are re-written and followed by the server
- - MathJax equations ([example](examples/mathjax.md))
+ - LiveReload your Markdown as you edit and save
+ - GitHub style rendering w/ Syntax Rendering
+
+Supporting: [MathJax](tests/mathjax.md), [Chineese Characters](tests/测试.md), [Tables](tests/tables.md), [Heading Anchors](tests/links.md)
 
 ## Example
 
@@ -29,9 +29,7 @@ Click this image to see the animated example:
 
 [![http://imgur.com/a/b8Cje](http://i.imgur.com/FrO2ilv.png)](http://i.imgur.com/D4MFCMr.gif)
 
-## Installing
-
-Install the markserv server via npm.
+## Installation
 
 ```shell
 npm install markserv -g
@@ -85,12 +83,12 @@ You can link to an external Markdown file in the same way that you use GitHub Wi
 Example code:
 
 ```markdown
-[Skateboarding Dog!](examples/Linked-Markdown-Example.md)
+[Skateboarding Dog!](tests/Linked-Markdown-Example.md)
 ```
 
 Example link:
 
-[Skateboarding Dog!](examples/Linked-Markdown-Example.md)
+[Skateboarding Dog!](tests/Linked-Markdown-Example.md)
 
 ## Options/Flags
 
