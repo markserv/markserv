@@ -8,6 +8,7 @@ const chalk = require('chalk')
 const style = {
 	link: chalk.blueBright.underline.italic,
 	patreon: chalk.rgb(249, 104, 84).underline.italic,
+	github: chalk.blue.underline.italic,
 	address: chalk.greenBright.underline.italic,
 	port: chalk.reset.cyanBright,
 	pid: chalk.reset.cyanBright
@@ -96,8 +97,13 @@ const log = (str, flags, err) => {
 }
 const msg = (type, msg, flags) => {
 	if (type === 'patreon') {
-		return log(chalk`{bgRgb(249, 104, 84).white.bold  {black |}● PATREON }  ` + msg, flags)
+		return log(chalk`{bgRgb(249, 104, 84).white.bold  {black ▕}● PATREON }  ` + msg, flags)
 	}
+
+	if (type === 'github') {
+		return log(chalk`{bgYellow.black    GitHub  }  ` + msg, flags)
+	}
+
 	log(chalk`{bgGreen.black   Markserv  } {white  ${type}: }` + msg, flags)
 }
 
@@ -412,17 +418,19 @@ const logActiveServerInfo = (httpPort, liveReloadPort, flags) => {
 		fallback: () => {}
 	})
 
-	const patreonLink = `http://patreon.com/f1lt3r`
+	const patreonLink = `patreon.com/f1lt3r`
+	const githubLink = 'github.com/f1lt3r/markserv'
 
-	msg('patreon', chalk`{whiteBright.bold Love Markserv? Become a Patreon! ${style.patreon(patreonLink)}}`, flags)
-	msg('start', chalk`{grey serving content from ${style.link(dir)} on port: ${style.port(httpPort)}}`, flags)
+	msg('patreon', chalk`{whiteBright.bold Help support Markserv - Become a Patreon! ${style.patreon(patreonLink)}}`, flags)
+	msg('github', chalk`Contribute on Github - {yellow.underline ${githubLink}}`, flags)
+	// msg('patreon', chalk`{white.italic Your}`, flags)
+	msg('path', chalk`{grey ${style.address(dir)}}`, flags)
 	msg('address', style.address(serveURL), flags)
-	msg('less', chalk`{grey using style from ${style.link(flags.less)}}`, flags)
 	msg('livereload', chalk`{grey communicating on port: ${style.port(liveReloadPort)}}`, flags)
 
 	if (process.pid) {
 		msg('process', chalk`{grey your pid is: ${style.pid(process.pid)}}`, flags)
-		msg('info', chalk`{grey to stop this server, press: {white [Ctrl + C]}, or type: {white "kill ${process.pid}"}}`, flags)
+		msg('stop', chalk`{grey press {magenta [Ctrl + C]} or type {magenta "sudo kill -9 ${process.pid}"}}`, flags)
 	}
 
 	if (flags.$openLocation) {

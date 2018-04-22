@@ -25,8 +25,4 @@ flags.version(pkg.version)
 		flags.dir = path.normalize(path.join(cwd, serverPath))
 	}).parse(process.argv)
 
-flags.$markserv = {
-	githubStylePath
-}
-
 markserv.init(flags)
