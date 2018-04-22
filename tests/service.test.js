@@ -15,20 +15,14 @@ test.cb('start service and receive tables markdown', t => {
 	)
 
 	const dir = path.join(__dirname, '..')
-	const less = path.join(__dirname, '..', 'less', 'github.less')
 
 	getPort().then(port => {
 		const flags = {
 			dir,
 			port,
 			livereloadport: false,
-			header: null,
-			footer: null,
-			navigation: null,
 			address: 'localhost',
-			silent: true,
-			less,
-			$markserv: {githubStylePath: less}
+			silent: true
 		}
 
 		const done = () => {
@@ -51,7 +45,13 @@ test.cb('start service and receive tables markdown', t => {
 					closeServer()
 				}
 
-				t.is(body, expected)
+				// Write expected:
+				// fs.writeFileSync(path.join(__dirname, 'service.expected.html'), body)
+
+				const bodyNoPid = body.replace(/PID: \d+</, 'PID: N/A<')
+				const expectedNoPid = expected.replace(/PID: \d+</, 'PID: N/A<')
+				t.is(bodyNoPid, expectedNoPid)
+
 				t.is(res.statusCode, 200)
 				t.pass()
 				closeServer()

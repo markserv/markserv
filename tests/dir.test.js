@@ -21,9 +21,6 @@ test.cb('start service and get directory listing', t => {
 			port,
 			dir,
 			livereloadport: false,
-			header: null,
-			footer: null,
-			navigation: null,
 			address: 'localhost',
 			silent: true
 		}
@@ -48,7 +45,8 @@ test.cb('start service and get directory listing', t => {
 					closeServer()
 				}
 
-				// Write expected: fs.writeFileSync(path.join(__dirname, 'dir.expected.html'), body)
+				// Write expected:
+				// fs.writeFileSync(path.join(__dirname, 'dir.expected.html'), body)
 
 				const bodyNoPid = body.replace(/PID: \d+</, 'PID: N/A<')
 				const expectedNoPid = expected.replace(/PID: \d+</, 'PID: N/A<')
