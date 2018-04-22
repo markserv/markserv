@@ -97,18 +97,18 @@ const log = (str, flags, err) => {
 }
 const msg = (type, msg, flags) => {
 	if (type === 'patreon') {
-		return log(chalk`{bgRgb(249, 104, 84).white.bold  {black ▕}● PATREON }  ` + msg, flags)
+		return log(chalk`{bgRgb(249, 104, 84).white.bold  {black ▕}● PATREON } ` + msg, flags)
 	}
 
 	if (type === 'github') {
-		return log(chalk`{bgYellow.black    GitHub  }  ` + msg, flags)
+		return log(chalk`{bgYellow.black    GitHub  } ` + msg, flags)
 	}
 
-	log(chalk`{bgGreen.black   Markserv  } {white  ${type}: }` + msg, flags)
+	log(chalk`{bgGreen.black   Markserv  }{white  ${type}: }` + msg, flags)
 }
 
 const errormsg = (type, msg, flags, err) =>
-	log(chalk`{bgRed.black  Markserv } {red  ${type}: }` + msg, flags, err)
+	log(chalk`{bgRed.black  Markserv }{red  ${type}: }` + msg, flags, err)
 
 const isType = (exts, filePath) => {
 	const fileExt = path.parse(filePath).ext
@@ -423,9 +423,8 @@ const logActiveServerInfo = (httpPort, liveReloadPort, flags) => {
 
 	msg('patreon', chalk`{whiteBright.bold Help support Markserv - Become a Patreon! ${style.patreon(patreonLink)}}`, flags)
 	msg('github', chalk`Contribute on Github - {yellow.underline ${githubLink}}`, flags)
-	// msg('patreon', chalk`{white.italic Your}`, flags)
-	msg('path', chalk`{grey ${style.address(dir)}}`, flags)
 	msg('address', style.address(serveURL), flags)
+	msg('path', chalk`{grey ${style.address(dir)}}`, flags)
 	msg('livereload', chalk`{grey communicating on port: ${style.port(liveReloadPort)}}`, flags)
 
 	if (process.pid) {
