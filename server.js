@@ -79,7 +79,8 @@ const md = new MarkdownIt({
 	.use(mdItTaskLists)
 	.use(mdItHLJS)
 
-const faviconData = fs.readFileSync(path.join(__dirname, 'markserv-favicon-96x96.png'))
+const faviconPath = path.join(__dirname, 'media', 'markserv-favicon-96x96.png')
+const faviconData = fs.readFileSync(faviconPath)
 
 const log = (str, flags, err) => {
 	if (flags.silent) {
@@ -278,7 +279,6 @@ const createRequestHandler = flags => {
 			const fileName = path.parse(filePath).base
 			if (fileName === 'favicon.ico') {
 				res.writeHead(200, {'Content-Type': 'image/x-icon'})
-				// Better? res.writeHead(200, {'Content-Type': 'image/png'})
 				res.write(faviconData)
 				res.end()
 				return
@@ -413,7 +413,7 @@ const logActiveServerInfo = (httpPort, liveReloadPort, flags) => {
 	const dir = path.resolve(flags.dir)
 
 	if (!flags.silent) {
-		const logoPath = path.join(__dirname, 'markserv-logo-term.png')
+		const logoPath = path.join(__dirname, 'media', 'markserv-logo-term.png')
 		termImg(logoPath, {
 			width: 12,
 			fallback: () => {}
