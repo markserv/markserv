@@ -412,11 +412,13 @@ const logActiveServerInfo = (httpPort, liveReloadPort, flags) => {
 	const serveURL = 'http://' + flags.address + ':' + httpPort
 	const dir = path.resolve(flags.dir)
 
-	const logoPath = path.join(__dirname, 'markserv-logo-term.png')
-	termImg(logoPath, {
-		width: 12,
-		fallback: () => {}
-	})
+	if (!flags.silent) {
+		const logoPath = path.join(__dirname, 'markserv-logo-term.png')
+		termImg(logoPath, {
+			width: 12,
+			fallback: () => {}
+		})
+	}
 
 	const patreonLink = `patreon.com/f1lt3r`
 	const githubLink = 'github.com/f1lt3r/markserv'

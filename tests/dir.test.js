@@ -5,7 +5,7 @@ import test from 'ava'
 import getPort from 'get-port'
 import markserv from '../server'
 
-test.cb('start service and receive tables markdown', t => {
+test.cb('start service and get directory listing', t => {
 	t.plan(3)
 
 	const expected = String(
@@ -15,20 +15,17 @@ test.cb('start service and receive tables markdown', t => {
 	)
 
 	const dir = path.join(__dirname, '..')
-	const less = path.join(__dirname, '..', 'less', 'github.less')
 
 	getPort().then(port => {
 		const flags = {
-			dir,
 			port,
+			dir,
 			livereloadport: false,
 			header: null,
 			footer: null,
 			navigation: null,
 			address: 'localhost',
-			less,
-			silent: true,
-			$markserv: {githubStylePath: less}
+			silent: true
 		}
 
 		const done = () => {
@@ -51,7 +48,11 @@ test.cb('start service and receive tables markdown', t => {
 					closeServer()
 				}
 
-				t.is(body, expected.replace('{{PID}}', service.pid))
+				// Write expected: fs.writeFileSync(path.join(__dirname, 'dir.expected.html'), body)
+
+				const bodyNoPid = body.replace(/PID: \d+</, 'PID: N/A<')
+				const expectedNoPid = expected.replace(/PID: \d+</, 'PID: N/A<')
+				t.is(bodyNoPid, expectedNoPid)
 				t.is(res.statusCode, 200)
 				t.pass()
 				closeServer()
