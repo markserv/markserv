@@ -15,11 +15,12 @@ Support the development of Markserv.
 
 ## Features
 
- - Basic HTTP server that indexes directories
- - Render Markdown files as HTML on-the-fly
- - Markdown rendered with GitHub flavor CSS
- - LiveReload your Markdown as you edit and save
- - GitHub style rendering w/ Syntax Rendering
+- Basic HTTP server that indexes directories
+- Render Markdown files as HTML on-the-fly
+- Markdown rendered with GitHub flavor CSS
+- LiveReload your Markdown as you edit and save
+- [Just-in-Time Templating](tests/templates/index.html) of Markdown, HTML &amp; LESS
+- Syntax highlighting with Github colors
 
 Supporting: [MathJax](tests/mathjax.md), [Chineese Characters](tests/测试.md), [Tables](tests/tables.md), [Heading Anchors](tests/links.md)
 
