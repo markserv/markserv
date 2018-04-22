@@ -211,6 +211,19 @@ const createRequestHandler = flags => {
 	}
 
 	const implantHandlers = {
+		file: (url, opts) => new Promise(resolve => {
+			const absUrl = path.join(opts.baseDir, url)
+			getFile(absUrl)
+				.then(data => {
+					msg('implant', style.link(absUrl), flags)
+					resolve(data)
+				})
+				.catch(err => {
+					errormsg('404', style.link(absUrl), flags, err)
+					resolve(false)
+				})
+		}),
+
 		less: (url, opts) => new Promise(resolve => {
 			const absUrl = path.join(opts.baseDir, url)
 			buildLessStyleSheet(absUrl)
@@ -307,12 +320,14 @@ const createRequestHandler = flags => {
 					return baseTemplate(templateUrl, handlebarData).then(final => {
 						const lvl2Dir = path.parse(templateUrl).dir
 						const lvl2Opts = deepmerge(implantOpts, {baseDir: lvl2Dir})
-						return implant(final, implantHandlers, lvl2Opts).then(output => {
-							res.writeHead(200, {
-								'content-type': 'text/html'
+
+						return implant(final, implantHandlers, lvl2Opts)
+							.then(output => {
+								res.writeHead(200, {
+									'content-type': 'text/html'
+								})
+								res.end(output)
 							})
-							res.end(output)
-						})
 					})
 				})
 			}).catch(err => {
