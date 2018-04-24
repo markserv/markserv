@@ -19,7 +19,7 @@ Support the development of Markserv.
 - Render Markdown files as HTML on-the-fly
 - Markdown rendered with GitHub flavor CSS
 - LiveReload your Markdown as you edit and save
-- [Just-in-Time Templating](tests/templates/index.html) of Markdown, HTML &amp; LESS
+- [Just-in-Time Templating](#just-in-time-templating) of Markdown, HTML &amp; LESS
 - Syntax highlighting with Github colors
 
 Supporting: [MathJax](tests/mathjax.md), [Chineese Characters](tests/测试.md), [Tables](tests/tables.md), [Heading Anchors](tests/links.md)
@@ -99,12 +99,35 @@ To list the options/flags for the markserv CLI tool:
 markserv --help
 ```
 
+
+## Just in Time Templating
+
+Markserv allows you to include nested content. Templates are fetched and rendered when you request them in your browser. The max-depth of includes is set to 10.
+
+### Include Markdown
+
+Any markdown files that you include will be transformed to HTML.
+
+```markdown
+# Include Markdown
+{markdown: foo/bar/baz/qux.md}
+```
+
+Output: 
+
+```html
+<h1>Include Markdown</h1>
+<h2>Foo Bar</h2>
+```
+
+[Example template](tests/templates/index.html)
+
 ### Changing the HTTP Directory
 
 You can serve content from a different path using the following command:
 
 ```shell
-markserv -h /path/to/dir
+markserv <file/path>
 ```
 
 ### Changing the HTTP Port
