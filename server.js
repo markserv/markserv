@@ -109,7 +109,10 @@ const msg = (type, msg, flags) => {
 }
 
 const errormsg = (type, msg, flags, err) =>
-	log(chalk`{bgRed.black  Markserv }{red  ${type}: }` + msg, flags, err)
+	log(chalk`{bgRed.black   Markserv  }{red  ${type}: }` + msg, flags, err)
+
+const warnmsg = (type, msg, flags) =>
+	log(chalk`{bgYellow.black   Markserv  }{yellow  ${type}: }` + msg, flags)
 
 const isType = (exts, filePath) => {
 	const fileExt = path.parse(filePath).ext
@@ -203,11 +206,11 @@ const createRequestHandler = flags => {
 	const isDir = fs.statSync(dir).isDirectory()
 	if (!isDir) {
 		dir = path.parse(flags.dir).dir
-		flags.$openLocation = path.relative(dir, flags.dir)
 	}
+	flags.$openLocation = path.relative(dir, flags.dir)
 
 	const implantOpts = {
-		maxRecursion: 10
+		maxDepth: 10
 	}
 
 	const implantHandlers = {
@@ -219,7 +222,7 @@ const createRequestHandler = flags => {
 					resolve(data)
 				})
 				.catch(err => {
-					errormsg('404', style.link(absUrl), flags, err)
+					warnmsg('implant 404', style.link(absUrl), flags, err)
 					resolve(false)
 				})
 		}),
@@ -232,7 +235,7 @@ const createRequestHandler = flags => {
 					resolve(data)
 				})
 				.catch(err => {
-					errormsg('404', style.link(absUrl), flags, err)
+					warnmsg('implant 404', style.link(absUrl), flags, err)
 					resolve(false)
 				})
 		}),
@@ -245,7 +248,7 @@ const createRequestHandler = flags => {
 					resolve(data)
 				})
 				.catch(err => {
-					errormsg('404', style.link(absUrl), flags, err)
+					warnmsg('implant 404', style.link(absUrl), flags, err)
 					resolve(false)
 				})
 		}),
@@ -258,7 +261,7 @@ const createRequestHandler = flags => {
 					resolve(data)
 				})
 				.catch(err => {
-					errormsg('404', style.link(absUrl), flags, err)
+					warnmsg('implant 404', style.link(absUrl), flags, err)
 					resolve(false)
 				})
 		})
@@ -309,7 +312,7 @@ const createRequestHandler = flags => {
 			msg('markdown', style.link(prettyPath), flags)
 			getFile(filePath).then(markdownToHTML).then(filePath).then(html => {
 				return implant(html, implantHandlers, implantOpts).then(output => {
-					const templateUrl = path.join(dir, 'templates/markdown.html')
+					const templateUrl = path.join(__dirname, 'templates/markdown.html')
 
 					const handlebarData = {
 						title: path.parse(filePath).base,
@@ -350,7 +353,7 @@ const createRequestHandler = flags => {
 		} else if (isDir) {
 			// Index: Browser is requesting a Directory Index
 			msg('dir', style.link(prettyPath), flags)
-			const templateUrl = path.join(dir, 'templates/directory.html')
+			const templateUrl = path.join(__dirname, 'templates/directory.html')
 
 			const dirs = path.relative(dir, filePath).split('/')
 			const handlebarData = {
@@ -449,7 +452,7 @@ const logActiveServerInfo = (httpPort, liveReloadPort, flags) => {
 		msg('stop', chalk`{grey press {magenta [Ctrl + C]} or type {magenta "sudo kill -9 ${process.pid}"}}`, flags)
 	}
 
-	if (flags.$openLocation) {
+	if (flags.$openLocation || flags.$pathProvided) {
 		open(serveURL + '/' + flags.$openLocation)
 	}
 }

@@ -1,7 +1,7 @@
 {
   "name": "markserv",
   "version": "1.0.0",
-  "description": "markserv serves Markdown files as GitHub style HTML and LiveReloads your files in the browser as you edit.",
+  "description": "🏁  serve markdown as html (GitHub style), index directories, live-reload as you edit",
   "preferGlobal": true,
   "scripts": {
     "test": "xo && npm run cover",
@@ -10,29 +10,46 @@
   },
   "keywords": [
     "markdown",
-    "livereload",
+    "md",
     "server",
+    "html",
+    "livereload",
+    "live-reload",
+    "live",
+    "reload",
     "github",
     "realtime",
     "highlighting",
+    "directory",
+    "index",
+    "indexes",
     "code",
     "syntax highlighting",
     "links",
-    "markdown-it"
+    "template",
+    "templating",
+    "include",
+    "markdown-it",
+    "gfm",
+    "github flavored markdown",
+    "marked",
+    "markitdown"
   ],
   "husky": {
     "hooks": {
-      "pre-commit": "npm test"
+      "precommit": "npm test"
     }
   },
   "bin": {
-    "markserv": "cli.js"
+    "markserv": "cli.js",
+    "readme": "readme.js"
   },
   "files": [
     "server.js",
     "cli.js",
-    "less/github.less",
-    "less/custom.less"
+    "templates/directory.html",
+    "templates/github.less",
+    "templates/markdown.html"
   ],
   "author": "Alistair MacDonald <al@pwn.io>",
   "email": "al@pwn.io",
@@ -49,14 +66,12 @@
     "connect-livereload": "^0.6.0",
     "deepmerge": "^2.1.0",
     "handlebars": "^4.0.11",
-    "implant": "^2.0.1",
+    "implant": "^2.0.3",
     "less": "^2.7.2",
     "livereload": "^0.7.0",
     "markdown-it": "^8.4.1",
     "markdown-it-anchor": "^4.0.0",
     "markdown-it-checkbox": "^1.1.0",
-    "markdown-it-emoji": "^1.4.0",
-    "markdown-it-front-matter": "^0.1.2",
     "markdown-it-highlightjs": "^3.0.0",
     "markdown-it-include": "^1.0.0",
     "markdown-it-task-lists": "^2.1.1",

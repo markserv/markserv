@@ -20,6 +20,7 @@ flags.version(pkg.version)
 	.option('-a, --address [type]', 'Serve on ip/address [address]', 'localhost')
 	.option('-v, --verbose', 'verbose output')
 	.action(serverPath => {
+		flags.$pathProvided = true
 		flags.dir = path.normalize(path.join(cwd, serverPath))
 	}).parse(process.argv)
 
