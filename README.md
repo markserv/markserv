@@ -42,6 +42,8 @@ Start Markserv
 $ markserv
 ```
 
+![Markserv CLI Splash](media/markserv-splash.png)
+
 Start Markserv and open a file or directory.
 
 ```shell
@@ -52,9 +54,11 @@ $ markserv ./path/to/file.md
 $ markserv ./
 ```
 
-You should see this:
+Start Markserv and open the closest README.md file in the browser:
 
-![Markserv CLI Splash](media/markserv-splash.png)
+```shell
+$ readme
+```
 
 ## Live Reload
 
@@ -89,7 +93,6 @@ To list the options/flags for the markserv CLI tool:
 ```shell
 $ markserv --help
 ```
-
 
 ## Just in Time Templating
 
