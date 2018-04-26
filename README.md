@@ -86,14 +86,6 @@ Example link:
 
 [Skateboarding Dog!](tests/Linked-Markdown-Example.md)
 
-## Flags
-
-To list the options/flags for the markserv CLI tool:
-
-```shell
-$ markserv --help
-```
-
 ## Just in Time Templating
 
 Markserv allows you to include nested content. Templates are fetched and rendered when you request them in your browser. The `maxDepth` of includes is set to `10`.
@@ -181,7 +173,13 @@ a {
 </style>
 ```
 
-## Info 
+## Flags
+
+To list the options/flags for the markserv CLI tool:
+
+```shell
+$ markserv --help
+```
 
 ### Changing the HTTP Port
 
