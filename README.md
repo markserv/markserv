@@ -1,15 +1,18 @@
-<center><img src="media/markserv-logo.png" width="188"></center>
+<p align="center">
+	<img src="media/markserv-logo.png" width="188"><br>
+	<img src="media/markserv-word-mark.png" width="420"><br>
+</p>
 
-<center><h1>🏁 Markserv</h1></center>
-
-> serve markdown as html (GitHub style), index directories, and live-reload as you edit
+> 🏁 serve markdown as html (GitHub style), index directories, and live-reload as you edit
 
 [![Build Status](https://travis-ci.org/F1LT3R/markserv.svg?branch=master)](https://travis-ci.org/F1LT3R/markserv)
 [![Coverage Status](https://coveralls.io/repos/github/F1LT3R/markserv/badge.svg?branch=master)](https://coveralls.io/github/F1LT3R/markserv?branch=master)
 [![Npm Version](https://img.shields.io/npm/v/markserv.svg)](https://www.npmjs.com/package/markserv)
 [![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)
 
-![Markserv Demo](media/markserv-demo.gif)
+<p align="center">
+	<img alt="Markserv Demo" src="media/markserv-demo.gif">
+</p>
 
 ## 🔥 Features
 
@@ -49,7 +52,9 @@ $ markserv README.md
 $ markserv node_modules
 ```
 
-![Markserv CLI Splash](media/markserv-splash.png)
+<p align="center">
+	<img alt="Markserv CLI Splash" src="media/markserv-splash.png">
+</p>
 
 Start Markserv and open a file or directory.
 
@@ -77,7 +82,9 @@ To see real-time updates as you save your markdown files, you will need to insta
 
 With the Live Reload plugin installed and turned on, you should see the page reloading as you save your Markdown file.
 
-![Markserv Live Reload](media/markserv-live-reload.gif)
+<p align="center">
+	<img alt="Markserv Live Reload" src="media/markserv-live-reload.gif">
+</p>
 
 ## 🔗 Markdown Links
 
