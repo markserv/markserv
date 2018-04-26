@@ -11,7 +11,7 @@
 [![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)
 
 <p align="center">
-	<img alt="Markserv Demo" src="media/markserv-demo.gif">
+	<img alt="Markserv Demo" src="media/markserv-demo.gif" width="100%">
 </p>
 
 ## 🔥 Features
@@ -53,7 +53,7 @@ $ markserv node_modules
 ```
 
 <p align="center">
-	<img alt="Markserv CLI Splash" src="media/markserv-splash.png">
+	<img alt="Markserv CLI Splash" src="media/markserv-splash.png" width="100%">
 </p>
 
 Start Markserv and open a file or directory.
@@ -83,7 +83,7 @@ To see real-time updates as you save your markdown files, you will need to insta
 With the Live Reload plugin installed and turned on, you should see the page reloading as you save your Markdown file.
 
 <p align="center">
-	<img alt="Markserv Live Reload" src="media/markserv-live-reload.gif">
+	<img alt="Markserv Live Reload" src="media/markserv-live-reload.gif" width="100%">
 </p>
 
 ## 🔗 Markdown Links
