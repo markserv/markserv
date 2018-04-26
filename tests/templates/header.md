@@ -1,0 +1,3 @@
+# Header Template
+
+`@:/head.md`

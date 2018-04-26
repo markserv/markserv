@@ -1,38 +1,55 @@
 {
   "name": "markserv",
-  "version": "0.3.4",
-  "description": "markserv serves Markdown files as GitHub style HTML and LiveReloads your files in the browser as you edit.",
+  "version": "1.0.0",
+  "description": "🏁  serve markdown as html (GitHub style), index directories, live-reload as you edit",
   "preferGlobal": true,
   "scripts": {
-		"test": "xo && npm run cover",
-		"cover": "nyc --reporter=lcov --reporter=html --reporter=text ava **/*.test.js",
-		"coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls -v"
+    "test": "xo && npm run cover",
+    "cover": "nyc --reporter=lcov --reporter=html --reporter=text ava **/*.test.js",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls -v"
   },
   "keywords": [
     "markdown",
-    "livereload",
+    "md",
     "server",
+    "html",
+    "livereload",
+    "live-reload",
+    "live",
+    "reload",
     "github",
     "realtime",
     "highlighting",
+    "directory",
+    "index",
+    "indexes",
     "code",
     "syntax highlighting",
     "links",
-    "markdown-it"
+    "template",
+    "templating",
+    "include",
+    "markdown-it",
+    "gfm",
+    "github flavored markdown",
+    "marked",
+    "markitdown"
   ],
   "husky": {
     "hooks": {
-      "pre-commit": "npm test"
+      "precommit": "npm test"
     }
   },
   "bin": {
-    "markserv": "cli.js"
+    "markserv": "cli.js",
+    "readme": "readme.js"
   },
   "files": [
     "server.js",
     "cli.js",
-    "less/github.less",
-    "less/custom.less"
+    "templates/directory.html",
+    "templates/github.less",
+    "templates/markdown.html"
   ],
   "author": "Alistair MacDonald <al@pwn.io>",
   "email": "al@pwn.io",
@@ -47,22 +64,30 @@
     "commander": "^2.5.1",
     "connect": "^3.6.5",
     "connect-livereload": "^0.6.0",
-    "jsdom": "^11.8.0",
+    "deepmerge": "^2.1.0",
+    "handlebars": "^4.0.11",
+    "implant": "^2.0.3",
     "less": "^2.7.2",
     "livereload": "^0.7.0",
     "markdown-it": "^8.4.1",
     "markdown-it-anchor": "^4.0.0",
+    "markdown-it-checkbox": "^1.1.0",
+    "markdown-it-highlightjs": "^3.0.0",
+    "markdown-it-include": "^1.0.0",
+    "markdown-it-task-lists": "^2.1.1",
     "micromatch": "^3.1.3",
     "mime": "^1.4.1",
     "open": "0.0.5",
-    "openport": "0.0.4",
-    "send": "^0.16.0"
+    "send": "^0.16.0",
+    "term-img": "^2.1.0"
   },
   "devDependencies": {
     "ava": "^0.25.0",
     "coveralls": "^3.0.0",
+    "get-port": "^3.2.0",
     "husky": "^0.14.3",
     "nyc": "^11.7.1",
+    "request": "^2.85.0",
     "xo": "^0.20.3"
   },
   "xo": {

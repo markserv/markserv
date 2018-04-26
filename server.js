@@ -1,78 +1,122 @@
 'use strict'
 
-// Markdown Extension Types
-const markdownExtensions = [
-	'markdown',
-	'mdown',
-	'mkdn',
-	'md',
-	'mkd',
-	'mdwn',
-	'mdtxt',
-	'mdtext',
-	'text'
-]
-
-const watchExtensions = markdownExtensions.concat([
-	'less',
-	'js',
-	'css',
-	'html',
-	'htm',
-	'json',
-	'gif',
-	'png',
-	'jpg',
-	'jpeg'
-])
-
-const PORT_RANGE = {
-	HTTP: [8000, 8100],
-	LIVE_RELOAD: [35729, 35829],
-	WEBSOCKETS: [3000, 4000]
-}
-
 const http = require('http')
 const path = require('path')
 const fs = require('fs')
+const chalk = require('chalk')
+
+const style = {
+	link: chalk.blueBright.underline.italic,
+	patreon: chalk.rgb(249, 104, 84).underline.italic,
+	github: chalk.blue.underline.italic,
+	address: chalk.greenBright.underline.italic,
+	port: chalk.reset.cyanBright,
+	pid: chalk.reset.cyanBright
+}
+
+// Markdown Extension Types
+const fileTypes = {
+	markdown: [
+		'.markdown',
+		'.mdown',
+		'.mkdn',
+		'.md',
+		'.mkd',
+		'.mdwn',
+		'.mdtxt',
+		'.mdtext',
+		'.text'
+	],
+
+	html: [
+		'.html',
+		'.htm'
+	],
+
+	watch: [
+		'.sass',
+		'.less',
+		'.js',
+		'.css',
+		'.json',
+		'.gif',
+		'.png',
+		'.jpg',
+		'.jpeg'
+	],
+
+	exclusions: [
+		'node_modules/'
+	]
+}
+
+fileTypes.watch = fileTypes.watch
+	.concat(fileTypes.markdown)
+	.concat(fileTypes.html)
+
 const open = require('open')
 const Promise = require('bluebird')
 const connect = require('connect')
 const less = require('less')
-const jsdom = require('jsdom')
 const send = require('send')
 const liveReload = require('livereload')
-const openPort = require('openport')
 const connectLiveReload = require('connect-livereload')
-const chalk = require('chalk')
+const implant = require('implant')
+const deepmerge = require('deepmerge')
+const handlebars = require('handlebars')
+const termImg = require('term-img')
 
 const MarkdownIt = require('markdown-it')
-const markdownItAnchor = require('markdown-it-anchor')
-
-const {JSDOM} = jsdom
+const mdItAnchor = require('markdown-it-anchor')
+const mdItTaskLists = require('markdown-it-task-lists')
+const mdItHLJS = require('markdown-it-highlightjs')
 
 const md = new MarkdownIt({
 	linkify: true,
 	html: true
-}).use(markdownItAnchor)
+})
+	.use(mdItAnchor)
+	.use(mdItTaskLists)
+	.use(mdItHLJS)
 
-// eslint-disable-next-line no-console
-const log = str => console.log(str)
-const msg = (type, msg) => log(chalk`{bgGreen.black  Markserv } {white  ${type}: }` + msg)
-const errormsg = (type, msg) => log(chalk`{bgRed.black  Markserv } {red  ${type}: }` + msg)
+const faviconPath = path.join(__dirname, 'media', 'markserv-favicon-96x96.png')
+const faviconData = fs.readFileSync(faviconPath)
 
-// HasMarkdownExtension: check whether a file is Markdown type
-const hasMarkdownExtension = path => {
-	const fileExtension = path.substr(path.length - 3).toLowerCase()
-	let extensionMatch = false
+const log = (str, flags, err) => {
+	if (flags.silent) {
+		return
+	}
+	if (str) {
+		// eslint-disable-next-line no-console
+		console.log(str)
+	}
 
-	markdownExtensions.forEach(extension => {
-		if (`.${extension}` === fileExtension) {
-			extensionMatch = true
-		}
-	})
+	if (err) {
+		// eslint-disable-next-line no-console
+		console.error(err)
+	}
+}
+const msg = (type, msg, flags) => {
+	if (type === 'patreon') {
+		return log(chalk`{bgRgb(249, 104, 84).white.bold  {black ▕}● PATREON } ` + msg, flags)
+	}
 
-	return extensionMatch
+	if (type === 'github') {
+		return log(chalk`{bgYellow.black    GitHub  } ` + msg, flags)
+	}
+
+	log(chalk`{bgGreen.black   Markserv  }{white  ${type}: }` + msg, flags)
+}
+
+const errormsg = (type, msg, flags, err) =>
+	log(chalk`{bgRed.black   Markserv  }{red  ${type}: }` + msg, flags, err)
+
+const warnmsg = (type, msg, flags) =>
+	log(chalk`{bgYellow.black   Markserv  }{yellow  ${type}: }` + msg, flags)
+
+const isType = (exts, filePath) => {
+	const fileExt = path.parse(filePath).ext
+	return exts.includes(fileExt)
 }
 
 // MarkdownToHTML: turns a Markdown file into HTML content
@@ -99,7 +143,7 @@ const getFile = path => new Promise((resolve, reject) => {
 })
 
 // Get Custom Less CSS to use in all Markdown files
-const buildStyleSheet = cssPath =>
+const buildLessStyleSheet = cssPath =>
 	new Promise(resolve =>
 		getFile(cssPath).then(data =>
 			less.render(data).then(data =>
@@ -108,154 +152,30 @@ const buildStyleSheet = cssPath =>
 		)
 	)
 
-// Linkify: converts github style wiki markdown links to .md links
-const linkify = (body, flags) => new Promise((resolve, reject) => {
-	const dom = new JSDOM(body)
-
-	if (!dom) {
-		return reject(dom)
-	}
-
-	const {window} = dom
-
-	const links = window.document.getElementsByTagName('a')
-	const l = links.length
-
-	let href
-	let link
-	let markdownFile
-	let mdFileExists
-	let relativeURL
-	let isFileHref
-
-	for (let i = 0; i < l; i++) {
-		link = links[i]
-		href = link.href
-		isFileHref = href.substr(0, 8) === 'file:///'
-
-		markdownFile = href.replace(path.join('file://', __dirname), flags.dir) + '.md'
-		mdFileExists = fs.existsSync(markdownFile)
-
-		if (isFileHref && mdFileExists) {
-			relativeURL = href.replace(path.join('file://', __dirname), '') + '.md'
-			link.href = relativeURL
-		}
-	}
-
-	const html = window.document.getElementsByTagName('body')[0].innerHTML
-	resolve(html)
+const baseTemplate = (templateUrl, handebarData) => new Promise((resolve, reject) => {
+	getFile(templateUrl).then(source => {
+		const template = handlebars.compile(source)
+		const output = template(handebarData)
+		resolve(output)
+	}).catch(reject)
 })
 
-// BuildHTMLFromMarkDown: compiles the final HTML/CSS output from Markdown/Less files, includes JS
-const buildHTMLFromMarkDown = (markdownPath, flags) => new Promise(resolve => {
-	const stack = [
-		buildStyleSheet(flags.less),
+const dirToHtml = filePath => {
+	const urls = fs.readdirSync(filePath)
 
-		// Article
-		getFile(markdownPath)
-			.then(markdownToHTML)
-			.then(html => linkify(html, flags)),
-
-		// Header
-		flags.header && getFile(flags.header)
-			.then(markdownToHTML)
-			.then(html => linkify(html, flags)),
-
-		// Footer
-		flags.footer && getFile(flags.footer)
-			.then(markdownToHTML)
-			.then(html => linkify(html, flags)),
-
-		// Navigation
-		flags.navigation && getFile(flags.navigation)
-			.then(markdownToHTML)
-			.then(html => linkify(html, flags))
-	]
-
-	Promise.all(stack).then(data => {
-		const css = data[0]
-		const htmlBody = data[1]
-		const dirs = markdownPath.split('/')
-		const title = dirs[dirs.length - 1].split('.md')[0]
-
-		let header
-		let footer
-		let navigation
-		let outputHtml
-
-		if (flags.header) {
-			header = data[2]
-		}
-
-		if (flags.footer) {
-			footer = data[3]
-		}
-
-		if (flags.navigation) {
-			navigation = data[4]
-		}
-
-		if (flags.less === flags.$markserv.githubStylePath) {
-			outputHtml = `<!DOCTYPE html>
-	          <head>
-	            <title>${title}</title>
-	            <meta charset="utf-8">
-	            <style>${css}</style>
-	            <link rel="stylesheet" href="//sindresorhus.com/github-markdown-css/github-markdown.css">
-	            <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-	            <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
-	            <link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/github-gist.css">
-	            <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});</script><script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-	          </head>
-	          <body>
-	            <article class="markdown-body">${htmlBody}</article>
-	          </body>
-	          <script>hljs.initHighlightingOnLoad();</script>`
-		} else {
-			outputHtml = `
-	        <!DOCTYPE html>
-	          <head>
-	            <title>${title}</title>
-	            <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-	            <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
-	            <link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/github-gist.css">
-	            <meta charset="utf-8">
-	            <style>${css}</style>
-	            <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});</script><script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-	          </head>
-	          <body>
-	            <div class="container">
-	              ${(header ? '<header>' + header + '</header>' : '')}
-	              ${(navigation ? '<nav>' + navigation + '</nav>' : '')}
-	              <article>${htmlBody}</article>
-	              ${(footer ? '<footer>' + footer + '</footer>' : '')}
-	            </div>
-	          </body>
-	          <script>hljs.initHighlightingOnLoad();</script>`
-		}
-		resolve(outputHtml)
-	})
-})
-
-// MarkItDown: begins the Markdown compilation process, then sends result when done...
-const compileAndSendMarkdown = (path, res, flags) => buildHTMLFromMarkDown(path, flags)
-	.then(html => {
-		res.writeHead(200)
-		res.end(html)
-
-	// Catch if something breaks...
-	}).catch(err => {
-		msg('error', 'Can\'t build HTML')
-		// eslint-disable-next-line no-console
-		console.error(err)
-	})
-
-const compileAndSendDirectoryListing = (path, res, flags) => {
-	const urls = fs.readdirSync(path)
 	let list = '<ul>\n'
 
+	let prettyPath = '/' + path.relative(process.cwd(), filePath)
+	if (prettyPath[prettyPath.length] !== '/') {
+		prettyPath += '/'
+	}
+
+	if (prettyPath.substr(prettyPath.length - 2, 2) === '//') {
+		prettyPath = prettyPath.substr(0, prettyPath.length - 1)
+	}
+
 	urls.forEach(subPath => {
-		const dir = fs.statSync(path + subPath).isDirectory()
+		const dir = fs.statSync(filePath + subPath).isDirectory()
 		let href
 		if (dir) {
 			href = subPath + '/'
@@ -272,38 +192,7 @@ const compileAndSendDirectoryListing = (path, res, flags) => {
 
 	list += '</ul>\n'
 
-	buildStyleSheet(flags.less).then(css => {
-		const html = `
-			<!DOCTYPE html>
-				<head>
-					<title>${path.slice(2)}</title>
-					<meta charset="utf-8">
-					<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-					<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
-					<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
-					<link rel="stylesheet" href="//highlightjs.org/static/demo/styles/github-gist.css">
-					<link rel="shortcut icon" type="image/x-icon" href="https://cdn0.iconfinder.com/data/icons/octicons/1024/markdown-128.png" />
-					<style>${css}</style>
-				</head>
-				<body>
-					<article class="markdown-body">
-						<h1>Index of ${path.slice(2)}</h1>${list}
-						<sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: ${process.pid}</sup>
-					</article>
-				</body>
-				<script src="http://localhost:35729/livereload.js?snipver=1"></script>`
-
-		// Log if verbose
-
-		if (flags.verbose) {
-			msg('index').write(path).reset().write('\n')
-		}
-
-		// Send file
-		res.writeHead(200, {'Content-Type': 'text/html'})
-		res.write(html)
-		res.end()
-	})
+	return list
 }
 
 // Remove URL params from file being fetched
@@ -313,34 +202,106 @@ const getPathFromUrl = url => {
 
 // Http_request_handler: handles all the browser requests
 const createRequestHandler = flags => {
-	const dir = flags.dir
+	let dir = flags.dir
+	const isDir = fs.statSync(dir).isDirectory()
+	if (!isDir) {
+		dir = path.parse(flags.dir).dir
+	}
+	flags.$openLocation = path.relative(dir, flags.dir)
+
+	const implantOpts = {
+		maxDepth: 10
+	}
+
+	const implantHandlers = {
+		file: (url, opts) => new Promise(resolve => {
+			const absUrl = path.join(opts.baseDir, url)
+			getFile(absUrl)
+				.then(data => {
+					msg('implant', style.link(absUrl), flags)
+					resolve(data)
+				})
+				.catch(err => {
+					warnmsg('implant 404', style.link(absUrl), flags, err)
+					resolve(false)
+				})
+		}),
+
+		less: (url, opts) => new Promise(resolve => {
+			const absUrl = path.join(opts.baseDir, url)
+			buildLessStyleSheet(absUrl)
+				.then(data => {
+					msg('implant', style.link(absUrl), flags)
+					resolve(data)
+				})
+				.catch(err => {
+					warnmsg('implant 404', style.link(absUrl), flags, err)
+					resolve(false)
+				})
+		}),
+
+		markdown: (url, opts) => new Promise(resolve => {
+			const absUrl = path.join(opts.baseDir, url)
+			getFile(absUrl).then(markdownToHTML)
+				.then(data => {
+					msg('implant', style.link(absUrl), flags)
+					resolve(data)
+				})
+				.catch(err => {
+					warnmsg('implant 404', style.link(absUrl), flags, err)
+					resolve(false)
+				})
+		}),
+
+		html: (url, opts) => new Promise(resolve => {
+			const absUrl = path.join(opts.baseDir, url)
+			getFile(absUrl)
+				.then(data => {
+					msg('implant', style.link(absUrl), flags)
+					resolve(data)
+				})
+				.catch(err => {
+					warnmsg('implant 404', style.link(absUrl), flags, err)
+					resolve(false)
+				})
+		})
+	}
 
 	return (req, res) => {
 		const decodedUrl = getPathFromUrl(decodeURIComponent(req.originalUrl))
+		const filePath = path.normalize(unescape(dir) + unescape(decodedUrl))
+		const baseDir = path.parse(filePath).dir
+		implantOpts.baseDir = baseDir
 
 		if (flags.verbose) {
-			msg('request')
-				.write(unescape(dir) + unescape(decodedUrl))
-				.reset().write('\n')
+			msg('request', filePath, flags)
 		}
 
-		const filePath = unescape(dir) + unescape(decodedUrl)
-		const prettyPath = filePath.slice(2)
+		const prettyPath = filePath
 
 		let stat
 		let isDir
 		let isMarkdown
+		let isHtml
 
 		try {
 			stat = fs.statSync(filePath)
 			isDir = stat.isDirectory()
-			isMarkdown = false
 			if (!isDir) {
-				isMarkdown = hasMarkdownExtension(filePath)
+				isMarkdown = isType(fileTypes.markdown, filePath)
+				isHtml = isType(fileTypes.html, filePath)
 			}
 		} catch (err) {
+			const fileName = path.parse(filePath).base
+			if (fileName === 'favicon.ico') {
+				res.writeHead(200, {'Content-Type': 'image/x-icon'})
+				res.write(faviconData)
+				res.end()
+				return
+			}
+
 			res.writeHead(200, {'Content-Type': 'text/html'})
-			errormsg('404', prettyPath)
+			errormsg('404', filePath, flags, err)
 			res.write(`404 :'( for ${prettyPath}`)
 			res.end()
 			return
@@ -348,91 +309,172 @@ const createRequestHandler = flags => {
 
 		// Markdown: Browser is requesting a Markdown file
 		if (isMarkdown) {
-			msg('markdown', prettyPath)
-			compileAndSendMarkdown(filePath, res, flags)
+			msg('markdown', style.link(prettyPath), flags)
+			getFile(filePath).then(markdownToHTML).then(filePath).then(html => {
+				return implant(html, implantHandlers, implantOpts).then(output => {
+					const templateUrl = path.join(__dirname, 'templates/markdown.html')
+
+					const handlebarData = {
+						title: path.parse(filePath).base,
+						content: output,
+						pid: process.pid | 'N/A'
+					}
+
+					return baseTemplate(templateUrl, handlebarData).then(final => {
+						const lvl2Dir = path.parse(templateUrl).dir
+						const lvl2Opts = deepmerge(implantOpts, {baseDir: lvl2Dir})
+
+						return implant(final, implantHandlers, lvl2Opts)
+							.then(output => {
+								res.writeHead(200, {
+									'content-type': 'text/html'
+								})
+								res.end(output)
+							})
+					})
+				})
+			}).catch(err => {
+				// eslint-disable-next-line no-console
+				console.error(err)
+			})
+		} else if (isHtml) {
+			msg('html', style.link(prettyPath), flags)
+			getFile(filePath).then(html => {
+				return implant(html, implantHandlers, implantOpts).then(output => {
+					res.writeHead(200, {
+						'content-type': 'text/html'
+					})
+					res.end(output)
+				})
+			}).catch(err => {
+				// eslint-disable-next-line no-console
+				console.error(err)
+			})
 		} else if (isDir) {
 			// Index: Browser is requesting a Directory Index
-			msg('dir', prettyPath)
-			compileAndSendDirectoryListing(filePath, res, flags)
+			msg('dir', style.link(prettyPath), flags)
+			const templateUrl = path.join(__dirname, 'templates/directory.html')
+
+			const dirs = path.relative(dir, filePath).split('/')
+			const handlebarData = {
+				dirname: path.parse(filePath).dir,
+				content: dirToHtml(filePath),
+				pid: process.pid | 'N/A',
+				path: path.relative(dir, filePath) + '/',
+				dir: dirs[dirs.length - 1] + '/'
+			}
+
+			return baseTemplate(templateUrl, handlebarData).then(final => {
+				const lvl2Dir = path.parse(templateUrl).dir
+				const lvl2Opts = deepmerge(implantOpts, {baseDir: lvl2Dir})
+				return implant(final, implantHandlers, lvl2Opts).then(output => {
+					res.writeHead(200, {
+						'content-type': 'text/html'
+					})
+					res.end(output)
+				})
+			}).catch(err => {
+				// eslint-disable-next-line no-console
+				console.error(err)
+			})
 		} else {
 			// Other: Browser requests other MIME typed file (handled by 'send')
-			msg('file', prettyPath)
-			send(req, filePath, {root: dir}).pipe(res)
+			msg('file', style.link(prettyPath), flags)
+			send(req, filePath).pipe(res)
 		}
 	}
 }
 
-const findOpenPort = range => new Promise((resolve, reject) => {
-	const props = {
-		startingPort: range[0],
-		endingPort: range[1]
-	}
-
-	openPort.find(props, (err, port) => {
-		if (err) {
-			return reject(err)
-		}
-		resolve(port)
-	})
-})
-
-const startConnectApp = (liveReloadPort, httpRequestHandler) => connect()
-	.use('/', httpRequestHandler)
-	.use(connectLiveReload({
+const startConnectApp = (liveReloadPort, httpRequestHandler) => {
+	const connectApp = connect().use('/', httpRequestHandler)
+	connectApp.use(connectLiveReload({
 		port: liveReloadPort
 	}))
 
+	return connectApp
+}
+
 const startHTTPServer = (connectApp, port, flags) => {
-	const httpServer = http.createServer(connectApp)
+	let httpServer
+
+	if (connectApp) {
+		httpServer = http.createServer(connectApp)
+	} else {
+		httpServer = http.createServer()
+	}
+
 	httpServer.listen(port, flags.address)
 	return httpServer
 }
 
-const startLiveReloadServer = (liveReloadPort, flags) => liveReload.createServer({
-	exts: watchExtensions,
-	port: liveReloadPort
-}).watch(path.resolve(flags.dir))
+const startLiveReloadServer = (liveReloadPort, flags) => {
+	let dir = flags.dir
+	const isDir = fs.statSync(dir).isDirectory()
+	if (!isDir) {
+		dir = path.parse(flags.dir).dir
+	}
+
+	const exts = fileTypes.watch.map(type => type.substr(1))
+	const exclusions = fileTypes.exclusions.map(exPath => {
+		return path.join(dir, exPath)
+	})
+
+	return liveReload.createServer({
+		exts,
+		exclusions,
+		port: liveReloadPort
+	}).watch(path.resolve(dir))
+}
 
 const logActiveServerInfo = (httpPort, liveReloadPort, flags) => {
 	const serveURL = 'http://' + flags.address + ':' + httpPort
 	const dir = path.resolve(flags.dir)
 
-	msg('start', chalk`serving content from {white ${dir}} on port: {white ${httpPort}}`)
-	msg('address', chalk`{underline.white ${serveURL}}`)
-	msg('less', chalk`using style from {white ${flags.less}}`)
-	msg('livereload', chalk`communicating on port: {white ${liveReloadPort}}`)
-
-	if (process.pid) {
-		msg('process', chalk`your pid is: {white ${process.pid}}`)
-		msg('info', chalk`to stop this server, press: {white [Ctrl + C]}, or type: {white "kill ${process.pid}"}`)
+	if (!flags.silent) {
+		const logoPath = path.join(__dirname, 'media', 'markserv-logo-term.png')
+		termImg(logoPath, {
+			width: 12,
+			fallback: () => {}
+		})
 	}
 
-	if (flags.file) {
-		open(serveURL + '/' + flags.file)
-	} else if (!flags.x) {
-		open(serveURL)
+	const patreonLink = `patreon.com/f1lt3r`
+	const githubLink = 'github.com/f1lt3r/markserv'
+
+	msg('patreon', chalk`{whiteBright.bold Help support Markserv - Become a Patreon! ${style.patreon(patreonLink)}}`, flags)
+	msg('github', chalk`Contribute on Github - {yellow.underline ${githubLink}}`, flags)
+	msg('address', style.address(serveURL), flags)
+	msg('path', chalk`{grey ${style.address(dir)}}`, flags)
+	msg('livereload', chalk`{grey communicating on port: ${style.port(liveReloadPort)}}`, flags)
+
+	if (process.pid) {
+		msg('process', chalk`{grey your pid is: ${style.pid(process.pid)}}`, flags)
+		msg('stop', chalk`{grey press {magenta [Ctrl + C]} or type {magenta "sudo kill -9 ${process.pid}"}}`, flags)
+	}
+
+	if (flags.$openLocation || flags.$pathProvided) {
+		open(serveURL + '/' + flags.$openLocation)
 	}
 }
 
 const init = async flags => {
-	const liveReloadPort = await findOpenPort(PORT_RANGE.LIVE_RELOAD)
+	const liveReloadPort = flags.livereloadport
+	const httpPort = flags.port
+
 	const httpRequestHandler = createRequestHandler(flags)
 	const connectApp = startConnectApp(liveReloadPort, httpRequestHandler)
-
-	let httpPort
-	if (flags.port === null) {
-		httpPort = await findOpenPort(PORT_RANGE.HTTP)
-	} else {
-		httpPort = flags.port
-	}
 	const httpServer = await startHTTPServer(connectApp, httpPort, flags)
 
-	const liveReloadServer = await startLiveReloadServer(liveReloadPort, flags)
+	let liveReloadServer
+	if (liveReloadPort) {
+		liveReloadServer = await startLiveReloadServer(liveReloadPort, flags)
+	}
 
 	// Log server info to CLI
 	logActiveServerInfo(httpPort, liveReloadPort, flags)
 
 	const service = {
+		pid: process.pid,
 		httpServer,
 		liveReloadServer,
 		connectApp

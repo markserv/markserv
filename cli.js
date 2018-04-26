@@ -8,23 +8,20 @@ const markserv = require('./server')
 
 const pkg = require('./package.json')
 
-const githubStylePath = path.join(__dirname, 'less/github.less')
+const cwd = process.cwd()
+
+flags.dir = cwd
 
 flags.version(pkg.version)
-	.option('-d, --dir [type]', 'Serve from directory [dir]', './')
-	.option('-p, --port [type]', 'Serve on port [port]', null)
-	.option('-h, --header [type]', 'Header template .md file', null)
-	.option('-r, --footer [type]', 'Footer template .md file', null)
-	.option('-n, --navigation [type]', 'Navigation .md file', null)
+	.usage('<file/dir>')
+	.option('-p, --port [type]', 'HTTP port [port]', 8642)
+	.option('-l, --livereloadport [type]', 'LiveReload port [livereloadport]', 35729)
+	.option('-i, --silent [type]', 'Silent (no logs to CLI)', false)
 	.option('-a, --address [type]', 'Serve on ip/address [address]', 'localhost')
-	.option('-s, --less [type]', 'Path to Less styles [less]', githubStylePath)
-	.option('-f, --file [type]', 'Open specific file in browser [file]')
-	.option('-x, --x', 'Don\'t open browser on run.')
 	.option('-v, --verbose', 'verbose output')
-	.parse(process.argv)
-
-flags.$markserv = {
-	githubStylePath
-}
+	.action(serverPath => {
+		flags.$pathProvided = true
+		flags.dir = path.normalize(path.join(cwd, serverPath))
+	}).parse(process.argv)
 
 markserv.init(flags)
