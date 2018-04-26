@@ -37,7 +37,7 @@
   ],
   "husky": {
     "hooks": {
-      "precommit": "npm test"
+      "pre-commit": "npm test"
     }
   },
   "bin": {
