@@ -1,8 +1,8 @@
-<img src="media/markserv-logo.png" width="188">
+<center><img src="media/markserv-logo.png" width="188"></center>
 
-# markserv
+<center><h1>🏁 Markserv</h1></center>
 
-> 🏁  serve markdown as html (GitHub style), index directories, live-reload as you edit
+> serve markdown as html (GitHub style), index directories, and live-reload as you edit
 
 [![Build Status](https://travis-ci.org/F1LT3R/markserv.svg?branch=master)](https://travis-ci.org/F1LT3R/markserv)
 [![Coverage Status](https://coveralls.io/repos/github/F1LT3R/markserv/badge.svg?branch=master)](https://coveralls.io/github/F1LT3R/markserv?branch=master)
@@ -11,7 +11,7 @@
 
 ![Markserv Demo](media/markserv-demo.gif)
 
-## Features
+## 🔥 Features
 
 - Basic HTTP server that indexes directories
 - Render Markdown files as HTML on-the-fly
@@ -22,11 +22,11 @@
 
 Supporting: [MathJax](tests/mathjax.md), [Chineese Characters](tests/测试.md), [Tables](tests/tables.md), [Heading Anchors](tests/links.md)
 
-## Installation
+## 👩‍💻  Installation
 
 ```shell
 # NPM
-$ npm install markserv -g
+$ npm i -g markserv
 
 # Yarn
 $ yarn --global add markserv
@@ -34,12 +34,19 @@ $ yarn --global add markserv
 
 <a href="https://patreon.com/bePatron?u=9720216"><img width="160" src="https://f1lt3r.io/content/images/2018/04/become_a_patron_button@2x.png"></a>
 
-## Usage
+## 🕹 Usage
 
-Start Markserv
+To start Markserv from the CLI
 
 ```shell
-$ markserv
+# Open closest README.md
+$ readme
+
+# Open file
+$ markserv README.md
+
+# Open a directory
+$ markserv node_modules
 ```
 
 ![Markserv CLI Splash](media/markserv-splash.png)
@@ -60,7 +67,7 @@ Start Markserv and open the closest README.md file in the browser:
 $ readme
 ```
 
-## Live Reload
+## ⚡ Live Reload
 
 To see real-time updates as you save your markdown files, you will need to install the LiveReload plugin for your browser:
 
@@ -72,7 +79,7 @@ With the Live Reload plugin installed and turned on, you should see the page rel
 
 ![Markserv Live Reload](media/markserv-live-reload.gif)
 
-## Markdown Links
+## 🔗 Markdown Links
 
 You can link to an external Markdown file in the same way that you use GitHub Wiki links. You can use the example code here to see how external links work.
 
@@ -86,7 +93,7 @@ Example link:
 
 [Skateboarding Dog!](tests/Linked-Markdown-Example.md)
 
-## Just in Time Templating
+## ⏱ Just in Time Templating
 
 Markserv allows you to include nested content. Templates are fetched and rendered when you request them in your browser. The `maxDepth` of includes is set to `10`.
 
@@ -173,7 +180,7 @@ a {
 </style>
 ```
 
-## Flags
+## 🎌 Flags
 
 To list the options/flags for the markserv CLI tool:
 
@@ -205,7 +212,7 @@ nohup markserv -p 8642 -a 0.0.0.0 &
 
 This will make the server instance persistent and will be available to access even when you log out or even when your ssh session closes (in case you are accessing a remote machine through ssh to set up `markserv` server)
 
-## Credits
+## 💘 Credits
 
 ### Logo Credits
 

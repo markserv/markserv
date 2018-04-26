@@ -1,6 +1,6 @@
 {
   "name": "markserv",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "🏁  serve markdown as html (GitHub style), index directories, live-reload as you edit",
   "preferGlobal": true,
   "scripts": {
@@ -37,7 +37,7 @@
   ],
   "husky": {
     "hooks": {
-      "precommit": "npm test"
+      "pre-commit": "npm test"
     }
   },
   "bin": {
@@ -49,7 +49,9 @@
     "cli.js",
     "templates/directory.html",
     "templates/github.less",
-    "templates/markdown.html"
+    "templates/markdown.html",
+    "media/markserv-favicon-96x96.png",
+    "media/markserv-logo-term.png"
   ],
   "author": "Alistair MacDonald <al@pwn.io>",
   "email": "al@pwn.io",
@@ -71,7 +73,6 @@
     "livereload": "^0.7.0",
     "markdown-it": "^8.4.1",
     "markdown-it-anchor": "^4.0.0",
-    "markdown-it-checkbox": "^1.1.0",
     "markdown-it-highlightjs": "^3.0.0",
     "markdown-it-include": "^1.0.0",
     "markdown-it-task-lists": "^2.1.1",
