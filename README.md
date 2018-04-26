@@ -1,6 +1,8 @@
 <p align="center">
-	<img src="media/markserv-logo.png" width="188"/><br>
-	<img src="media/markserv-word-mark.png" width="380"/><br>
+	<img alt="Markserv Logo" src="media/markserv-logo.png" width="188"/>
+</p>
+<p align="center">
+	<img alt="Markserv Word Mark" src="media/markserv-word-mark.png" width="380"/>
 </p>
 
 > 🏁 serve markdown as html (GitHub style), index directories, and live-reload as you edit
