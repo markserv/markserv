@@ -1,6 +1,6 @@
 {
   "name": "markserv",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "🏁  serve markdown as html (GitHub style), index directories, live-reload as you edit",
   "preferGlobal": true,
   "scripts": {
@@ -41,8 +41,8 @@
     }
   },
   "bin": {
-    "markserv": "cli.js",
-    "readme": "readme.js"
+    "markserv": "lib/cli.js",
+    "readme": "lib/readme.js"
   },
   "files": [
     "server.js",
