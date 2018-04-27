@@ -1,5 +1,5 @@
 <p align="center">
-	<img alt="Markserv Logo" src="media/markserv-logo-wordmark.png" width="420">
+	<img alt="Markserv Logo" src="media/markserv-readme-banner.svg">
 </p>
 
 > 🏁 serve markdown as html (GitHub style), index directories, and live-reload as you edit
@@ -15,12 +15,12 @@
 
 ## 🔥 Features
 
-- Basic HTTP server that indexes directories
-- Render Markdown files as HTML on-the-fly
-- Markdown rendered with GitHub flavor CSS
-- LiveReload your Markdown as you edit and save
-- [Just-in-Time Templating](#just-in-time-templating) of Markdown, HTML &amp; LESS
-- Syntax highlighting with Github colors
+- Markdown content rendered as HTML
+- GitHub flavor CSS and Syntax Highlighting
+- [Just-in-Time Templating](#just-in-time-templating): Markdown, HTML &amp; LESS
+- LiveReload as you edit
+- Directory indexes
+- MIME-Type file support
 
 Supporting: [MathJax](tests/mathjax.md), [Chineese Characters](tests/测试.md), [Tables](tests/tables.md), [Heading Anchors](tests/links.md)
 

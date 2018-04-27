@@ -1,6 +1,6 @@
 {
   "name": "markserv",
-  "version": "1.3.10",
+  "version": "1.4.0",
   "description": "🏁  serve markdown as html (GitHub style), index directories, live-reload as you edit",
   "preferGlobal": true,
   "scripts": {
@@ -93,7 +93,7 @@
   },
   "xo": {
     "esnext": true,
-    "semicolon": false,
+    "semicolons": false,
     "rules": {
       "no-console": 1,
       "space-before-function-paren": 0,
