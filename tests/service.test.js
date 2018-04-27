@@ -3,7 +3,7 @@ import path from 'path'
 import request from 'request'
 import test from 'ava'
 import getPort from 'get-port'
-import markserv from '../server'
+import markserv from '../lib/server'
 
 test.cb('start service and receive tables markdown', t => {
 	t.plan(3)

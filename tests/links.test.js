@@ -1,6 +1,6 @@
 import path from 'path'
 import test from 'ava'
-import markserv from '../server'
+import markserv from '../lib/server'
 
 test('markdown tables', async t => {
 	const markdown = await markserv.getFile(path.join(__dirname, 'links.md'))
