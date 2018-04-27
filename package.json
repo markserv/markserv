@@ -93,7 +93,7 @@
   },
   "xo": {
     "esnext": true,
-    "semicolons": false,
+    "semicolon": false,
     "rules": {
       "no-console": 1,
       "space-before-function-paren": 0,
