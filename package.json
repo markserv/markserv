@@ -48,6 +48,7 @@
     "lib/cli.js",
     "lib/readme.js",
     "lib/server.js",
+    "lib/icons",
     "lib/templates/directory.html",
     "lib/templates/github.less",
     "lib/templates/markdown.html",
@@ -95,11 +96,6 @@
   "xo": {
     "esnext": true,
     "semicolon": false,
-    "rules": {
-      "no-console": 1,
-      "space-before-function-paren": 0,
-      "unicorn/escape-case": 0
-    },
     "rules": {
       "node/no-unpublished-bin": false
     }
