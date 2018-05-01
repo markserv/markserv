@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="285px" height="284px" viewBox="0 0 285 284" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="208px" height="210px" viewBox="0 0 208 210" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
-    <title>markserv</title>
+    <title>Slice 1</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="markserv" transform="translate(14.000000, 14.000000)" fill-rule="nonzero">
-            <rect id="Combined-Shape" fill="#34495E" x="0" y="0" width="256.560907" height="255.804176" rx="37"></rect>
-            <polygon id="Combined-Shape" fill="#FFFFFF" points="209.626283 196 231.452757 196 189.226378 244.4625 147 196 169.469713 196 169.469713 95.7510687 129.313142 148.12268 89.156571 95.7510687 89.156571 182.742334 49 182.742334 49 35 89.156571 35 129.313142 87.3716109 169.469713 35 209.626283 35"></polygon>
-            <polygon id="Rectangle-path" fill="#1ABC9C" points="82 209 135.775369 209 166.000759 242.441713 112 242.441713"></polygon>
-            <path d="M14,215.998009 C14,212.6854 16.6778908,210 20.0010364,210 L61.2878788,210 L91.2878788,243.441713 L20.0003383,243.441713 C16.686443,243.441713 14,240.761567 14,237.443704 L14,215.998009 Z" id="Rectangle-path" fill="#1ABC9C"></path>
+        <g id="markserv" transform="translate(22.000000, 22.000000)" fill="#34495E">
+            <polygon id="Combined-Shape-path" points="146.653928 127.593245 164 127.593245 130.441587 166 96.883175 127.593245 114.740446 127.593245 114.740446 48.1455029 82.8269642 89.6502471 50.9134821 48.1455029 50.9134821 117.086483 19 117.086483 19 0 50.9134821 0 82.8269642 41.5047439 114.740446 0 146.653928 0"></polygon>
+            <polygon id="Rectangle-path-path" points="46 138 88.891871 138 113 164 69.9283552 164"></polygon>
+            <path d="M0,143.663285 C0,141.087824 2.10926864,139 4.72677895,139 L29.3701869,139 L53,165 L4.72622909,165 C2.11600487,165 0,162.916261 0,160.336715 L0,143.663285 Z" id="Rectangle-path-path"></path>
         </g>
     </g>
 </svg>

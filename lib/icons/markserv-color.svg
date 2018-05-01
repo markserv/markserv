@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+    <title>markserv-color</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="markserv" transform="translate(2.000000, 2.000000)" fill-rule="nonzero">
+            <rect id="Combined-Shape" fill="#1ABC9C" x="0" y="0" width="20" height="20" rx="2"></rect>
+            <g id="Group" transform="translate(1.500000, 2.000000)" fill="#FFFFFF">
+                <polygon id="Combined-Shape" points="15.281478 12.999155 17.0867988 12.999155 13.5941522 16.894215 10.1015056 12.999155 11.9600303 12.999155 11.9600303 4.94188186 8.63858254 9.15112752 5.31713477 4.94188186 5.31713477 11.9336012 1.995687 11.9336012 1.995687 0.0591569258 5.31713477 0.0591569258 8.63858254 4.26840256 11.9600303 0.0591569258 15.281478 0.0591569258"></polygon>
+                <path d="M0.995687002,14.8291772 C0.995687002,14.5750042 1.20643831,14.3689563 1.46797149,14.3689563 L9.28290382,14.3689563 L11.6098308,16.9349037 L1.46791654,16.9349037 C1.20711137,16.9349037 0.995687002,16.7292589 0.995687002,16.4746828 L0.995687002,14.8291772 Z" id="Rectangle-path" opacity="0.692764946"></path>
+            </g>
+        </g>
+    </g>
+</svg>

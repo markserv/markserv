@@ -4,11 +4,15 @@ body {
   outline: 1300px solid #fff;
   margin: 16px auto;
 }
+
 body .markdown-body {
   padding: 30px;
 }
 
 .icon:before {
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-positiong: 50% 50%;
     content: "";
     display: block;
     position: absolute;
@@ -19,6 +23,25 @@ body .markdown-body {
     background-size: contain;
 }
 
+.icon.markdown.isfile:before {
+  -webkit-mask-image: none!important;
+  -webkit-mask-size: auto!important;
+  -webkit-mask-repeat: auto!important;
+  -webkit-mask-position: auto!important;
+
+  background-color: transparent;
+  background-size: contain;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+}
+
+.icon.isfolder:before {
+  background-color: #34495E;
+}
+
+.icon.isfile:before {
+  background-color: #34495E;
+}
 
 li.icon {
     list-style-type: none;
@@ -26,8 +49,6 @@ li.icon {
 
 .dir h1.icon {
     padding-left: 48px;
-    /*border-bottom: none;*/
-    /*margin-bottom: 0;*/
 }
 
 .dir h1.icon:before {

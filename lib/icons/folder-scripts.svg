@@ -1,2 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.4142" version="1.1" viewBox="0 0 24 24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><path d="m10 4h-6c-1.11 0-2 0.89-2 2v12c0 1.097 0.903 2 2 2h16c1.097 0 2-0.903 2-2v-10c0-1.11-0.9-2-2-2h-8l-2-2z" fill="#546e7a" fill-rule="nonzero"/><g transform="matrix(.62922 0 0 .62922 9.657 7.657)" fill="#cfd8dc"><path d="m14 20c1.097 0 2-0.903 2-2v-13h-7c-0.549 0-1 0.451-1 1v10h-3v-11c0-1.646 1.354-3 3-3h11c1.646 0 3 1.354 3 3v1h-4v13c0 1.646-1.354 3-3 3h-10c-1.646 0-3-1.354-3-3v-1h10c0 1.097 0.903 2 2 2z" fill="#cfd8dc" fill-rule="nonzero"/></g></svg>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+    <title>folder-scripts</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M10,4 L12,6 L20,6 C21.1,6 22,6.89 22,8 L22,18 C22,19.097 21.097,20 20,20 L4,20 C2.903,20 2,19.097 2,18 L2,6 C2,4.89 2.89,4 4,4 L10,4 Z M13.241104,17.341496 C12.674249,17.341496 12.20764,16.874887 12.20764,16.308032 L7.04032,16.308032 L7.04032,16.824764 C7.04032,17.6753049 7.73997513,18.37496 8.590516,18.37496 L13.757836,18.37496 C14.6083769,18.37496 15.308032,17.6753049 15.308032,16.824764 L15.308032,10.107248 L17.37496,10.107248 L17.37496,9.590516 C17.37496,8.73997513 16.6753049,8.04032 15.824764,8.04032 L10.140712,8.04032 C9.29017113,8.04032 8.590516,8.73997513 8.590516,9.590516 L8.590516,15.274568 L10.140712,15.274568 L10.140712,10.107248 C10.140712,9.82356213 10.3737581,9.590516 10.657444,9.590516 L14.274568,9.590516 L14.274568,16.308032 C14.274568,16.874887 13.807959,17.341496 13.241104,17.341496 Z" id="Combined-Shape" fill="#546E7A" fill-rule="nonzero"></path>
+    </g>
+</svg>
