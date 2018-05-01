@@ -8,6 +8,21 @@ body .markdown-body {
   padding: 30px;
 }
 
+.icon:before {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    margin: 0 0 0 -32px;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+
+li.icon {
+    list-style-type: none;
+}
 
 .dir h1.icon {
     padding-left: 48px;
