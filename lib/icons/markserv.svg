@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg viewBox="0 0 257 256" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="285px" height="284px" viewBox="0 0 285 284" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
     <title>markserv</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="markserv" fill-rule="nonzero">
+        <g id="markserv" transform="translate(14.000000, 14.000000)" fill-rule="nonzero">
             <rect id="Combined-Shape" fill="#34495E" x="0" y="0" width="256.560907" height="255.804176" rx="37"></rect>
             <polygon id="Combined-Shape" fill="#FFFFFF" points="209.626283 196 231.452757 196 189.226378 244.4625 147 196 169.469713 196 169.469713 95.7510687 129.313142 148.12268 89.156571 95.7510687 89.156571 182.742334 49 182.742334 49 35 89.156571 35 129.313142 87.3716109 169.469713 35 209.626283 35"></polygon>
             <polygon id="Rectangle-path" fill="#1ABC9C" points="82 209 135.775369 209 166.000759 242.441713 112 242.441713"></polygon>
