@@ -24,6 +24,10 @@
 
 Supporting: [MathJax](tests/mathjax.md), [Chineese Characters](tests/测试.md), [Tables](tests/tables.md), [Heading Anchors](tests/links.md)
 
+<p align="center">
+	<img alt="Markserv directory index" src="media/markserv-directory-listing.png" width="100%">
+</p>
+
 ## 👩‍💻  Installation
 
 ```shell
