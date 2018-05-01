@@ -1,8 +1,10 @@
 ## Auto Links
 
-This should automatically be turned into a link:
+This should NOT automatically be turned into a link:
 
 https://f1lt3r.io
+
+Markdown-It Linkify was switched off after it was seen to take a long time to complete on long markdown files in the Node profiler.
 
 ## Headings Anchors
 

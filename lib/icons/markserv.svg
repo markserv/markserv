@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="208px" height="210px" viewBox="0 0 208 210" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+    <title>Slice 1</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="markserv" transform="translate(22.000000, 22.000000)" fill="#34495E">
+            <polygon id="Combined-Shape-path" points="146.653928 127.593245 164 127.593245 130.441587 166 96.883175 127.593245 114.740446 127.593245 114.740446 48.1455029 82.8269642 89.6502471 50.9134821 48.1455029 50.9134821 117.086483 19 117.086483 19 0 50.9134821 0 82.8269642 41.5047439 114.740446 0 146.653928 0"></polygon>
+            <polygon id="Rectangle-path-path" points="46 138 88.891871 138 113 164 69.9283552 164"></polygon>
+            <path d="M0,143.663285 C0,141.087824 2.10926864,139 4.72677895,139 L29.3701869,139 L53,165 L4.72622909,165 C2.11600487,165 0,162.916261 0,160.336715 L0,143.663285 Z" id="Rectangle-path-path"></path>
+        </g>
+    </g>
+</svg>

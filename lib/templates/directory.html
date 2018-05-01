@@ -2,14 +2,16 @@
 <head>
 	<title>{{title}}</title>
 		<meta charset="utf-8">
-		<style>{less: github.less}</style>
+		<link rel="stylesheet" href="{markserv}templates/markserv.css">
+		<link rel="stylesheet" href="{markserv}icons/icons.css">
 		<link rel="stylesheet" href="//sindresorhus.com/github-markdown-css/github-markdown.css">
 		<link rel="stylesheet" href="//highlightjs.org/static/demo/styles/github-gist.css">
 	</head>
-<body>
+<body class="dir">
 <article class="markdown-body">
-<h1>Index of {{path}}</h1>
+<h1 class="icon {{folderIcon}} isfolder">{{#each crumbs}}<a href="{{href}}">{{text}}</a>/{{/each}}</h1>
 {{{content}}}
 <sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: {{pid}}</sup>
+
 </article>
 </body>

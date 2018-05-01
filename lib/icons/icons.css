@@ -1,0 +1,1026 @@
+.icon.markdown:before {
+    background-image: url("markserv-color.svg");
+}
+.icon.git:before {
+    -webkit-mask-image: url("git.svg");
+}
+.icon.c:before {
+    -webkit-mask-image: url("c.svg");
+}
+.icon.yaml:before {
+    -webkit-mask-image: url("yaml.svg");
+}
+.icon.xml:before {
+    -webkit-mask-image: url("xml.svg");
+}
+.icon.matlab:before {
+    -webkit-mask-image: url("matlab.svg");
+}
+.icon.settings:before {
+    -webkit-mask-image: url("settings.svg");
+}
+.icon.shaderlab:before {
+    -webkit-mask-image: url("shaderlab.svg");
+}
+.icon.diff:before {
+    -webkit-mask-image: url("diff.svg");
+}
+.icon.json:before {
+    -webkit-mask-image: url("json.svg");
+}
+.icon.blink:before {
+    -webkit-mask-image: url("blink.svg");
+}
+.icon.java:before {
+    -webkit-mask-image: url("java.svg");
+}
+.icon.razor:before {
+    -webkit-mask-image: url("razor.svg");
+}
+.icon.python:before {
+    -webkit-mask-image: url("python.svg");
+}
+.icon.javascript:before {
+    -webkit-mask-image: url("javascript.svg");
+}
+.icon.typescript:before {
+    -webkit-mask-image: url("typescript.svg");
+}
+.icon.scala:before {
+    -webkit-mask-image: url("scala.svg");
+}
+.icon.handlebars:before {
+    -webkit-mask-image: url("handlebars.svg");
+}
+.icon.perl:before {
+    -webkit-mask-image: url("perl.svg");
+}
+.icon.haxe:before {
+    -webkit-mask-image: url("haxe.svg");
+}
+.icon.puppet:before {
+    -webkit-mask-image: url("puppet.svg");
+}
+.icon.elixir:before {
+    -webkit-mask-image: url("elixir.svg");
+}
+.icon.livescript:before {
+    -webkit-mask-image: url("livescript.svg");
+}
+.icon.erlang:before {
+    -webkit-mask-image: url("erlang.svg");
+}
+.icon.twig:before {
+    -webkit-mask-image: url("twig.svg");
+}
+.icon.julia:before {
+    -webkit-mask-image: url("julia.svg");
+}
+.icon.elm:before {
+    -webkit-mask-image: url("elm.svg");
+}
+.icon.purescript:before {
+    -webkit-mask-image: url("purescript.svg");
+}
+.icon.stylus:before {
+    -webkit-mask-image: url("stylus.svg");
+}
+.icon.nunjucks:before {
+    -webkit-mask-image: url("nunjucks.svg");
+}
+.icon.pug:before {
+    -webkit-mask-image: url("pug.svg");
+}
+.icon.robot:before {
+    -webkit-mask-image: url("robot.svg");
+}
+.icon.sass:before {
+    -webkit-mask-image: url("sass.svg");
+}
+.icon.less:before {
+    -webkit-mask-image: url("less.svg");
+}
+.icon.css:before {
+    -webkit-mask-image: url("css.svg");
+}
+.icon.visualstudio:before {
+    -webkit-mask-image: url("visualstudio.svg");
+}
+.icon.angular:before {
+    -webkit-mask-image: url("angular.svg");
+}
+.icon.graphql:before {
+    -webkit-mask-image: url("graphql.svg");
+}
+.icon.solidity:before {
+    -webkit-mask-image: url("solidity.svg");
+}
+.icon.autoit:before {
+    -webkit-mask-image: url("autoit.svg");
+}
+.icon.haml:before {
+    -webkit-mask-image: url("haml.svg");
+}
+.icon.yang:before {
+    -webkit-mask-image: url("yang.svg");
+}
+.icon.terraform:before {
+    -webkit-mask-image: url("terraform.svg");
+}
+.icon.applescript:before {
+    -webkit-mask-image: url("applescript.svg");
+}
+.icon.cake:before {
+    -webkit-mask-image: url("cake.svg");
+}
+.icon.cucumber:before {
+    -webkit-mask-image: url("cucumber.svg");
+}
+.icon.nim:before {
+    -webkit-mask-image: url("nim.svg");
+}
+.icon.apiblueprint:before {
+    -webkit-mask-image: url("apiblueprint.svg");
+}
+.icon.riot:before {
+    -webkit-mask-image: url("riot.svg");
+}
+.icon.postcss:before {
+    -webkit-mask-image: url("postcss.svg");
+}
+.icon.coldfusion:before {
+    -webkit-mask-image: url("coldfusion.svg");
+}
+.icon.haskell:before {
+    -webkit-mask-image: url("haskell.svg");
+}
+.icon.cabal:before {
+    -webkit-mask-image: url("cabal.svg");
+}
+.icon.nix:before {
+    -webkit-mask-image: url("nix.svg");
+}
+.icon.ruby:before {
+    -webkit-mask-image: url("ruby.svg");
+}
+.icon.slim:before {
+    -webkit-mask-image: url("slim.svg");
+}
+.icon.php:before {
+    -webkit-mask-image: url("php.svg");
+}
+.icon.php_elephant:before {
+    -webkit-mask-image: url("php_elephant.svg");
+}
+.icon.hack:before {
+    -webkit-mask-image: url("hack.svg");
+}
+.icon.react:before {
+    -webkit-mask-image: url("react.svg");
+}
+.icon.mjml:before {
+    -webkit-mask-image: url("mjml.svg");
+}
+.icon.processing:before {
+    -webkit-mask-image: url("processing.svg");
+}
+.icon.html:before {
+    -webkit-mask-image: url("html.svg");
+}
+.icon.blink_light:before {
+    -webkit-mask-image: url("blink_light.svg");
+}
+.icon.jinja:before {
+    -webkit-mask-image: url("jinja.svg");
+}
+.icon.jinja_light:before {
+    -webkit-mask-image: url("jinja_light.svg");
+}
+.icon.sublime:before {
+    -webkit-mask-image: url("sublime.svg");
+}
+.icon.image:before {
+    -webkit-mask-image: url("image.svg");
+}
+.icon.typescript-def:before {
+    -webkit-mask-image: url("typescript-def.svg");
+}
+.icon.markojs:before {
+    -webkit-mask-image: url("markojs.svg");
+}
+.icon.pdf:before {
+    -webkit-mask-image: url("pdf.svg");
+}
+.icon.table:before {
+    -webkit-mask-image: url("table.svg");
+}
+.icon.vscode:before {
+    -webkit-mask-image: url("vscode.svg");
+}
+.icon.database:before {
+    -webkit-mask-image: url("database.svg");
+}
+.icon.csharp:before {
+    -webkit-mask-image: url("csharp.svg");
+}
+.icon.zip:before {
+    -webkit-mask-image: url("zip.svg");
+}
+.icon.exe:before {
+    -webkit-mask-image: url("exe.svg");
+}
+.icon.h:before {
+    -webkit-mask-image: url("h.svg");
+}
+.icon.cpp:before {
+    -webkit-mask-image: url("cpp.svg");
+}
+.icon.hpp:before {
+    -webkit-mask-image: url("hpp.svg");
+}
+.icon.go:before {
+    -webkit-mask-image: url("go.svg");
+}
+.icon.url:before {
+    -webkit-mask-image: url("url.svg");
+}
+.icon.console:before {
+    -webkit-mask-image: url("console.svg");
+}
+.icon.powershell:before {
+    -webkit-mask-image: url("powershell.svg");
+}
+.icon.gradle:before {
+    -webkit-mask-image: url("gradle.svg");
+}
+.icon.word:before {
+    -webkit-mask-image: url("word.svg");
+}
+.icon.certificate:before {
+    -webkit-mask-image: url("certificate.svg");
+}
+.icon.key:before {
+    -webkit-mask-image: url("key.svg");
+}
+.icon.font:before {
+    -webkit-mask-image: url("font.svg");
+}
+.icon.lib:before {
+    -webkit-mask-image: url("lib.svg");
+}
+.icon.fsharp:before {
+    -webkit-mask-image: url("fsharp.svg");
+}
+.icon.swift:before {
+    -webkit-mask-image: url("swift.svg");
+}
+.icon.arduino:before {
+    -webkit-mask-image: url("arduino.svg");
+}
+.icon.docker:before {
+    -webkit-mask-image: url("docker.svg");
+}
+.icon.tex:before {
+    -webkit-mask-image: url("tex.svg");
+}
+.icon.powerpoint:before {
+    -webkit-mask-image: url("powerpoint.svg");
+}
+.icon.video:before {
+    -webkit-mask-image: url("video.svg");
+}
+.icon.virtual:before {
+    -webkit-mask-image: url("virtual.svg");
+}
+.icon.email:before {
+    -webkit-mask-image: url("email.svg");
+}
+.icon.audio:before {
+    -webkit-mask-image: url("audio.svg");
+}
+.icon.coffee:before {
+    -webkit-mask-image: url("coffee.svg");
+}
+.icon.document:before {
+    -webkit-mask-image: url("document.svg");
+}
+.icon.rust:before {
+    -webkit-mask-image: url("rust.svg");
+}
+.icon.raml:before {
+    -webkit-mask-image: url("raml.svg");
+}
+.icon.xaml:before {
+    -webkit-mask-image: url("xaml.svg");
+}
+.icon.kotlin:before {
+    -webkit-mask-image: url("kotlin.svg");
+}
+.icon.lua:before {
+    -webkit-mask-image: url("lua.svg");
+}
+.icon.clojure:before {
+    -webkit-mask-image: url("clojure.svg");
+}
+.icon.groovy:before {
+    -webkit-mask-image: url("groovy.svg");
+}
+.icon.r:before {
+    -webkit-mask-image: url("r.svg");
+}
+.icon.dart:before {
+    -webkit-mask-image: url("dart.svg");
+}
+.icon.actionscript:before {
+    -webkit-mask-image: url("actionscript.svg");
+}
+.icon.mxml:before {
+    -webkit-mask-image: url("mxml.svg");
+}
+.icon.autohotkey:before {
+    -webkit-mask-image: url("autohotkey.svg");
+}
+.icon.flash:before {
+    -webkit-mask-image: url("flash.svg");
+}
+.icon.swc:before {
+    -webkit-mask-image: url("swc.svg");
+}
+.icon.cmake:before {
+    -webkit-mask-image: url("cmake.svg");
+}
+.icon.assembly:before {
+    -webkit-mask-image: url("assembly.svg");
+}
+.icon.vue:before {
+    -webkit-mask-image: url("vue.svg");
+}
+.icon.ocaml:before {
+    -webkit-mask-image: url("ocaml.svg");
+}
+.icon.javascript-map:before {
+    -webkit-mask-image: url("javascript-map.svg");
+}
+.icon.css-map:before {
+    -webkit-mask-image: url("css-map.svg");
+}
+.icon.lock:before {
+    -webkit-mask-image: url("lock.svg");
+}
+.icon.test-ts:before {
+    -webkit-mask-image: url("test-ts.svg");
+}
+.icon.test-jsx:before {
+    -webkit-mask-image: url("test-jsx.svg");
+}
+.icon.test-js:before {
+    -webkit-mask-image: url("test-js.svg");
+}
+.icon.angular-routing:before {
+    -webkit-mask-image: url("angular-routing.svg");
+}
+.icon.angular-component:before {
+    -webkit-mask-image: url("angular-component.svg");
+}
+.icon.angular-guard:before {
+    -webkit-mask-image: url("angular-guard.svg");
+}
+.icon.angular-service:before {
+    -webkit-mask-image: url("angular-service.svg");
+}
+.icon.angular-pipe:before {
+    -webkit-mask-image: url("angular-pipe.svg");
+}
+.icon.angular-directive:before {
+    -webkit-mask-image: url("angular-directive.svg");
+}
+.icon.angular-resolver:before {
+    -webkit-mask-image: url("angular-resolver.svg");
+}
+.icon.smarty:before {
+    -webkit-mask-image: url("smarty.svg");
+}
+.icon.reason:before {
+    -webkit-mask-image: url("reason.svg");
+}
+.icon.bucklescript:before {
+    -webkit-mask-image: url("bucklescript.svg");
+}
+.icon.merlin:before {
+    -webkit-mask-image: url("merlin.svg");
+}
+.icon.verilog:before {
+    -webkit-mask-image: url("verilog.svg");
+}
+.icon.mathematica:before {
+    -webkit-mask-image: url("mathematica.svg");
+}
+.icon.wolframlanguage:before {
+    -webkit-mask-image: url("wolframlanguage.svg");
+}
+.icon.laravel:before {
+    -webkit-mask-image: url("laravel.svg");
+}
+.icon.vfl:before {
+    -webkit-mask-image: url("vfl.svg");
+}
+.icon.kl:before {
+    -webkit-mask-image: url("kl.svg");
+}
+.icon.todo:before {
+    -webkit-mask-image: url("todo.svg");
+}
+.icon.http:before {
+    -webkit-mask-image: url("http.svg");
+}
+.icon.restql:before {
+    -webkit-mask-image: url("restql.svg");
+}
+.icon.kivy:before {
+    -webkit-mask-image: url("kivy.svg");
+}
+.icon.graphcool:before {
+    -webkit-mask-image: url("graphcool.svg");
+}
+.icon.sbt:before {
+    -webkit-mask-image: url("sbt.svg");
+}
+.icon.webpack:before {
+    -webkit-mask-image: url("webpack.svg");
+}
+.icon.ionic:before {
+    -webkit-mask-image: url("ionic.svg");
+}
+.icon.gulp:before {
+    -webkit-mask-image: url("gulp.svg");
+}
+.icon.nodejs:before {
+    -webkit-mask-image: url("nodejs.svg");
+}
+.icon.npm:before {
+    -webkit-mask-image: url("npm.svg");
+}
+.icon.yarn:before {
+    -webkit-mask-image: url("yarn.svg");
+}
+.icon.android:before {
+    -webkit-mask-image: url("android.svg");
+}
+.icon.tune:before {
+    -webkit-mask-image: url("tune.svg");
+}
+.icon.babel:before {
+    -webkit-mask-image: url("babel.svg");
+}
+.icon.contributing:before {
+    -webkit-mask-image: url("contributing.svg");
+}
+.icon.readme:before {
+    -webkit-mask-image: url("readme.svg");
+}
+.icon.changelog:before {
+    -webkit-mask-image: url("changelog.svg");
+}
+.icon.credits:before {
+    -webkit-mask-image: url("credits.svg");
+}
+.icon.flow:before {
+    -webkit-mask-image: url("flow.svg");
+}
+.icon.favicon:before {
+    -webkit-mask-image: url("favicon.svg");
+}
+.icon.karma:before {
+    -webkit-mask-image: url("karma.svg");
+}
+.icon.bithound:before {
+    -webkit-mask-image: url("bithound.svg");
+}
+.icon.appveyor:before {
+    -webkit-mask-image: url("appveyor.svg");
+}
+.icon.travis:before {
+    -webkit-mask-image: url("travis.svg");
+}
+.icon.protractor:before {
+    -webkit-mask-image: url("protractor.svg");
+}
+.icon.fusebox:before {
+    -webkit-mask-image: url("fusebox.svg");
+}
+.icon.heroku:before {
+    -webkit-mask-image: url("heroku.svg");
+}
+.icon.editorconfig:before {
+    -webkit-mask-image: url("editorconfig.svg");
+}
+.icon.gitlab:before {
+    -webkit-mask-image: url("gitlab.svg");
+}
+.icon.bower:before {
+    -webkit-mask-image: url("bower.svg");
+}
+.icon.eslint:before {
+    -webkit-mask-image: url("eslint.svg");
+}
+.icon.conduct:before {
+    -webkit-mask-image: url("conduct.svg");
+}
+.icon.watchman:before {
+    -webkit-mask-image: url("watchman.svg");
+}
+.icon.aurelia:before {
+    -webkit-mask-image: url("aurelia.svg");
+}
+.icon.mocha:before {
+    -webkit-mask-image: url("mocha.svg");
+}
+.icon.jenkins:before {
+    -webkit-mask-image: url("jenkins.svg");
+}
+.icon.firebase:before {
+    -webkit-mask-image: url("firebase.svg");
+}
+.icon.rollup:before {
+    -webkit-mask-image: url("rollup.svg");
+}
+.icon.stylelint:before {
+    -webkit-mask-image: url("stylelint.svg");
+}
+.icon.stylelint_light:before {
+    -webkit-mask-image: url("stylelint_light.svg");
+}
+.icon.code-climate:before {
+    -webkit-mask-image: url("code-climate.svg");
+}
+.icon.code-climate_light:before {
+    -webkit-mask-image: url("code-climate_light.svg");
+}
+.icon.prettier:before {
+    -webkit-mask-image: url("prettier.svg");
+}
+.icon.nodemon:before {
+    -webkit-mask-image: url("nodemon.svg");
+}
+.icon.sonar:before {
+    -webkit-mask-image: url("sonar.svg");
+}
+.icon.browserlist:before {
+    -webkit-mask-image: url("browserlist.svg");
+}
+.icon.browserlist_light:before {
+    -webkit-mask-image: url("browserlist_light.svg");
+}
+.icon.crystal:before {
+    -webkit-mask-image: url("crystal.svg");
+}
+.icon.crystal_light:before {
+    -webkit-mask-image: url("crystal_light.svg");
+}
+.icon.snyk:before {
+    -webkit-mask-image: url("snyk.svg");
+}
+.icon.drone:before {
+    -webkit-mask-image: url("drone.svg");
+}
+.icon.drone_light:before {
+    -webkit-mask-image: url("drone_light.svg");
+}
+.icon.cuda:before {
+    -webkit-mask-image: url("cuda.svg");
+}
+.icon.log:before {
+    -webkit-mask-image: url("log.svg");
+}
+.icon.dotjs:before {
+    -webkit-mask-image: url("dotjs.svg");
+}
+.icon.ejs:before {
+    -webkit-mask-image: url("ejs.svg");
+}
+.icon.sequelize:before {
+    -webkit-mask-image: url("sequelize.svg");
+}
+.icon.gatsby:before {
+    -webkit-mask-image: url("gatsby.svg");
+}
+.icon.wakatime:before {
+    -webkit-mask-image: url("wakatime.svg");
+}
+.icon.wakatime_light:before {
+    -webkit-mask-image: url("wakatime_light.svg");
+}
+.icon.circleci:before {
+    -webkit-mask-image: url("circleci.svg");
+}
+.icon.circleci_light:before {
+    -webkit-mask-image: url("circleci_light.svg");
+}
+.icon.cloudfoundry:before {
+    -webkit-mask-image: url("cloudfoundry.svg");
+}
+.icon.grunt:before {
+    -webkit-mask-image: url("grunt.svg");
+}
+.icon.jest:before {
+    -webkit-mask-image: url("jest.svg");
+}
+.icon.processing_light:before {
+    -webkit-mask-image: url("processing_light.svg");
+}
+.icon.storybook:before {
+    -webkit-mask-image: url("storybook.svg");
+}
+.icon.wepy:before {
+    -webkit-mask-image: url("wepy.svg");
+}
+.icon.fastlane:before {
+    -webkit-mask-image: url("fastlane.svg");
+}
+.icon.file:before {
+    -webkit-mask-image: url("file.svg");
+}
+.icon.folder-src:before {
+    -webkit-mask-image: url("folder-src.svg");
+}
+.icon.folder-src-open:before {
+    -webkit-mask-image: url("folder-src-open.svg");
+}
+.icon.folder-dist:before {
+    -webkit-mask-image: url("folder-dist.svg");
+}
+.icon.folder-dist-open:before {
+    -webkit-mask-image: url("folder-dist-open.svg");
+}
+.icon.folder-css:before {
+    -webkit-mask-image: url("folder-css.svg");
+}
+.icon.folder-css-open:before {
+    -webkit-mask-image: url("folder-css-open.svg");
+}
+.icon.folder-sass:before {
+    -webkit-mask-image: url("folder-sass.svg");
+}
+.icon.folder-sass-open:before {
+    -webkit-mask-image: url("folder-sass-open.svg");
+}
+.icon.folder-images:before {
+    -webkit-mask-image: url("folder-images.svg");
+}
+.icon.folder-images-open:before {
+    -webkit-mask-image: url("folder-images-open.svg");
+}
+.icon.folder-scripts:before {
+    -webkit-mask-image: url("folder-scripts.svg");
+}
+.icon.folder-scripts-open:before {
+    -webkit-mask-image: url("folder-scripts-open.svg");
+}
+.icon.folder-node:before {
+    -webkit-mask-image: url("folder-node.svg");
+}
+.icon.folder-node-open:before {
+    -webkit-mask-image: url("folder-node-open.svg");
+}
+.icon.folder-javascript:before {
+    -webkit-mask-image: url("folder-javascript.svg");
+}
+.icon.folder-javascript-open:before {
+    -webkit-mask-image: url("folder-javascript-open.svg");
+}
+.icon.folder-font:before {
+    -webkit-mask-image: url("folder-font.svg");
+}
+.icon.folder-font-open:before {
+    -webkit-mask-image: url("folder-font-open.svg");
+}
+.icon.folder-bower:before {
+    -webkit-mask-image: url("folder-bower.svg");
+}
+.icon.folder-bower-open:before {
+    -webkit-mask-image: url("folder-bower-open.svg");
+}
+.icon.folder-test:before {
+    -webkit-mask-image: url("folder-test.svg");
+}
+.icon.folder-test-open:before {
+    -webkit-mask-image: url("folder-test-open.svg");
+}
+.icon.folder-jinja:before {
+    -webkit-mask-image: url("folder-jinja.svg");
+}
+.icon.folder-jinja-open:before {
+    -webkit-mask-image: url("folder-jinja-open.svg");
+}
+.icon.folder-jinja_light:before {
+    -webkit-mask-image: url("folder-jinja_light.svg");
+}
+.icon.folder-jinja-open_light:before {
+    -webkit-mask-image: url("folder-jinja-open_light.svg");
+}
+.icon.folder-markdown:before {
+    -webkit-mask-image: url("folder-markdown.svg");
+}
+.icon.folder-markdown-open:before {
+    -webkit-mask-image: url("folder-markdown-open.svg");
+}
+.icon.folder-php:before {
+    -webkit-mask-image: url("folder-php.svg");
+}
+.icon.folder-php-open:before {
+    -webkit-mask-image: url("folder-php-open.svg");
+}
+.icon.folder-phpmailer:before {
+    -webkit-mask-image: url("folder-phpmailer.svg");
+}
+.icon.folder-phpmailer-open:before {
+    -webkit-mask-image: url("folder-phpmailer-open.svg");
+}
+.icon.folder-sublime:before {
+    -webkit-mask-image: url("folder-sublime.svg");
+}
+.icon.folder-sublime-open:before {
+    -webkit-mask-image: url("folder-sublime-open.svg");
+}
+.icon.folder-docs:before {
+    -webkit-mask-image: url("folder-docs.svg");
+}
+.icon.folder-docs-open:before {
+    -webkit-mask-image: url("folder-docs-open.svg");
+}
+.icon.folder-git:before {
+    -webkit-mask-image: url("folder-git.svg");
+}
+.icon.folder-git-open:before {
+    -webkit-mask-image: url("folder-git-open.svg");
+}
+.icon.folder-github:before {
+    -webkit-mask-image: url("folder-github.svg");
+}
+.icon.folder-github-open:before {
+    -webkit-mask-image: url("folder-github-open.svg");
+}
+.icon.folder-gitlab:before {
+    -webkit-mask-image: url("folder-gitlab.svg");
+}
+.icon.folder-gitlab-open:before {
+    -webkit-mask-image: url("folder-gitlab-open.svg");
+}
+.icon.folder-vscode:before {
+    -webkit-mask-image: url("folder-vscode.svg");
+}
+.icon.folder-vscode-open:before {
+    -webkit-mask-image: url("folder-vscode-open.svg");
+}
+.icon.folder-views:before {
+    -webkit-mask-image: url("folder-views.svg");
+}
+.icon.folder-views-open:before {
+    -webkit-mask-image: url("folder-views-open.svg");
+}
+.icon.folder-vue:before {
+    -webkit-mask-image: url("folder-vue.svg");
+}
+.icon.folder-vue-open:before {
+    -webkit-mask-image: url("folder-vue-open.svg");
+}
+.icon.folder-expo:before {
+    -webkit-mask-image: url("folder-expo.svg");
+}
+.icon.folder-expo-open:before {
+    -webkit-mask-image: url("folder-expo-open.svg");
+}
+.icon.folder-config:before {
+    -webkit-mask-image: url("folder-config.svg");
+}
+.icon.folder-config-open:before {
+    -webkit-mask-image: url("folder-config-open.svg");
+}
+.icon.folder-i18n:before {
+    -webkit-mask-image: url("folder-i18n.svg");
+}
+.icon.folder-i18n-open:before {
+    -webkit-mask-image: url("folder-i18n-open.svg");
+}
+.icon.folder-components:before {
+    -webkit-mask-image: url("folder-components.svg");
+}
+.icon.folder-components-open:before {
+    -webkit-mask-image: url("folder-components-open.svg");
+}
+.icon.folder-aurelia:before {
+    -webkit-mask-image: url("folder-aurelia.svg");
+}
+.icon.folder-aurelia-open:before {
+    -webkit-mask-image: url("folder-aurelia-open.svg");
+}
+.icon.folder-resource:before {
+    -webkit-mask-image: url("folder-resource.svg");
+}
+.icon.folder-resource-open:before {
+    -webkit-mask-image: url("folder-resource-open.svg");
+}
+.icon.folder-lib:before {
+    -webkit-mask-image: url("folder-lib.svg");
+}
+.icon.folder-lib-open:before {
+    -webkit-mask-image: url("folder-lib-open.svg");
+}
+.icon.folder-tools:before {
+    -webkit-mask-image: url("folder-tools.svg");
+}
+.icon.folder-tools-open:before {
+    -webkit-mask-image: url("folder-tools-open.svg");
+}
+.icon.folder-webpack:before {
+    -webkit-mask-image: url("folder-webpack.svg");
+}
+.icon.folder-webpack-open:before {
+    -webkit-mask-image: url("folder-webpack-open.svg");
+}
+.icon.folder-global:before {
+    -webkit-mask-image: url("folder-global.svg");
+}
+.icon.folder-global-open:before {
+    -webkit-mask-image: url("folder-global-open.svg");
+}
+.icon.folder-public:before {
+    -webkit-mask-image: url("folder-public.svg");
+}
+.icon.folder-public-open:before {
+    -webkit-mask-image: url("folder-public-open.svg");
+}
+.icon.folder-include:before {
+    -webkit-mask-image: url("folder-include.svg");
+}
+.icon.folder-include-open:before {
+    -webkit-mask-image: url("folder-include-open.svg");
+}
+.icon.folder-docker:before {
+    -webkit-mask-image: url("folder-docker.svg");
+}
+.icon.folder-docker-open:before {
+    -webkit-mask-image: url("folder-docker-open.svg");
+}
+.icon.folder-database:before {
+    -webkit-mask-image: url("folder-database.svg");
+}
+.icon.folder-database-open:before {
+    -webkit-mask-image: url("folder-database-open.svg");
+}
+.icon.folder-log:before {
+    -webkit-mask-image: url("folder-log.svg");
+}
+.icon.folder-log-open:before {
+    -webkit-mask-image: url("folder-log-open.svg");
+}
+.icon.folder-temp:before {
+    -webkit-mask-image: url("folder-temp.svg");
+}
+.icon.folder-temp-open:before {
+    -webkit-mask-image: url("folder-temp-open.svg");
+}
+.icon.folder-aws:before {
+    -webkit-mask-image: url("folder-aws.svg");
+}
+.icon.folder-aws-open:before {
+    -webkit-mask-image: url("folder-aws-open.svg");
+}
+.icon.folder-audio:before {
+    -webkit-mask-image: url("folder-audio.svg");
+}
+.icon.folder-audio-open:before {
+    -webkit-mask-image: url("folder-audio-open.svg");
+}
+.icon.folder-video:before {
+    -webkit-mask-image: url("folder-video.svg");
+}
+.icon.folder-video-open:before {
+    -webkit-mask-image: url("folder-video-open.svg");
+}
+.icon.folder-kubernetes:before {
+    -webkit-mask-image: url("folder-kubernetes.svg");
+}
+.icon.folder-kubernetes-open:before {
+    -webkit-mask-image: url("folder-kubernetes-open.svg");
+}
+.icon.folder-import:before {
+    -webkit-mask-image: url("folder-import.svg");
+}
+.icon.folder-import-open:before {
+    -webkit-mask-image: url("folder-import-open.svg");
+}
+.icon.folder-export:before {
+    -webkit-mask-image: url("folder-export.svg");
+}
+.icon.folder-export-open:before {
+    -webkit-mask-image: url("folder-export-open.svg");
+}
+.icon.folder-wakatime:before {
+    -webkit-mask-image: url("folder-wakatime.svg");
+}
+.icon.folder-wakatime-open:before {
+    -webkit-mask-image: url("folder-wakatime-open.svg");
+}
+.icon.folder-circleci:before {
+    -webkit-mask-image: url("folder-circleci.svg");
+}
+.icon.folder-circleci-open:before {
+    -webkit-mask-image: url("folder-circleci-open.svg");
+}
+.icon.folder-wordpress:before {
+    -webkit-mask-image: url("folder-wordpress.svg");
+}
+.icon.folder-wordpress-open:before {
+    -webkit-mask-image: url("folder-wordpress-open.svg");
+}
+.icon.folder-gradle:before {
+    -webkit-mask-image: url("folder-gradle.svg");
+}
+.icon.folder-gradle-open:before {
+    -webkit-mask-image: url("folder-gradle-open.svg");
+}
+.icon.folder-coverage:before {
+    -webkit-mask-image: url("folder-coverage.svg");
+}
+.icon.folder-coverage-open:before {
+    -webkit-mask-image: url("folder-coverage-open.svg");
+}
+.icon.folder-class:before {
+    -webkit-mask-image: url("folder-class.svg");
+}
+.icon.folder-class-open:before {
+    -webkit-mask-image: url("folder-class-open.svg");
+}
+.icon.folder-other:before {
+    -webkit-mask-image: url("folder-other.svg");
+}
+.icon.folder-other-open:before {
+    -webkit-mask-image: url("folder-other-open.svg");
+}
+.icon.folder-typescript:before {
+    -webkit-mask-image: url("folder-typescript.svg");
+}
+.icon.folder-typescript-open:before {
+    -webkit-mask-image: url("folder-typescript-open.svg");
+}
+.icon.folder-routes:before {
+    -webkit-mask-image: url("folder-routes.svg");
+}
+.icon.folder-routes-open:before {
+    -webkit-mask-image: url("folder-routes-open.svg");
+}
+.icon.folder-ci:before {
+    -webkit-mask-image: url("folder-ci.svg");
+}
+.icon.folder-ci-open:before {
+    -webkit-mask-image: url("folder-ci-open.svg");
+}
+.icon.folder-benchmark:before {
+    -webkit-mask-image: url("folder-benchmark.svg");
+}
+.icon.folder-benchmark-open:before {
+    -webkit-mask-image: url("folder-benchmark-open.svg");
+}
+.icon.folder-messages:before {
+    -webkit-mask-image: url("folder-messages.svg");
+}
+.icon.folder-messages-open:before {
+    -webkit-mask-image: url("folder-messages-open.svg");
+}
+.icon.folder-less:before {
+    -webkit-mask-image: url("folder-less.svg");
+}
+.icon.folder-less-open:before {
+    -webkit-mask-image: url("folder-less-open.svg");
+}
+.icon.folder-python:before {
+    -webkit-mask-image: url("folder-python.svg");
+}
+.icon.folder-python-open:before {
+    -webkit-mask-image: url("folder-python-open.svg");
+}
+.icon.folder-debug:before {
+    -webkit-mask-image: url("folder-debug.svg");
+}
+.icon.folder-debug-open:before {
+    -webkit-mask-image: url("folder-debug-open.svg");
+}
+.icon.folder-fastlane:before {
+    -webkit-mask-image: url("folder-fastlane.svg");
+}
+.icon.folder-fastlane-open:before {
+    -webkit-mask-image: url("folder-fastlane-open.svg");
+}
+.icon.folder:before {
+    -webkit-mask-image: url("folder.svg");
+}
+.icon.folder-open:before {
+    -webkit-mask-image: url("folder-open.svg");
+}
+.icon.folder-root:before {
+    -webkit-mask-image: url("folder-root.svg");
+}
+.icon.folder-root-open:before {
+    -webkit-mask-image: url("folder-root-open.svg");
+}
