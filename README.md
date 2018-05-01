@@ -22,7 +22,7 @@
 - Directory indexes
 - MIME-Type file support
 
-Supporting: [MathJax](tests/mathjax.md), [Chineese Characters](tests/测试.md), [Tables](tests/tables.md), [Heading Anchors](tests/links.md)
+Supporting: [MathJax](tests/mathjax.md), [Chinese Characters](tests/测试.md), [Tables](tests/tables.md), [Heading Anchors](tests/links.md)
 
 ## :woman_technologist: Installation
 
