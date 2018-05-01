@@ -1,13 +1,26 @@
 body {
-  width: 45em;
-  border: 1px solid #ddd;
-  outline: 1300px solid #fff;
+  width: 48em;
   margin: 16px auto;
 }
 
-body .markdown-body
-{
+body .markdown-body {
   padding: 30px;
+}
+
+@media screen {
+  body {
+    border: 1px solid #ddd;
+    outline: 1300px solid #fff;
+  }
+}
+
+@media print {
+  body .markdown-body {
+    padding: 20px;
+  }
+  header, footer {
+    display: none !important;
+  }
 }
 
 @font-face {
@@ -181,8 +194,7 @@ body .markdown-body
   margin-bottom: 0;
 }
 
-.markdown-body ol ol,
-.markdown-body ul ol {
+.markdown-body ol ol {
   list-style-type: lower-roman;
 }
 
@@ -467,7 +479,7 @@ body .markdown-body
 .markdown-body pre>code {
   padding: 0;
   margin: 0;
-  font-size: 100%;
+  font-size: 90%;
   word-break: normal;
   white-space: pre;
   background: transparent;
