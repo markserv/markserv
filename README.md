@@ -220,10 +220,4 @@ This will make the server instance persistent and will be available to access ev
 
 ## 💘 Credits
 
-### Logo Credits
-
-| Icon | Name | Creator |
-| --- | --- | --- |
-| ![Markdown Icon](https://cdn0.iconfinder.com/data/icons/octicons/1024/markdown-32.png) | **Markdown Icon** | [Octicon Icons by Github](https://www.iconfinder.com/icons/298823/markdown_icon#size=32) |
-| ![File Icon](https://cdn4.iconfinder.com/data/icons/linecon/512/file-32.png) | **File icon** | [Linecon by W3 Creative Labs](https://www.iconfinder.com/icons/370083/document_file_files_page_paper_sheet_icon#size=32) |
-| ![Folder Icon](https://cdn1.iconfinder.com/data/icons/hawcons/32/699086-icon-94-folder-32.png) | **Folder icon** | [Hawcons by Yannick Lung](https://www.iconfinder.com/icons/314937/folder_icon#size=32) |
+- Logos used in the directory list: [PKief - vscode-material-icon-theme](https://github.com/PKief/vscode-material-icon-theme)
