@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+    <title>folder-coverage</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M10,4 L12,6 L20,6 C21.1,6 22,6.89 22,8 L22,18 C22,19.097 21.097,20 20,20 L4,20 C2.903,20 2,19.097 2,18 L2,6 C2,4.89 2.89,4 4,4 L10,4 Z M12.3259,7.5 L7.8259,9.49994367 L7.8259,12.4999437 C7.8259,15.2749394 9.74591352,17.8698811 12.3259,18.4998592 C14.9058865,17.8698642 16.8259,15.274855 16.8259,12.4999437 L16.8259,9.49994367 L12.3259,7.5 Z M11.3258775,15.4999268 L9.3259338,13.4999831 L10.0309245,12.7949924 L11.3259451,14.0849434 L14.6209093,10.7899792 L15.3259,11.4999718 L11.3258775,15.4999268 Z" id="Combined-Shape" fill="#689F38" fill-rule="nonzero"></path>
+    </g>
+</svg>

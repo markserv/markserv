@@ -4,6 +4,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>{{title}}</title>
+<<<<<<< HEAD
 	<link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/github-gist.css">
 	<style>{less: github.less}</style>
 </head>
@@ -12,5 +13,18 @@
 <h1><a href="/">Index</a> of {{{path}}}</h1>
 {{{content}}}
 <footer><sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: {{pid}}</sup></footer>
+=======
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="{markserv}templates/markserv.css">
+		<link rel="stylesheet" href="{markserv}templates/highlight-js-github-gist.css">
+		<link rel="stylesheet" href="{markserv}icons/icons.css">
+	</head>
+<body class="dir">
+<article class="markdown-body">
+<h1 class="icon {{folderIcon}} isfolder">{{#each crumbs}}<a href="{{href}}">{{text}}</a>/{{/each}}</h1>
+{{{content}}}
+<sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: {{pid}}</sup>
+
+>>>>>>> 4e039513481e79e2290fcbc58b0a07d14da6f7b9
 </article>
 </body>

@@ -1,6 +1,6 @@
 {
   "name": "markserv",
-  "version": "1.5.2",
+  "version": "1.7.0",
   "description": "🏁  serve markdown as html (GitHub style), index directories, live-reload as you edit",
   "preferGlobal": true,
   "scripts": {
@@ -48,6 +48,7 @@
     "lib/cli.js",
     "lib/readme.js",
     "lib/server.js",
+    "lib/icons",
     "lib/templates/directory.html",
     "lib/templates/github.less",
     "lib/templates/markdown.html",
@@ -78,6 +79,7 @@
     "markdown-it-emoji": "^1.4.0",
     "markdown-it-highlightjs": "^3.0.0",
     "markdown-it-include": "^1.0.0",
+    "markdown-it-table-of-contents": "^0.3.3",
     "markdown-it-task-lists": "^2.1.1",
     "micromatch": "^3.1.3",
     "mime": "^1.4.1",
