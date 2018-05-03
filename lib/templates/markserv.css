@@ -18,9 +18,9 @@ body .markdown-body {
   body {
     width: auto;
     margin: 8px auto;
-    .markdown-body {
-      padding: 10px;
-    }
+  }
+  body .markdown-body {
+    padding: 10px;
   }
 }
 
