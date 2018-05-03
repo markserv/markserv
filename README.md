@@ -22,7 +22,7 @@
 - Directory indexes
 - MIME-Type file support
 
-Supporting: [MathJax](tests/mathjax.md), [Chineese Characters](tests/测试.md), [Tables](tests/tables.md), [Heading Anchors](tests/links.md)
+Supporting: [MathJax](tests/mathjax.md), [Chineese Characters](tests/测试.md), [Table of Contents](tests/toc.md), [Tables](tests/tables.md), [Heading Anchors](tests/links.md)
 
 <p align="center">
 	<img alt="Markserv directory index" src="media/markserv-directory-listing.png" width="100%">
