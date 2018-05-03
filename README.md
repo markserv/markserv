@@ -22,15 +22,11 @@
 - Directory indexes
 - MIME-Type file support
 
-<<<<<<< HEAD
-Supporting: [MathJax](tests/mathjax.md), [Chinese Characters](tests/测试.md), [Tables](tests/tables.md), [Heading Anchors](tests/links.md)
-=======
-Supporting: [MathJax](tests/mathjax.md), [Chineese Characters](tests/测试.md), [Table of Contents](tests/toc.md), [Tables](tests/tables.md), [Heading Anchors](tests/links.md)
+Supporting: [MathJax](tests/mathjax.md), [Chinese Characters](tests/测试.md), [Table of Contents](tests/toc.md), [Tables](tests/tables.md), [Heading Anchors](tests/links.md)
 
 <p align="center">
 	<img alt="Markserv directory index" src="media/markserv-directory-listing.png" width="100%">
 </p>
->>>>>>> 4e039513481e79e2290fcbc58b0a07d14da6f7b9
 
 ## :woman_technologist: Installation
 
@@ -228,14 +224,4 @@ This will make the server instance persistent and will be available to access ev
 
 ## :cupid: Credits
 
-<<<<<<< HEAD
-### Logo Credits
-
-| Icon | Name | Creator |
-| --- | --- | --- |
-| ![Markdown Icon](https://cdn0.iconfinder.com/data/icons/octicons/1024/markdown-32.png) | **Markdown Icon** | [Octicon Icons by Github](https://www.iconfinder.com/icons/298823/markdown_icon#size=32) |
-| ![File Icon](https://cdn4.iconfinder.com/data/icons/linecon/512/file-32.png) | **File icon** | [Linecon by W3 Creative Labs](https://www.iconfinder.com/icons/370083/document_file_files_page_paper_sheet_icon#size=32) |
-| ![Folder Icon](https://cdn1.iconfinder.com/data/icons/hawcons/32/699086-icon-94-folder-32.png) | **Folder icon** | [Hawcons by Yannick Lung](https://www.iconfinder.com/icons/314937/folder_icon#size=32) |
-=======
 - Logos used in the directory list: [PKief - vscode-material-icon-theme](https://github.com/PKief/vscode-material-icon-theme)
->>>>>>> 4e039513481e79e2290fcbc58b0a07d14da6f7b9
