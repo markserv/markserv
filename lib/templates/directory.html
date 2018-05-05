@@ -4,24 +4,24 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>{{title}}</title>
-	<link rel="stylesheet" href="{markserv}templates/markserv.css">
-	<link rel="stylesheet" href="{markserv}templates/highlight-js-github-gist.css">
-	<link rel="stylesheet" href="{markserv}icons/icons.css">
+	<link rel="stylesheet" href="/{markserv}/templates/markserv.css">
+	<link rel="stylesheet" href="/{markserv}/templates/highlight-js-github-gist.css">
+	<link rel="stylesheet" href="/{markserv}/icons/icons.css">
 	<style>
-	.dir h1 div.folder {
+	.dir-folder {
 		display: inline-block;
 		width: 36px;
 		height: 36px;
 		position: relative;
 		top: 4px;
 		background-color: #34495E;
-		-webkit-mask-image: url({markserv}icons/folder.svg);
+		-webkit-mask-image: url(/{markserv}/icons/folder.svg);
 	}
 	</style>
 </head>
 <body class="dir">
 <article class="markdown-body">
-<h1><a href="/"><div class="folder"></div></a>{{{path}}}</h1>
+<h1><a href="/"><div class="dir-folder"></div></a>{{{path}}}</h1>
 {{{content}}}
 <footer><sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: {{pid}}</sup></footer>
 </article>
