@@ -2,7 +2,7 @@
 	<img alt="Markserv Logo" src="https://f1lt3r.github.io/markserv/media/markserv-readme-banner.svg">
 </p>
 
-> 🏁 serve markdown as html (GitHub style), index directories, and live-reload as you edit
+> :checkered_flag: serve markdown as html (GitHub style), index directories, and live-reload as you edit
 
 [![Build Status](https://travis-ci.org/F1LT3R/markserv.svg?branch=master)](https://travis-ci.org/F1LT3R/markserv)
 [![Coverage Status](https://coveralls.io/repos/github/F1LT3R/markserv/badge.svg?branch=master)](https://coveralls.io/github/F1LT3R/markserv?branch=master)
@@ -13,22 +13,22 @@
 	<img alt="Markserv Demo" src="media/markserv-demo.gif" width="100%">
 </p>
 
-## 🔥 Features
+## :fire: Features
 
 - Markdown content rendered as HTML
 - GitHub flavor CSS and Syntax Highlighting
-- [Just-in-Time Templating](#just-in-time-templating): Markdown, HTML &amp; LESS
+- [Just in Time Templating](#stopwatch-just-in-time-templating): Markdown, HTML &amp; LESS
 - LiveReload as you edit
 - Directory indexes
 - MIME-Type file support
 
-Supporting: [MathJax](tests/mathjax.md), [Chineese Characters](tests/测试.md), [Table of Contents](tests/toc.md), [Tables](tests/tables.md), [Heading Anchors](tests/links.md)
+Supporting: [MathJax](tests/mathjax.md), [Chinese Characters](tests/测试.md), [Table of Contents](tests/toc.md), [Tables](tests/tables.md), [Heading Anchors](tests/links.md)
 
 <p align="center">
 	<img alt="Markserv directory index" src="media/markserv-directory-listing.png" width="100%">
 </p>
 
-## 👩‍💻  Installation
+## :woman_technologist: Installation
 
 ```shell
 # NPM
@@ -40,7 +40,7 @@ $ yarn --global add markserv
 
 <a href="https://patreon.com/bePatron?u=9720216"><img width="160" src="https://f1lt3r.io/content/images/2018/04/become_a_patron_button@2x.png"></a>
 
-## 🕹 Usage
+## :joystick: Usage
 
 To start Markserv from the CLI
 
@@ -75,7 +75,7 @@ Start Markserv and open the closest README.md file in the browser:
 $ readme
 ```
 
-## ⚡ Live Reload
+## :zap: Live Reload
 
 To see real-time updates as you save your markdown files, you will need to install the LiveReload plugin for your browser:
 
@@ -89,7 +89,7 @@ With the Live Reload plugin installed and turned on, you should see the page rel
 	<img alt="Markserv Live Reload" src="media/markserv-live-reload.gif" width="100%">
 </p>
 
-## 🔗 Markdown Links
+## :link: Markdown Links
 
 You can link to an external Markdown file in the same way that you use GitHub Wiki links. You can use the example code here to see how external links work.
 
@@ -103,7 +103,7 @@ Example link:
 
 [Skateboarding Dog!](tests/Linked-Markdown-Example.md)
 
-## ⏱ Just in Time Templating
+## :stopwatch: Just in Time Templating
 
 Markserv allows you to include nested content. Templates are fetched and rendered when you request them in your browser. The `maxDepth` of includes is set to `10`.
 
@@ -190,7 +190,7 @@ a {
 </style>
 ```
 
-## 🎌 Flags
+## :crossed_flags: Flags
 
 To list the options/flags for the markserv CLI tool:
 
@@ -222,6 +222,6 @@ nohup markserv -p 8642 -a 0.0.0.0 &
 
 This will make the server instance persistent and will be available to access even when you log out or even when your ssh session closes (in case you are accessing a remote machine through ssh to set up `markserv` server)
 
-## 💘 Credits
+## :cupid: Credits
 
 - Logos used in the directory list: [PKief - vscode-material-icon-theme](https://github.com/PKief/vscode-material-icon-theme)

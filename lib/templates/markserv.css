@@ -1,12 +1,36 @@
 body {
-  width: 45em;
-  border: 1px solid #ddd;
-  outline: 1300px solid #fff;
+  width: 48em;
   margin: 16px auto;
 }
 
 body .markdown-body {
   padding: 30px;
+}
+
+@media screen and (min-width: 768px) {
+  body {
+    border: 1px solid #ddd;
+    outline: 1300px solid #fff;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  body {
+    width: auto;
+    margin: 8px auto;
+  }
+  body .markdown-body {
+    padding: 10px;
+  }
+}
+
+@media print {
+  body .markdown-body {
+    padding: 20px;
+  }
+  header, footer {
+    display: none !important;
+  }
 }
 
 .icon:before {
@@ -60,7 +84,7 @@ li.icon {
 }
 
 /*.dir .crumbs {
-  /*border-bottom:;*/
+    border-bottom: none;
     border-bottom: 1px solid #ddd;
     margin-bottom: 1em;
     padding-bottom: 0.5em;
@@ -139,7 +163,7 @@ li.icon {
   box-sizing: border-box;
 }
 .markdown-body input {
-  font: 9.285714285714286px Helvetica, arial, freesans, clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+  font: 13px/1.4 Helvetica, arial, freesans, clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
 }
 .markdown-body a {
   color: #4183c4;
