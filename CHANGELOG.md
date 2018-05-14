@@ -7,7 +7,7 @@
 
 ### Added
 
-- Emoji support with `mdItEmoji` and `emojiRegex`
+- Emoji support with `mdItEmoji`. Example: `:fire:` now renders as :fire:
 	+ @ChenYingChou PR [#48](https://github.com/F1LT3R/markserv/pull/48/files)
 - Indent size 4 to `.editorconfig` - @ChenYingChou PR [#48](https://github.com/F1LT3R/markserv/pull/48/files)
 
