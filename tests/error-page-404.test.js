@@ -48,15 +48,14 @@ test.cb('start service and receive error page (404)', t => {
 				// // Write expected:
 				// fs.writeFileSync(path.join(__dirname, 'service.expected.html'), body)
 
-				const bodyNonVariable = body
-					.replace(/PID: \d+</, 'PID: N/A<')
-					.replace(/<code>*<\/code>/, '<code/>')
-					.replace(/<p class="errorMsg">*<\/p>/, '<p class="errorMsg"/>')
+				const sanitize = text => {
+					return text.replace(/PID: \d+</, 'PID: N/A<')
+						.replace(/<p class="errorMsg">(.*?)<\/p>/, '')
+						.replace(/<pre>(.*?)<\/pre>/s, '')
+				}
 
-				const expectedNonVariable = expected
-					.replace(/PID: \d+</, 'PID: N/A<')
-					.replace(/<code>*<\/code>/, '<code/>')
-					.replace(/<p class="errorMsg">*<\/p>/, '<p class="errorMsg"/>')
+				const bodyNonVariable = sanitize(body)
+				const expectedNonVariable = sanitize(expected)
 
 				t.is(bodyNonVariable, expectedNonVariable)
 

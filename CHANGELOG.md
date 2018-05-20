@@ -3,6 +3,14 @@
 - Markserv uses [Semantic Versioning](http://semver.org/)
 - Markserv [Keeps a ChangeLog](https://keepachangelog.com/en/1.0.0/)
 
+## [1.9.0] - 2018-05-21
+
+### Added
+
+- Sanitize  
+	+ @ChenYingChou PR [#48](https://github.com/F1LT3R/markserv/pull/48/files)
+
+
 ## [1.8.0] - 2018-05-13
 
 ### Added
