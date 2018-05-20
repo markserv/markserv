@@ -45,7 +45,7 @@ test.cb('start service and get directory listing', t => {
 					closeServer()
 				}
 
-				// Write expected:
+				// // Write expected:
 				// fs.writeFileSync(path.join(__dirname, 'dir.expected.html'), body)
 
 				const bodyNoPid = body.replace(/PID: \d+</, 'PID: N/A<')

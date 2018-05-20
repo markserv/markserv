@@ -45,7 +45,7 @@ test.cb('start service and receive tables markdown', t => {
 					closeServer()
 				}
 
-				// Write expected:
+				// // Write expected:
 				// fs.writeFileSync(path.join(__dirname, 'service.expected.html'), body)
 
 				const bodyNoPid = body.replace(/PID: \d+</, 'PID: N/A<')
