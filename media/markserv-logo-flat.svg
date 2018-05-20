@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="256px" height="256px" viewBox="0 0 256 256" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+    <title>markserv-logo-flat</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard-2-Copy-5">
+            <rect id="Combined-Shape" fill="#34495E" x="0" y="0" width="256.560907" height="255.804176" rx="12"></rect>
+            <path d="M209.626283,196 L231.452757,196 L189.226378,244.4625 L147,196 L169.469713,196 L169.469713,95.7510687 L129.313142,148.12268 L89.156571,95.7510687 L89.156571,182.742334 L49,182.742334 L49,35 L89.156571,35 L129.313142,87.3716109 L169.469713,35 L209.626283,35 L209.626283,196 Z" id="Combined-Shape" fill="#FFFFFF"></path>
+            <polygon id="Rectangle-path" fill="#1ABC9C" points="82 209 135.775369 209 166.000759 242.441713 112 242.441713"></polygon>
+            <path d="M14,215.998009 C14,212.6854 16.6778908,210 20.0010364,210 L61.2878788,210 L91.2878788,243.441713 L20.0003383,243.441713 C16.686443,243.441713 14,240.761567 14,237.443704 L14,215.998009 Z" id="Rectangle-path" fill="#1ABC9C"></path>
+        </g>
+    </g>
+</svg>
