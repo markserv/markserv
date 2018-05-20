@@ -52,7 +52,7 @@ test.cb('start service and receive error page (404)', t => {
 					return text.replace(/PID: \d+</, 'PID: N/A<')
 						.replace(/<p class="errorMsg">(.*?)<\/p>/, '')
 						.replace(/<pre>(.*?)<\/pre>/s, '')
-						.replace(/<title>(.*?)\/markserv\/beep\/boop\/bwwwaaaaahhhggg<\/title>/s, '')
+						.replace(/<title>404: (.*?)\/markserv\/beep\/boop\/bwwwaaaaahhhggg<\/title>/, '')
 				}
 
 				const bodyNonVariable = sanitize(body)
