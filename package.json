@@ -1,6 +1,6 @@
 {
   "name": "markserv",
-  "version": "1.9.0",
+  "version": "1.10.1",
   "description": "🏁  serve markdown as html (GitHub style), index directories, live-reload as you edit",
   "preferGlobal": true,
   "scripts": {
@@ -50,8 +50,9 @@
     "lib/server.js",
     "lib/icons",
     "lib/templates/directory.html",
-    "lib/templates/github.less",
     "lib/templates/markdown.html",
+    "lib/templates/error.html",
+    "lib/templates/github.less",
     "lib/templates/highlight-js-github-gist.css",
     "lib/templates/markserv.css",
     "media/markserv-favicon-96x96.png",
