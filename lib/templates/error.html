@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>testdir</title>
+	<title>{{code}}: {{filePath}}</title>
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="{markserv}templates/markserv.css">
 	<link rel="stylesheet" href="{markserv}templates/highlight-js-github-gist.css">
@@ -12,13 +12,11 @@
 </head>
 <body class="dir">
 <article class="markdown-body">
-<h1 class="icon folder isfolder"><a href="/">./</a><a href="/tests/">tests/</a><a href="/tests/testdir/">testdir/</a></h1>
-<ul>
-	<li class="icon markdown isfile"><a href="file1.md">file1.md</a></li> 
-	<li class="icon document isfile"><a href="file2.txt">file2.txt</a></li> 
-</ul>
-
-<footer><sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: 58957</sup></footer>
+<h1>⛔ Error {{code}}</h1>
+<p class="errorMsg">{{errorMsg}}</p>
+<p><pre>{{errorStack}}</pre></p>
+<p><a class="button back" href="{{referer}}">Go Back</a></p>
+<footer><sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: {{pid}}</sup></footer>
 </article>
 </body>
 </html>

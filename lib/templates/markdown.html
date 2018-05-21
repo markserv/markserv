@@ -1,16 +1,20 @@
 <!DOCTYPE html>
+<html>
 <head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>{{title}}</title>
-		<meta charset="utf-8">
-		<style>{less: github.less}</style>
-		<link rel="stylesheet" href="{markserv}templates/markserv.css">
-		<link rel="stylesheet" href="{markserv}templates/highlight-js-github-gist.css">
-		<script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});</script>
-		<script type="text/javascript" async src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-	</head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="{markserv}templates/markserv.css">
+	<link rel="stylesheet" href="{markserv}templates/highlight-js-github-gist.css">
+	<script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});</script>
+	<script type="text/javascript" async src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</head>
 <body>
 <article class="markdown-body">
 {{{content}}}
-<sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: {{{pid}}}</sup>
+<footer><sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: {{pid}}</sup></footer>
 </article>
 </body>
+</html>

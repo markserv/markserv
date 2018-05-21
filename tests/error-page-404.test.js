@@ -5,12 +5,12 @@ import test from 'ava'
 import getPort from 'get-port'
 import markserv from '../lib/server'
 
-test.cb('start service and receive tables markdown', t => {
+test.cb('start service and receive error page (404)', t => {
 	t.plan(3)
 
 	const expected = String(
 		fs.readFileSync(
-			path.join(__dirname, 'service.expected.html')
+			path.join(__dirname, 'error-page-404.expected.html')
 		)
 	)
 
@@ -35,7 +35,7 @@ test.cb('start service and receive tables markdown', t => {
 			}
 
 			const opts = {
-				url: `http://localhost:${port}/tests/tables.md`,
+				url: `http://localhost:${port}/beep/boop/bwwwaaaaahhhggg`,
 				timeout: 1000 * 2
 			}
 
@@ -48,9 +48,17 @@ test.cb('start service and receive tables markdown', t => {
 				// // Write expected:
 				// fs.writeFileSync(path.join(__dirname, 'service.expected.html'), body)
 
-				const bodyNoPid = body.replace(/PID: \d+</, 'PID: N/A<')
-				const expectedNoPid = expected.replace(/PID: \d+</, 'PID: N/A<')
-				t.is(bodyNoPid, expectedNoPid)
+				const sanitize = text => {
+					return text.replace(/PID: \d+</, 'PID: N/A<')
+						.replace(/<p class="errorMsg">(.*?)<\/p>/, '')
+						.replace(/<pre>(.*?)<\/pre>/s, '')
+						.replace(/<title>404: (.*?)\/markserv\/beep\/boop\/bwwwaaaaahhhggg<\/title>/, '')
+				}
+
+				const bodyNonVariable = sanitize(body)
+				const expectedNonVariable = sanitize(expected)
+
+				t.is(bodyNonVariable, expectedNonVariable)
 
 				t.is(res.statusCode, 200)
 				t.pass()
