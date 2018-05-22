@@ -4,10 +4,12 @@
 
 > :checkered_flag: serve markdown as html (GitHub style), index directories, and live-reload as you edit
 
+[![Gitter](https://img.shields.io/badge/gitter-join%20chat%20%E2%86%92-FF69B4.svg?logo=gitter-white&link=https://gitter.im/markserv)](https://gitter.im/markserv)
+[![CHANGELOG](https://img.shields.io/badge/changelog-&nbsp;✔️-orange.svg)](CHANGELOG.md)
 [![Build Status](https://travis-ci.org/F1LT3R/markserv.svg?branch=master)](https://travis-ci.org/F1LT3R/markserv)
 [![Coverage Status](https://coveralls.io/repos/github/F1LT3R/markserv/badge.svg?branch=master)](https://coveralls.io/github/F1LT3R/markserv?branch=master)
 [![Npm Version](https://img.shields.io/npm/v/markserv.svg)](https://www.npmjs.com/package/markserv)
-[![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo) [CHANGELOG](CHANGELOG.md)
+[![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)
 
 <p align="center">
 	<img alt="Markserv Demo" src="media/markserv-demo.gif" width="100%">
