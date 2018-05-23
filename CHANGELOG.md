@@ -13,6 +13,18 @@
 
 - Auto Upgrade - user gets option to upgrade to latest when starting Markserv: PR [#52](https://github.com/F1LT3R/markserv/pull/52)
 
+## [1.11.0] - 2018-05-22
+
+### Changed
+
+- Updated README after changing github:filter/markserv to github/markserv/markserv (no PR)
+
+## [1.10.0] - 2018-05-22
+
+### Changed
+
+- Updated README after changing github:filter/markserv to github/markserv/markserv (no PR)
+
 ## [1.9.0] - 2018-05-21
 
 ### Changed

@@ -1,6 +1,6 @@
 {
   "name": "markserv",
-  "version": "1.12.0-alpha",
+  "version": "1.12.0",
   "description": "🏁  serve markdown as html (GitHub style), index directories, live-reload as you edit",
   "preferGlobal": true,
   "scripts": {
