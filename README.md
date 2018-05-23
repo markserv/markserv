@@ -1,5 +1,5 @@
 <p align="center">
-	<img alt="Markserv Logo" src="https://markserv.github.io/markserv/media/markserv-readme-banner.svg">
+	<img alt="Markserv Logo" src="media/markserv-readme-banner.svg">
 </p>
 
 > :checkered_flag: serve markdown as html (GitHub style), index directories, and live-reload as you edit
