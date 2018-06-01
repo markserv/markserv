@@ -22,7 +22,7 @@
 - [Just in Time Templating](#stopwatch-just-in-time-templating): Markdown, HTML &amp; LESS
 - LiveReload as you edit
 - Directory indexes
-- MIME-Type file support
+- MIME Type file support
 
 Supporting: [MathJax](tests/mathjax.md), [Chinese Characters](tests/测试.md), [Table of Contents](tests/toc.md), [Tables](tests/tables.md), [Heading Anchors](tests/links.md)
 
