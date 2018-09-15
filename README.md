@@ -15,7 +15,7 @@
 	<img alt="Markserv Demo" src="media/markserv-demo.gif" width="100%">
 </p>
 
-## :fire: Features
+## :sparkles: Features
 
 - Markdown content rendered as HTML
 - GitHub flavor CSS and Syntax Highlighting
@@ -30,7 +30,7 @@ Supporting: [MathJax](tests/mathjax.md), [Chinese Characters](tests/测试.md), 
 	<img alt="Markserv directory index" src="media/markserv-directory-listing.png" width="100%">
 </p>
 
-## :woman_technologist: Installation
+## :computer: Installation
 
 ```shell
 # NPM
