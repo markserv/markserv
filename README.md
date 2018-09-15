@@ -10,6 +10,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/markserv/markserv/badge.svg?branch=master)](https://coveralls.io/github/markserv/markserv?branch=master)
 [![Npm Version](https://img.shields.io/npm/v/markserv.svg)](https://www.npmjs.com/package/markserv)
 [![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)
+[![Known Vulnerabilities](https://snyk.io/test/github/markserv/markserv/badge.svg)](https://snyk.io/test/github/markserv/markserv)
 
 <p align="center">
 	<img alt="Markserv Demo" src="media/markserv-demo.gif" width="100%">

@@ -3,6 +3,12 @@
 - Markserv uses [Semantic Versioning](http://semver.org/)
 - Markserv [Keeps a ChangeLog](https://keepachangelog.com/en/1.0.0/)
 
+## [1.13.2] - 2018-09-14
+
+### Fixed
+
+- Clean `npm audit`: PR [#59](https://github.com/F1LT3R/markserv/pull/59)
+
 ## [1.13.1] - 2018-09-14
 
 ### Fixed
