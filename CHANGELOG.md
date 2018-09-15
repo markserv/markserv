@@ -3,11 +3,22 @@
 - Markserv uses [Semantic Versioning](http://semver.org/)
 - Markserv [Keeps a ChangeLog](https://keepachangelog.com/en/1.0.0/)
 
+## [1.13.0] - 2018-09-14
+
+### Added
+
+- Mobile Font - does not look squished on smaller screens: PR [#55](https://github.com/F1LT3R/markserv/pull/55)
+
+### Changed
+
+- Removed useless CSS, and border from printing and mobile view: PR [#55](https://github.com/F1LT3R/markserv/pull/55)
+
+
 ## [1.12.0] - 2018-05-23
 
 ### Changed
 
-- Updated boot - splash is now called from cli and readme to so the user can see that markserv is loading: PR [#55](https://github.com/F1LT3R/markserv/pull/53)
+- Updated boot - splash is now called from cli and readme to so the user can see that markserv is loading: PR [#53](https://github.com/F1LT3R/markserv/pull/53)
 
 ### Added
 
