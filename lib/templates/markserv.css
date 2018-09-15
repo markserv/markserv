@@ -1,12 +1,36 @@
 body {
   width: 45em;
-  border: 1px solid #ddd;
-  outline: 1300px solid #fff;
   margin: 16px auto;
 }
 
 body .markdown-body {
   padding: 30px;
+}
+
+@media screen and (min-width: 768px) {
+  body {
+    border: 1px solid #ddd;
+    outline: 1300px solid #fff;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  body {
+    width: auto;
+    margin: 8px auto;
+  }
+  body .markdown-body {
+    padding: 10px;
+  }
+}
+
+@media print {
+  body .markdown-body {
+    padding: 20px;
+  }
+  header, footer {
+    display: none !important;
+  }
 }
 
 .icon:before {
@@ -60,7 +84,6 @@ li.icon {
 }
 
 /*.dir .crumbs {
-  /*border-bottom:;*/
     border-bottom: 1px solid #ddd;
     margin-bottom: 1em;
     padding-bottom: 0.5em;
@@ -88,10 +111,6 @@ li.icon {
 }
 .markdown-body strong {
   font-weight: bold;
-}
-.markdown-body h1 {
-  font-size: 2em;
-  margin: 0.67em 0;
 }
 .markdown-body img {
   border: 0;
@@ -176,24 +195,6 @@ li.icon {
   margin-top: 15px;
   margin-bottom: 15px;
   line-height: 1.1;
-}
-.markdown-body h1 {
-  font-size: 30px;
-}
-.markdown-body h2 {
-  font-size: 21px;
-}
-.markdown-body h3 {
-  font-size: 16px;
-}
-.markdown-body h4 {
-  font-size: 14px;
-}
-.markdown-body h5 {
-  font-size: 12px;
-}
-.markdown-body h6 {
-  font-size: 11px;
 }
 .markdown-body blockquote {
   margin: 0;
