@@ -32,7 +32,9 @@ test.cb('start markserv via "readme" command', t => {
 
 		readme.run(flags).then(service => {
 			const closeServer = () => {
-				service.httpServer.close(done)
+				service.httpServer.close().then(() => {
+					done()
+				})
 			}
 
 			const opts = {
