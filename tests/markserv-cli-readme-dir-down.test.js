@@ -5,7 +5,7 @@ import test from 'ava'
 import getPort from 'get-port'
 import readme from '../lib/readme'
 
-test.cb('start markserv via "readme" command', t => {
+test.cb('start markserv via "readme" command from child dir', t => {
 	t.plan(3)
 
 	const expected = String(
@@ -26,17 +26,7 @@ test.cb('start markserv via "readme" command', t => {
 			browser: false
 		}
 
-		const done = () => {
-			t.end()
-		}
-
 		readme.run(flags).then(service => {
-			const closeServer = () => {
-				service.httpServer.close().then(() => {
-					done()
-				})
-			}
-
 			const opts = {
 				url: service.launchUrl,
 				timeout: 1000 * 2
@@ -44,15 +34,16 @@ test.cb('start markserv via "readme" command', t => {
 
 			request(opts, (err, res, body) => {
 				if (err) {
+					service.httpServer.close()
 					t.fail(err)
-					closeServer()
 				}
 
 				t.true(body.includes(expected))
 
 				t.is(res.statusCode, 200)
 				t.pass()
-				closeServer()
+				service.httpServer.close()
+				t.end()
 			})
 		}).catch(err => {
 			t.fail(err)
