@@ -9,31 +9,31 @@
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls -v"
   },
   "keywords": [
-    "markdown",
-    "md",
-    "server",
-    "html",
-    "livereload",
-    "live-reload",
-    "live",
-    "reload",
-    "github",
-    "realtime",
-    "highlighting",
+    "code",
     "directory",
+    "gfm",
+    "github",
+    "github flavored markdown",
+    "highlighting",
+    "html",
+    "include",
     "index",
     "indexes",
-    "code",
-    "syntax highlighting",
     "links",
-    "template",
-    "templating",
-    "include",
+    "live",
+    "live-reload",
+    "livereload",
+    "markdown",
     "markdown-it",
-    "gfm",
-    "github flavored markdown",
     "marked",
-    "markitdown"
+    "markitdown",
+    "md",
+    "realtime",
+    "reload",
+    "server",
+    "syntax highlighting",
+    "template",
+    "templating"
   ],
   "husky": {
     "hooks": {
@@ -112,5 +112,14 @@
   },
   "ava": {
     "failfast": true
-  }
+  },
+  "contributors": [
+    "Alistair MacDonald (https://f1lt3r.io)",
+    "Kefei Lu (https://kflu.github.io)",
+    "陳瀛洲 (https://finenet.com.tw)",
+    "Zhenfei You (https://www.imyzf.com)",
+    "Andrew (https://github.com/anslzo)",
+    "Daniel Perez (https://daniel.perez.sh)",
+    "Sushruth Shastry (https://github.com/sushruth)"
+  ]
 }
