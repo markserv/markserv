@@ -3,7 +3,13 @@
 - Markserv uses [Semantic Versioning](http://semver.org/)
 - Markserv [Keeps a ChangeLog](https://keepachangelog.com/en/1.0.0/)
 
-## [1.4.1] - 2018-10-14
+## [1.15.1] - 2018-10-14
+
+### Added
+
+- Added `markserv --livereloadport false` to disable LiveReload. [#65] 
+- Added `markserv --browser false` to disable Browser Launch. [#65] 
+- Added contributors to `package.json` [#65] 
 
 ### Fixed
 
@@ -30,7 +36,6 @@
 ### Changed
 
 - Removed useless CSS, and border from printing and mobile view: PR [#55](https://github.com/F1LT3R/markserv/pull/55)
-
 
 ## [1.12.0] - 2018-05-23
 
