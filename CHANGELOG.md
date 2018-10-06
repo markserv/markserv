@@ -37,7 +37,6 @@
 
 - Removed useless CSS, and border from printing and mobile view: PR [#55](https://github.com/F1LT3R/markserv/pull/55)
 
-
 ## [1.12.0] - 2018-05-23
 
 ### Changed
