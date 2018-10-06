@@ -3,6 +3,12 @@
 - Markserv uses [Semantic Versioning](http://semver.org/)
 - Markserv [Keeps a ChangeLog](https://keepachangelog.com/en/1.0.0/)
 
+## [1.4.1] - 2018-10-14
+
+### Fixed
+
+- Fix launch of relative files and dirs from `markserv` and `readme` commands. [#63]
+
 ## [1.13.2] - 2018-09-14
 
 ### Fixed
