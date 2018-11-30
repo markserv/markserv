@@ -92,7 +92,7 @@
     "opn": "^5.3.0",
     "promptly": "^3.0.3",
     "send": "^0.16.0",
-    "term-img": "^2.1.0"
+    "term-img": "^3.0.0"
   },
   "devDependencies": {
     "ava": "^0.25.0",
