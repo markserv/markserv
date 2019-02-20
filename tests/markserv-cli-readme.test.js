@@ -20,7 +20,7 @@ test.cb('start markserv via "readme" command', t => {
 
 	getPort().then(port => {
 		const flags = {
-			dir,
+			path: dir,
 			port,
 			livereloadport: false,
 			address: 'localhost',

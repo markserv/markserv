@@ -14,23 +14,23 @@ test.cb('start markserv via "cli" command opening file in same dir', t => {
 		)
 	)
 
-	const dir = 'README.md'
-
 	getPort().then(port => {
-		const flags = {
-			dir,
-			port,
-			livereloadport: false,
-			address: 'localhost',
-			silent: true,
-			browser: false
+		const cliOpts = {
+			input: ['README.md'],
+			flags: {
+				port,
+				livereloadport: false,
+				address: 'localhost',
+				silent: true,
+				browser: false
+			}
 		}
 
 		const done = () => {
 			t.end()
 		}
 
-		cli.run(flags).then(service => {
+		cli.run(cliOpts).then(service => {
 			const closeServer = () => {
 				service.httpServer.close(done)
 			}
@@ -68,23 +68,23 @@ test.cb('start markserv via "cli" command opening file in same dir with preceedi
 		)
 	)
 
-	const dir = './README.md'
-
 	getPort().then(port => {
-		const flags = {
-			dir,
-			port,
-			livereloadport: false,
-			address: 'localhost',
-			silent: true,
-			browser: false
+		const cliOpts = {
+			input: ['./README.md'],
+			flags: {
+				port,
+				livereloadport: false,
+				address: 'localhost',
+				silent: true,
+				browser: false
+			}
 		}
 
 		const done = () => {
 			t.end()
 		}
 
-		cli.run(flags).then(service => {
+		cli.run(cliOpts).then(service => {
 			const closeServer = () => {
 				service.httpServer.close(done)
 			}
