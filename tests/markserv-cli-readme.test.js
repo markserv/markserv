@@ -19,20 +19,22 @@ test.cb('start markserv via "readme" command', t => {
 	) + path.sep
 
 	getPort().then(port => {
-		const flags = {
-			path: dir,
-			port,
-			livereloadport: false,
-			address: 'localhost',
-			silent: true,
-			browser: false
+		const cliOpts = {
+			input: [dir],
+			flags: {
+				port,
+				livereloadport: false,
+				address: 'localhost',
+				silent: true,
+				browser: false
+			}
 		}
 
 		const done = () => {
 			t.end()
 		}
 
-		readme.run(flags).then(service => {
+		readme.run(cliOpts).then(service => {
 			const closeServer = () => {
 				service.httpServer.close(done)
 			}

@@ -5,7 +5,7 @@
   "preferGlobal": true,
   "scripts": {
     "test": "xo && npm run cover",
-    "cover": "nyc --reporter=lcov --reporter=html --reporter=text ava ./test/**/*.test.js",
+    "cover": "nyc --reporter=lcov --reporter=html --reporter=text ava ./tests/**/*.test.js",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls -v"
   },
   "keywords": [
@@ -67,6 +67,7 @@
     "url": "http://github.com/markserv/markserv.git"
   },
   "dependencies": {
+    "all-contributors-cli": "^6.1.2",
     "analyze-deps": "^2.0.0",
     "bluebird": "^3.4.7",
     "chalk": "^2.4.0",
