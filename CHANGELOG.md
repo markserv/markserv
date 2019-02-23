@@ -3,6 +3,17 @@
 - Markserv uses [Semantic Versioning](http://semver.org/)
 - Markserv [Keeps a ChangeLog](https://keepachangelog.com/en/1.0.0/)
 
+## [1.16.0] - 2019-02-23
+
+### Changes
+
+- Updated CSS page width in stylesheets to reflect GitHubs styles. [#74]
+- Replace Commander with Meow. [#75]
+
+### Fixed
+
+- Fixed README CLI command. [#75]
+
 ## [1.15.1] - 2018-10-14
 
 ### Added
