@@ -7,7 +7,7 @@
 
 ### Added
 
-- Added contibutors table to README. [#76]
+- Added contributors table to README. [#76]
 
 ## [1.16.0] - 2019-02-23
 
