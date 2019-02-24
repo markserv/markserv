@@ -62,6 +62,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "danhper",
+      "name": "Daniel Perez",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/1436271?v=4",
+      "profile": "https://daniel.perez.sh",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
