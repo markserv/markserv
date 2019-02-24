@@ -10,15 +10,6 @@
   "commit": true,
   "contributors": [
     {
-      "login": "ptkdev",
-      "name": "Patryk Rzucidło",
-      "avatar_url": "https://avatars1.githubusercontent.com/u/442844?v=4",
-      "profile": "https://ptkdev.it",
-      "contributions": [
-        "code"
-      ]
-    },
-    {
       "login": "F1LT3R",
       "name": "Alistair MacDonald",
       "avatar_url": "https://avatars1.githubusercontent.com/u/1218446?v=4",
@@ -28,19 +19,19 @@
       ]
     },
     {
-      "login": "kflu",
-      "name": "Kefei Lu",
-      "avatar_url": "https://avatars2.githubusercontent.com/u/1031978?v=4",
-      "profile": "https://kflu.github.io/",
+      "login": "ChenYingChou",
+      "name": "陳瀛洲",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/154892?v=4",
+      "profile": "https://finenet.com.tw",
       "contributions": [
         "code"
       ]
     },
     {
-      "login": "ChenYingChou",
-      "name": "陳瀛洲",
-      "avatar_url": "https://avatars3.githubusercontent.com/u/154892?v=4",
-      "profile": "https://finenet.com.tw",
+      "login": "kflu",
+      "name": "Kefei Lu",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/1031978?v=4",
+      "profile": "https://kflu.github.io/",
       "contributions": [
         "code"
       ]
@@ -77,6 +68,15 @@
       "name": "Sushruth Shastry",
       "avatar_url": "https://avatars0.githubusercontent.com/u/2114206?v=4",
       "profile": "https://github.com/sushruth",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ptkdev",
+      "name": "Patryk Rzucidło",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/442844?v=4",
+      "profile": "https://ptkdev.it",
       "contributions": [
         "code"
       ]

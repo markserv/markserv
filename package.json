@@ -1,6 +1,6 @@
 {
   "name": "markserv",
-  "version": "1.16.0",
+  "version": "1.17.0",
   "description": "🏁  serve markdown as html (GitHub style), index directories, live-reload as you edit",
   "preferGlobal": true,
   "scripts": {
@@ -67,7 +67,6 @@
     "url": "http://github.com/markserv/markserv.git"
   },
   "dependencies": {
-    "all-contributors-cli": "^6.1.2",
     "analyze-deps": "^2.0.0",
     "bluebird": "^3.4.7",
     "chalk": "^2.4.0",
@@ -97,6 +96,7 @@
     "term-img": "^2.1.0"
   },
   "devDependencies": {
+    "all-contributors-cli": "^6.1.2",
     "ava": "^0.25.0",
     "coveralls": "^3.0.0",
     "get-port": "^3.2.0",
@@ -114,14 +114,5 @@
   },
   "ava": {
     "failfast": true
-  },
-  "contributors": [
-    "Alistair MacDonald (https://f1lt3r.io)",
-    "Kefei Lu (https://kflu.github.io)",
-    "陳瀛洲 (https://finenet.com.tw)",
-    "Zhenfei You (https://www.imyzf.com)",
-    "Andrew (https://github.com/anslzo)",
-    "Daniel Perez (https://daniel.perez.sh)",
-    "Sushruth Shastry (https://github.com/sushruth)"
-  ]
+  }
 }
