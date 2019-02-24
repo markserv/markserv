@@ -1,6 +1,6 @@
 {
   "name": "markserv",
-  "version": "1.17.0",
+  "version": "1.17.1",
   "description": "🏁  serve markdown as html (GitHub style), index directories, live-reload as you edit",
   "preferGlobal": true,
   "scripts": {
@@ -93,7 +93,8 @@
     "opn": "^5.3.0",
     "promptly": "^3.0.3",
     "send": "^0.16.0",
-    "term-img": "^2.1.0"
+    "snyk": "^1.134.2",
+    "term-img": "^3.0.0"
   },
   "devDependencies": {
     "all-contributors-cli": "^6.1.2",

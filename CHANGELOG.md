@@ -3,11 +3,17 @@
 - Markserv uses [Semantic Versioning](http://semver.org/)
 - Markserv [Keeps a ChangeLog](https://keepachangelog.com/en/1.0.0/)
 
+## [1.17.1] - 2019-02-23
+
+### Fixed
+
+- Snyk security audit & fixed CLI launch bug. [#77]
+
 ## [1.17.0] - 2019-02-23
 
 ### Added
 
-- Added contibutors table to README. [#76]
+- Added contributors table to README. [#76]
 
 ## [1.16.0] - 2019-02-23
 
