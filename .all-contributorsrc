@@ -1,0 +1,23 @@
+{
+  "projectName": "markserv",
+  "projectOwner": "f1lt3r",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "contributors": [
+    {
+      "login": "ptkdev",
+      "name": "Patryk Rzucidło",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/442844?v=4",
+      "profile": "https://ptkdev.it",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7
+}
