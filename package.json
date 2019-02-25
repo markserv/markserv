@@ -46,6 +46,7 @@
   },
   "files": [
     "lib/cli.js",
+    "lib/cli-defs.js",
     "lib/cli-help.txt",
     "lib/readme.js",
     "lib/server.js",
