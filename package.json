@@ -6,7 +6,9 @@
   "scripts": {
     "test": "xo && npm run cover",
     "cover": "nyc --reporter=lcov --reporter=html --reporter=text ava ./tests/**/*.test.js",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls -v"
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls -v",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "keywords": [
     "code",
@@ -115,5 +117,6 @@
   },
   "ava": {
     "failfast": true
-  }
+  },
+  "snyk": true
 }
