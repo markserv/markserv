@@ -3,6 +3,12 @@
 - Markserv uses [Semantic Versioning](http://semver.org/)
 - Markserv [Keeps a ChangeLog](https://keepachangelog.com/en/1.0.0/)
 
+## [1.17.2] - 2019-02-26
+
+### Fixed
+
+- Missing CLI packages. [#79], [#81]
+
 ## [1.17.1] - 2019-02-23
 
 ### Fixed
