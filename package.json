@@ -87,6 +87,7 @@
     "markdown-it-emoji": "^1.4.0",
     "markdown-it-highlightjs": "^3.0.0",
     "markdown-it-include": "^1.0.0",
+    "markdown-it-mathjax": "^2.0.0",
     "markdown-it-table-of-contents": "^0.4.3",
     "markdown-it-task-lists": "^2.1.1",
     "meow": "^5.0.0",
