@@ -82,7 +82,7 @@
     "is-online": "^7.0.0",
     "less": "^3.8.1",
     "livereload": "^0.7.0",
-    "markdown-it": "^8.4.1",
+    "markdown-it": "^10.0.0",
     "markdown-it-anchor": "^5.0.2",
     "markdown-it-emoji": "^1.4.0",
     "markdown-it-highlightjs": "^3.0.0",
