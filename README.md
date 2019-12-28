@@ -246,6 +246,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://ptkdev.it"><img src="https://avatars1.githubusercontent.com/u/442844?v=4" width="100px;" alt=""/><br /><sub><b>Patryk Rzucidło</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/commits?author=ptkdev" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/EstebanMarin"><img src="https://avatars3.githubusercontent.com/u/13613037?v=4" width="100px;" alt=""/><br /><sub><b>EstebanMarin</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/commits?author=EstebanMarin" title="Code">💻</a></td>
     <td align="center"><a href="https://matthewreishus.com/"><img src="https://avatars3.githubusercontent.com/u/937354?v=4" width="100px;" alt=""/><br /><sub><b>Matthew Reishus</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/commits?author=mreishus" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/danielwe"><img src="https://avatars3.githubusercontent.com/u/5809017?v=4" width="100px;" alt=""/><br /><sub><b>Daniel Wennberg</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/commits?author=danielwe" title="Code">💻</a></td>
   </tr>
 </table>
 
