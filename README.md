@@ -82,7 +82,7 @@ $ readme
 To see real-time updates as you save your markdown files, you will need to install the LiveReload plugin for your browser:
 
 - [Chrome](https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei?hl=en)
-- [Firefox](https://addons.mozilla.org/addon/live-reload/)
+- [Firefox](https://addons.mozilla.org/addon/livereload-web-extension/)
 - [Internet Explorer](https://github.com/dvdotsenko/livereload_ie_extension)
 
 With the Live Reload plugin installed and turned on, you should see the page reloading as you save your Markdown file.
