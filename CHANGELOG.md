@@ -3,6 +3,23 @@
 - Markserv uses [Semantic Versioning](http://semver.org/)
 - Markserv [Keeps a ChangeLog](https://keepachangelog.com/en/1.0.0/)
 
+## [1.18.0] - 2019-12-28
+
+### Fixed
+
+- Fixed Live-Reload for browsers without Plugin. [#92]
+- Documentation fixes. [#97], [#89]
+- NPM audit fix --force. Updated AVA test runner path with AVA 1.x > 2.x. [#98]
+
+### Changed
+
+- Process MathJax with Markdown-It-MathJax. [#93]
+- Update all-contibutors table. [#98]
+
+### Removed
+
+- Removed unused Patreon links. [#98]
+
 ## [1.17.2] - 2019-02-26
 
 ### Fixed
@@ -23,7 +40,7 @@
 
 ## [1.16.0] - 2019-02-23
 
-### Changes
+### Changed
 
 - Updated CSS page width in stylesheets to reflect GitHubs styles. [#74]
 - Replace Commander with Meow. [#75]
