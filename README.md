@@ -40,8 +40,6 @@ $ npm i -g markserv
 $ yarn global add markserv
 ```
 
-<a href="https://patreon.com/bePatron?u=9720216"><img width="160" src="https://f1lt3r.io/content/images/2018/04/become_a_patron_button@2x.png"></a>
-
 ## :joystick: Usage
 
 To start Markserv from the CLI
