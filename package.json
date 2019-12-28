@@ -5,7 +5,7 @@
   "preferGlobal": true,
   "scripts": {
     "test": "xo && npm run cover",
-    "cover": "nyc --reporter=lcov --reporter=html --reporter=text ava ./tests/**/*.test.js",
+    "cover": "nyc --reporter=lcov --reporter=html --reporter=text ava",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls -v"
   },
   "keywords": [
@@ -81,7 +81,7 @@
     "implant": "^2.0.3",
     "is-online": "^7.0.0",
     "less": "^3.8.1",
-    "livereload": "^0.7.0",
+    "livereload": "^0.8.2",
     "markdown-it": "^8.4.1",
     "markdown-it-anchor": "^5.0.2",
     "markdown-it-emoji": "^1.4.0",
@@ -101,11 +101,11 @@
   },
   "devDependencies": {
     "all-contributors-cli": "^6.1.2",
-    "ava": "^0.25.0",
+    "ava": "^2.4.0",
     "coveralls": "^3.0.0",
     "get-port": "^3.2.0",
     "husky": "^0.14.3",
-    "nyc": "^11.7.1",
+    "nyc": "^15.0.0",
     "request": "^2.85.0",
     "xo": "^0.20.3"
   },
