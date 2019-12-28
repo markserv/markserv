@@ -116,6 +116,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "ghost",
+      "name": "Deleted user",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/10137?v=4",
+      "profile": "https://github.com/ghost",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
