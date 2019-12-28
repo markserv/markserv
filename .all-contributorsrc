@@ -125,6 +125,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "liamdawson",
+      "name": "Liam Dawson",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/760143?v=4",
+      "profile": "https://www.ldaws.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
