@@ -49,7 +49,7 @@ test.cb('start service and get text file', t => {
 				// Write expected:
 				// fs.writeFileSync(path.join(__dirname, 'implant-file.expected.html'), body)
 
-				t.is(body, expected)
+				t.true(body.includes(expected))
 				t.is(res.statusCode, 200)
 				t.pass()
 				closeServer()
