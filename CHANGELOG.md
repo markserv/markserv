@@ -3,6 +3,12 @@
 - Markserv uses [Semantic Versioning](http://semver.org/)
 - Markserv [Keeps a ChangeLog](https://keepachangelog.com/en/1.0.0/)
 
+## [1.17.4] - 2019-12-28
+
+### Changed
+
+- Update to latest packages using `npm-check-updates`. Update new linting errors from latest XO package. [#99]
+
 ## [1.17.3] - 2019-12-28
 
 ### Added
