@@ -54,8 +54,8 @@ test.cb('start markserv via "readme" command', t => {
 				t.pass()
 				closeServer()
 			})
-		}).catch(err => {
-			t.fail(err)
+		}).catch(error => {
+			t.fail(error)
 			t.end()
 		})
 	})

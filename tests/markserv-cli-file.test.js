@@ -52,8 +52,8 @@ test.cb('start markserv via "cli" command opening file in same dir', t => {
 				t.pass()
 				closeServer()
 			})
-		}).catch(err => {
-			t.fail(err)
+		}).catch(error => {
+			t.fail(error)
 			t.end()
 		})
 	})
@@ -106,8 +106,8 @@ test.cb('start markserv via "cli" command opening file in same dir with preceedi
 				t.pass()
 				closeServer()
 			})
-		}).catch(err => {
-			t.fail(err)
+		}).catch(error => {
+			t.fail(error)
 			t.end()
 		})
 	})

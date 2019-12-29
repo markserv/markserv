@@ -55,8 +55,8 @@ test.cb('start service and get directory listing', t => {
 				t.pass()
 				closeServer()
 			})
-		}).catch(err => {
-			t.fail(err)
+		}).catch(error => {
+			t.fail(error)
 			t.end()
 		})
 	})

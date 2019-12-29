@@ -64,8 +64,8 @@ test.cb('start service and receive error page (404)', t => {
 				t.pass()
 				closeServer()
 			})
-		}).catch(err => {
-			t.fail(err)
+		}).catch(error => {
+			t.fail(error)
 			t.end()
 		})
 	})
