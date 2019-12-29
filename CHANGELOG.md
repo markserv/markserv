@@ -3,13 +3,11 @@
 - Markserv uses [Semantic Versioning](http://semver.org/)
 - Markserv [Keeps a ChangeLog](https://keepachangelog.com/en/1.0.0/)
 
-## [1.18.0] - 2019-12-28
+## [1.17.3] - 2019-12-28
 
-### Fixed
+### Added
 
-- Fixed Live-Reload for browsers without Plugin. [#92]
-- Documentation fixes. [#97], [#89]
-- NPM audit fix --force. Updated AVA test runner path with AVA 1.x > 2.x. [#98]
+- Added test for file implant. [#98]
 
 ### Changed
 
@@ -19,6 +17,15 @@
 ### Removed
 
 - Removed unused Patreon links. [#98]
+
+### Fixed
+
+- Fixed Live-Reload for browsers without Plugin. [#92]
+- Documentation fixes. [#97], [#89]
+
+### Security
+
+- NPM audit fix --force. Resulted in AVA update to 2.x requiring package script test runner path change. [#98]
 
 ## [1.17.2] - 2019-02-26
 
