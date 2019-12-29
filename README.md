@@ -40,8 +40,6 @@ $ npm i -g markserv
 $ yarn global add markserv
 ```
 
-<a href="https://patreon.com/bePatron?u=9720216"><img width="160" src="https://f1lt3r.io/content/images/2018/04/become_a_patron_button@2x.png"></a>
-
 ## :joystick: Usage
 
 To start Markserv from the CLI
@@ -232,9 +230,31 @@ This will make the server instance persistent and will be available to access ev
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore -->
-<table><tr><td align="center"><a href="https://f1lt3r.io"><img src="https://avatars1.githubusercontent.com/u/1218446?v=4" width="100px;" alt="Alistair MacDonald"/><br /><sub><b>Alistair MacDonald</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/commits?author=F1LT3R" title="Code">💻</a></td><td align="center"><a href="https://finenet.com.tw"><img src="https://avatars3.githubusercontent.com/u/154892?v=4" width="100px;" alt="陳瀛洲"/><br /><sub><b>陳瀛洲</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/commits?author=ChenYingChou" title="Code">💻</a></td><td align="center"><a href="https://kflu.github.io/"><img src="https://avatars2.githubusercontent.com/u/1031978?v=4" width="100px;" alt="Kefei Lu"/><br /><sub><b>Kefei Lu</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/commits?author=kflu" title="Code">💻</a></td><td align="center"><a href="https://www.imyzf.com"><img src="https://avatars1.githubusercontent.com/u/8298849?v=4" width="100px;" alt="Zhenfei You"/><br /><sub><b>Zhenfei You</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/commits?author=imyzf" title="Code">💻</a></td><td align="center"><a href="https://github.com/anslzo"><img src="https://avatars2.githubusercontent.com/u/11443948?v=4" width="100px;" alt="Andrew"/><br /><sub><b>Andrew</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/commits?author=anslzo" title="Code">💻</a></td><td align="center"><a href="https://daniel.perez.sh"><img src="https://avatars2.githubusercontent.com/u/1436271?v=4" width="100px;" alt="Daniel Perez"/><br /><sub><b>Daniel Perez</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/commits?author=danhper" title="Code">💻</a></td><td align="center"><a href="https://github.com/sushruth"><img src="https://avatars0.githubusercontent.com/u/2114206?v=4" width="100px;" alt="Sushruth Shastry"/><br /><sub><b>Sushruth Shastry</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/commits?author=sushruth" title="Code">💻</a></td></tr><tr><td align="center"><a href="https://ptkdev.it"><img src="https://avatars1.githubusercontent.com/u/442844?v=4" width="100px;" alt="Patryk Rzucidło"/><br /><sub><b>Patryk Rzucidło</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/commits?author=ptkdev" title="Code">💻</a></td><td align="center"><a href="https://github.com/EstebanMarin"><img src="https://avatars3.githubusercontent.com/u/13613037?v=4" width="100px;" alt="EstebanMarin"/><br /><sub><b>EstebanMarin</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/commits?author=EstebanMarin" title="Code">💻</a></td></tr></table>
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://f1lt3r.io"><img src="https://avatars1.githubusercontent.com/u/1218446?v=4" width="100px;" alt=""/><br /><sub><b>Alistair MacDonald</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/commits?author=F1LT3R" title="Code">💻</a></td>
+    <td align="center"><a href="https://finenet.com.tw"><img src="https://avatars3.githubusercontent.com/u/154892?v=4" width="100px;" alt=""/><br /><sub><b>陳瀛洲</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/commits?author=ChenYingChou" title="Code">💻</a></td>
+    <td align="center"><a href="https://kflu.github.io/"><img src="https://avatars2.githubusercontent.com/u/1031978?v=4" width="100px;" alt=""/><br /><sub><b>Kefei Lu</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/commits?author=kflu" title="Code">💻</a></td>
+    <td align="center"><a href="https://www.imyzf.com"><img src="https://avatars1.githubusercontent.com/u/8298849?v=4" width="100px;" alt=""/><br /><sub><b>Zhenfei You</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/commits?author=imyzf" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/anslzo"><img src="https://avatars2.githubusercontent.com/u/11443948?v=4" width="100px;" alt=""/><br /><sub><b>Andrew</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/commits?author=anslzo" title="Code">💻</a></td>
+    <td align="center"><a href="https://daniel.perez.sh"><img src="https://avatars2.githubusercontent.com/u/1436271?v=4" width="100px;" alt=""/><br /><sub><b>Daniel Perez</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/commits?author=danhper" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/sushruth"><img src="https://avatars0.githubusercontent.com/u/2114206?v=4" width="100px;" alt=""/><br /><sub><b>Sushruth Shastry</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/commits?author=sushruth" title="Code">💻</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://ptkdev.it"><img src="https://avatars1.githubusercontent.com/u/442844?v=4" width="100px;" alt=""/><br /><sub><b>Patryk Rzucidło</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/commits?author=ptkdev" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/EstebanMarin"><img src="https://avatars3.githubusercontent.com/u/13613037?v=4" width="100px;" alt=""/><br /><sub><b>EstebanMarin</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/commits?author=EstebanMarin" title="Code">💻</a></td>
+    <td align="center"><a href="https://matthewreishus.com/"><img src="https://avatars3.githubusercontent.com/u/937354?v=4" width="100px;" alt=""/><br /><sub><b>Matthew Reishus</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/commits?author=mreishus" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/danielwe"><img src="https://avatars3.githubusercontent.com/u/5809017?v=4" width="100px;" alt=""/><br /><sub><b>Daniel Wennberg</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/commits?author=danielwe" title="Code">💻</a></td>
+    <td align="center"><a href="http://thepete.net"><img src="https://avatars1.githubusercontent.com/u/65444?v=4" width="100px;" alt=""/><br /><sub><b>Pete Hodgson</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/commits?author=moredip" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/ghost"><img src="https://avatars3.githubusercontent.com/u/10137?v=4" width="100px;" alt=""/><br /><sub><b>Deleted user</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/commits?author=ghost" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://www.ldaws.com"><img src="https://avatars2.githubusercontent.com/u/760143?v=4" width="100px;" alt=""/><br /><sub><b>Liam Dawson</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/commits?author=liamdawson" title="Code">💻</a></td>
+  </tr>
+</table>
 
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

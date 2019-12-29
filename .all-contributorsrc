@@ -89,7 +89,53 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "mreishus",
+      "name": "Matthew Reishus",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/937354?v=4",
+      "profile": "https://matthewreishus.com/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "danielwe",
+      "name": "Daniel Wennberg",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/5809017?v=4",
+      "profile": "https://github.com/danielwe",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "moredip",
+      "name": "Pete Hodgson",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/65444?v=4",
+      "profile": "http://thepete.net",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ghost",
+      "name": "Deleted user",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/10137?v=4",
+      "profile": "https://github.com/ghost",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "liamdawson",
+      "name": "Liam Dawson",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/760143?v=4",
+      "profile": "https://www.ldaws.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
-  "contributorsPerLine": 7
+  "contributorsPerLine": 7,
+  "commitConvention": "none"
 }
