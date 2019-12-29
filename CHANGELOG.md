@@ -5,6 +5,10 @@
 
 ## [1.17.4] - 2019-12-28
 
+### Added
+
+- Added test for LESS implant. [#99]
+
 ### Changed
 
 - Update to latest packages using `npm-check-updates`. Update new linting errors from latest XO package. [#99]
