@@ -77,6 +77,19 @@ Start Markserv and open the closest README.md file in the browser:
 $ readme
 ```
 
+If you like using Docker, be aware Markserv can also be built as a docker image. For that we have provided a Dockerfile as an example. To read more information about building and using docker images, please refer to [Docker Documentation](https://docs.docker.com/engine/reference/commandline/build/) or even `man docker build`
+
+To see your /path_to_your_awesome_markdown_project/ in the web browser, being served by a docker container, you can run the following commands:
+
+```shell
+sudo docker build -t your_username/markserv .
+sudo docker run --rm -d -p 8642:8642 -v /path_to_your_awesome_markdown_project/:/markserv -v /etc/localtime:/etc/localtime:ro --name markserv your_username/markserv
+```
+Note: In order to build our image, we assume the user already `cd` to the directory where the Dockerfile is, that is why the dot at the end of the command line is important. Also the above example shows how to run a container from that image we just created, which relies on `--rm` argument to automatically remove the container when it exits. Detached mode with `-d` argument, which runs the container in the background and print the new container ID. Port number being published to the host by `-p` argument, separated by colon to diferentiate hostPort and containerPort. Using a volume being specified by `-v` argument, which is the path to our markdown files, also separated by colon to diferentiate hostDir and containerDir. Also using `/etc/localtime` as a read-only (`:ro`) volume just for sake of timestamps. Using the `--name` argument to define the container name, and finally, the name of the image you want to run from, which in our case is your_username/markserv the image we just created.
+
+To read more information about running containers from docker images, please refer to [Docker Documentation](https://docs.docker.com/engine/reference/commandline/run/) or even `man docker run`
+
+
 ## :zap: Live Reload
 
 To see real-time updates as you save your markdown files, you will need to install the LiveReload plugin for your browser:
