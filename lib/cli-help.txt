@@ -9,3 +9,4 @@ Options
 	--silent, -i  Silent (false)
 	--address, -a  Serve on ip/address [address] (localhost)
 	--verbose, -v  Verbose output (false)
+	--darkmode, -d  Enable dark theme (false)

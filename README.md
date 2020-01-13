@@ -198,6 +198,14 @@ To list the options/flags for the markserv CLI tool:
 $ markserv --help
 ```
 
+### Using the "Darkmode" theme
+
+You can enable the dark theme by doing this:
+
+```shell
+markserv -d true
+```
+
 ### Changing the HTTP Port
 
 You can change the HTTP Port like this:
