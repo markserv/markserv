@@ -5,58 +5,80 @@ import test from 'ava'
 import getPort from 'get-port'
 import markserv from '../lib/server'
 
-test.cb('start service and get text file', t => {
-	t.plan(3)
-
+test('Get text file', async t => {
 	const expected = String(
 		fs.readFileSync(
 			path.join(__dirname, 'implant-file.expected.html')
 		)
 	)
 
-	const dir = path.join(__dirname)
+	const opts = {
+		url: 'http://localhost:port/implant-file.render-fixture.md',
+		timeout: 1000 * 2
+	}
 
-	getPort().then(port => {
-		const flags = {
-			port,
-			dir,
-			livereloadport: false,
-			address: 'localhost',
-			silent: true,
-			browser: false
+	await macro(t, opts, expected)
+})
+
+test('No URL attached to {file}', async t => {
+	const expected = String(
+		fs.readFileSync(
+			path.join(__dirname, 'implant-file.expected2.html')
+		)
+	)
+
+	const opts = {
+		url: 'http://localhost:port/implant-file.render-fixture2.md',
+		timeout: 1000 * 2
+	}
+
+	await macro(t, opts, expected)
+})
+
+function macro(t, opts, expected) {
+	t.plan(3)
+
+	return requestMarkserv(opts).then(
+		({res, body, closeServer}) => {
+			t.true(body.includes(expected))
+			t.is(res.statusCode, 200)
+			t.pass()
+			closeServer()
 		}
+	).catch(error => {
+		t.fail(error)
+	})
+}
 
-		const done = () => {
-			t.end()
-		}
+function requestMarkserv(opts) {
+	return new Promise((resolve, reject) => {
+		getPort().then(port => {
+			opts.url = opts.url.replace(':port', ':' + port)
+			const dir = path.join(__dirname)
 
-		markserv.init(flags).then(service => {
-			const closeServer = () => {
-				service.httpServer.close(done)
+			const flags = {
+				port,
+				dir,
+				livereloadport: false,
+				address: 'localhost',
+				silent: true,
+				browser: false
 			}
 
-			const opts = {
-				url: `http://localhost:${port}/implant-file.render-fixture.md`,
-				timeout: 1000 * 2
-			}
-
-			request(opts, (err, res, body) => {
-				if (err) {
-					t.fail(err)
-					closeServer()
+			markserv.init(flags).then(service => {
+				const closeServer = () => {
+					service.httpServer.close()
 				}
 
-				// Write expected:
-				// fs.writeFileSync(path.join(__dirname, 'implant-file.expected.html'), body)
+				request(opts, (err, res, body) => {
+					if (err) {
+						closeServer()
+						reject(err)
+					}
 
-				t.true(body.includes(expected))
-				t.is(res.statusCode, 200)
-				t.pass()
-				closeServer()
+					resolve({res, body, closeServer})
+				})
 			})
-		}).catch(error => {
-			t.fail(error)
-			t.end()
 		})
 	})
-})
+}
