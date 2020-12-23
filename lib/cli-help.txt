@@ -3,9 +3,9 @@ $ markserv <file/dir>
 $ readme (serve closest README.md file)
 
 Options
-	--port, -p,  HTTP port [port] (80)
-	--livereloadport, -l  LiveReload port [port/false] (35729)
-	--browser, -b  Launch browser (true)
-	--silent, -i  Silent (false)
-	--address, -a  Serve on ip/address [address] (localhost)
-	--verbose, -v  Verbose output (false)
+    --port, -p,           HTTP port [port] (80)
+    --livereloadport, -l  LiveReload port [port/false] (35729)
+    --browser, -b         Launch browser [browser/true/false] (true)
+    --silent, -i          Silent (false)
+    --address, -a         Serve on ip/address [address] (localhost)
+    --verbose, -v         Verbose output (false)
