@@ -624,3 +624,47 @@ a.button.back {
     display: inline-block;
     font-size: 16px;
 }
+
+@media (prefers-color-scheme: dark) {
+  html, body, input, textarea, select, button {
+    background-color: #181a1b;
+    border-color: #575757;
+    color: #e8e6e3;
+  }
+  a {
+      color: #3391ff;
+  }
+  table {
+      border-color: #4c4c4c;
+  }
+  body {
+    outline: none;
+  }
+  .markdown-body {
+    color: rgb(214, 211, 205);
+  }
+  .markdown-body hr {
+    background-color: rgb(31, 33, 34);
+    border-top-color: initial;
+    border-right-color: initial;
+    border-bottom-color: initial;
+    border-left-color: initial;
+  }
+  .markdown-body h1 {
+    border-bottom-color: rgb(54, 54, 54);
+  }
+  .markdown-body h2 {
+    border-bottom-color: rgb(54, 54, 54);
+  }
+  .markdown-body .highlight pre, .markdown-body pre {
+    background-color: rgb(27, 28, 29);
+  }
+  .markdown-body pre code {
+    background-color: transparent;
+    border-top-color: initial;
+    border-right-color: initial;
+    border-bottom-color: initial;
+    border-left-color: initial;
+    color: rgb(186, 181, 171);
+  }
+}
