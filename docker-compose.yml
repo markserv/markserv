@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+
+  markserv: 
+    build: .
+    volumes:
+      - ./files:/usr/app/files:ro
+    ports:
+      - 8080:8080
