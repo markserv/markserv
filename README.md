@@ -32,7 +32,7 @@ Supporting: [MathJax](tests/mathjax.md), [Chinese Characters](tests/测试.md), 
 
 ## :whale2: Usage (Docker)
 
-Place the files to serve in the `./files` directory or [edit the mount point] and run the following command.
+Place the files to serve in the `./files` directory or [edit the mount point](./docker-compose.yml#L8) and run the following command.
 
 ```shell
 docker-compose up --build -d
