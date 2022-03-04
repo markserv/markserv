@@ -30,7 +30,17 @@ Supporting: [MathJax](tests/mathjax.md), [Chinese Characters](tests/测试.md), 
 	<img alt="Markserv directory index" src="media/markserv-directory-listing.png" width="100%">
 </p>
 
-## :computer: Installation
+## :whale2: Usage (Docker)
+
+Place the files to serve in the `./files` directory or [edit the mount point] and run the following command.
+
+```shell
+docker-compose up --build -d
+```
+
+You can access Markserv at `http://localhost:8080`
+
+## :computer: Installation (CLI)
 
 ```shell
 # NPM
@@ -40,7 +50,7 @@ $ npm i -g markserv
 $ yarn global add markserv
 ```
 
-## :joystick: Usage
+## :joystick: Usage (CLI)
 
 To start Markserv from the CLI
 
