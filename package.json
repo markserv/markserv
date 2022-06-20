@@ -79,7 +79,7 @@
     "emoji-regex": "^8.0.0",
     "handlebars": "^4.5.3",
     "implant": "^2.0.3",
-    "is-online": "^8.2.1",
+    "is-online": "^10.0.0",
     "less": "^3.10.3",
     "livereload": "^0.8.2",
     "markdown-it": "^10.0.0",
