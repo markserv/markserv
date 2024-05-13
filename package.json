@@ -81,7 +81,7 @@
     "implant": "^2.0.3",
     "is-online": "^8.2.1",
     "less": "^3.10.3",
-    "livereload": "^0.8.2",
+    "livereload": "^0.9.0",
     "markdown-it": "^10.0.0",
     "markdown-it-anchor": "^5.2.5",
     "markdown-it-emoji": "^1.4.0",
