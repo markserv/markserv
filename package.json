@@ -69,6 +69,7 @@
     "url": "http://github.com/markserv/markserv.git"
   },
   "dependencies": {
+    "@agoose77/markdown-it-mermaid": "^1.1.0",
     "analyze-deps": "^2.0.0",
     "bluebird": "^3.7.2",
     "chalk": "^3.0.0",
