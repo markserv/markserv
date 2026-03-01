@@ -19,7 +19,7 @@ test.cb('start markserv via "cli" command opening file in different dir', t => {
 			input: ['tests/markserv-cli-file-diff-dir.expected.html'],
 			flags: {
 				port,
-				livereloadport: false,
+				hotreload: false,
 				address: 'localhost',
 				silent: true,
 				browser: false
@@ -73,7 +73,7 @@ test.cb('start markserv via "cli" command opening file in different dir with pre
 			input: ['./tests/markserv-cli-file-diff-dir.expected.html'],
 			flags: {
 				port,
-				livereloadport: false,
+				hotreload: false,
 				address: 'localhost',
 				silent: true,
 				browser: false

@@ -20,7 +20,7 @@ test.cb('start service and receive error page (404)', t => {
 		const flags = {
 			dir,
 			port,
-			livereloadport: false,
+			hotreload: false,
 			address: 'localhost',
 			silent: true
 		}

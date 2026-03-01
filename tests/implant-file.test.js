@@ -20,7 +20,7 @@ test.cb('start service and get text file', t => {
 		const flags = {
 			port,
 			dir,
-			livereloadport: false,
+			hotreload: false,
 			address: 'localhost',
 			silent: true,
 			browser: false

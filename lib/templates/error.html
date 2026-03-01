@@ -50,5 +50,27 @@
 	});
 })();
 </script>
+{{#if hotreload}}
+<script>
+(function() {
+	var ws, retry;
+	function connect() {
+		ws = new WebSocket('ws://localhost:{{wsPort}}');
+		ws.onopen = function() {
+			clearInterval(retry);
+			ws.send(JSON.stringify({path: location.pathname}));
+		};
+		ws.onmessage = function(e) {
+			var el = document.querySelector('.markdown-body');
+			if (el) el.innerHTML = e.data;
+		};
+		ws.onclose = function() {
+			retry = setInterval(connect, 1000);
+		};
+	}
+	connect();
+})();
+</script>
+{{/if}}
 </body>
 </html>

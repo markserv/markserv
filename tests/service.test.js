@@ -20,7 +20,7 @@ test.cb('start service and receive tables markdown', t => {
 		const flags = {
 			dir,
 			port,
-			livereloadport: false,
+			hotreload: false,
 			address: 'localhost',
 			silent: true
 		}

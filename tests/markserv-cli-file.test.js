@@ -19,7 +19,7 @@ test.cb('start markserv via "cli" command opening file in same dir', t => {
 			input: ['README.md'],
 			flags: {
 				port,
-				livereloadport: false,
+				hotreload: false,
 				address: 'localhost',
 				silent: true,
 				browser: false
@@ -73,7 +73,7 @@ test.cb('start markserv via "cli" command opening file in same dir with preceedi
 			input: ['./README.md'],
 			flags: {
 				port,
-				livereloadport: false,
+				hotreload: false,
 				address: 'localhost',
 				silent: true,
 				browser: false

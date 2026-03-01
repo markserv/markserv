@@ -19,7 +19,7 @@ test.cb('start markserv via "readme" command', t => {
 			input: [],
 			flags: {
 				port,
-				livereloadport: false,
+				hotreload: false,
 				address: 'localhost',
 				silent: true,
 				browser: false

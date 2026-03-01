@@ -20,7 +20,7 @@ test.cb('start service and get directory listing', t => {
 		const flags = {
 			port,
 			dir,
-			livereloadport: false,
+			hotreload: false,
 			address: 'localhost',
 			silent: true
 		}
