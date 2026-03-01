@@ -3,6 +3,27 @@
 - Markserv uses [Semantic Versioning](http://semver.org/)
 - Markserv [Keeps a ChangeLog](https://keepachangelog.com/en/1.0.0/)
 
+## [1.18.0] - 2026-03-01
+
+### Added
+
+- Built-in WebSocket hot-reload: content updates in-place without full page reload and without any browser plugin.
+- Dark, light, and synthwave themes with in-browser toggle button (persists via localStorage).
+- `--hotreload` / `--no-hotreload` flag to enable/disable hot-reload.
+- `--light`, `--synthwave`, and `--theme` CLI flags for theme selection.
+
+### Changed
+
+- Hot-reload uses `ws` package over WebSocket instead of `livereload` + `connect-livereload` on a separate port.
+- WebSocket port is auto-found via `get-port`, supporting multiple simultaneous instances.
+- File watching uses Node.js built-in `fs.watch` (recursive) with 150ms debounce.
+- Updated README to document hot-reload and themes.
+
+### Removed
+
+- Removed `livereload` and `connect-livereload` dependencies.
+- Removed `--livereloadport` CLI flag (replaced by `--hotreload`).
+
 ## [1.17.4] - 2019-12-28
 
 ### Added
