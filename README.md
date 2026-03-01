@@ -2,7 +2,7 @@
 	<img alt="Markserv Logo" src="https://markserv.github.io/markserv/media/markserv-readme-banner.svg">
 </p>
 
-> :checkered_flag: serve markdown as html (GitHub style), index directories, and live-reload as you edit
+> :checkered_flag: serve markdown as html (GitHub style), index directories, and hot-reload as you edit
 
 [![Gitter](https://img.shields.io/badge/gitter-join%20chat%20%E2%86%92-FF69B4.svg?style=flat-square&logo=gitter-white&link=https://gitter.im/markserv)](https://gitter.im/markserv)
 [![CHANGELOG](https://img.shields.io/badge/changelog-&nbsp;✔️-orange.svg?style=flat-square)](CHANGELOG.md)
@@ -20,7 +20,7 @@
 - Markdown content rendered as HTML
 - GitHub flavor CSS and Syntax Highlighting
 - [Just in Time Templating](#stopwatch-just-in-time-templating): Markdown, HTML &amp; LESS
-- LiveReload as you edit
+- Hot-reload as you edit (no browser plugin required)
 - Directory indexes
 - MIME Type file support
 
@@ -75,19 +75,36 @@ Start Markserv and open the closest README.md file in the browser:
 $ readme
 ```
 
-## :zap: Live Reload
+## :zap: Hot Reload
 
-To see real-time updates as you save your markdown files, you will need to install the LiveReload plugin for your browser:
+Markserv includes built-in hot-reload via WebSocket. When you save a Markdown file, the page content updates instantly without a full page reload and without any browser plugin.
 
-- [Chrome](https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei?hl=en)
-- [Firefox](https://addons.mozilla.org/addon/livereload-web-extension/)
-- [Internet Explorer](https://github.com/dvdotsenko/livereload_ie_extension)
+To disable hot-reload, use `--no-hotreload`:
 
-With the Live Reload plugin installed and turned on, you should see the page reloading as you save your Markdown file.
+```shell
+markserv --no-hotreload README.md
+```
 
 <p align="center">
 	<img alt="Markserv Live Reload" src="media/markserv-live-reload.gif" width="100%">
 </p>
+
+## :art: Themes
+
+Markserv ships with three themes: **dark** (default), **light**, and **synthwave**. You can set the theme from the CLI:
+
+```shell
+# Use light theme
+markserv --light README.md
+
+# Use synthwave theme
+markserv --synthwave README.md
+
+# Or use the --theme flag
+markserv --theme light README.md
+```
+
+You can also toggle between themes in the browser using the theme button in the bottom-right corner. Your choice is saved in `localStorage` and persists across hot-reloads.
 
 ## :link: Markdown Links
 
