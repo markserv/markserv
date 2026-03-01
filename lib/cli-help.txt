@@ -9,3 +9,5 @@ Options
 	--silent, -i  Silent (false)
 	--address, -a  Serve on ip/address [address] (localhost)
 	--verbose, -v  Verbose output (false)
+	--light  Use light theme (default: dark)
+	--synthwave  Use synthwave/retro-neon theme (default: dark)

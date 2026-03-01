@@ -58,6 +58,9 @@
     "lib/templates/github.less",
     "lib/templates/highlight-js-github-gist.css",
     "lib/templates/markserv.css",
+    "lib/templates/github-markdown-dark.css",
+    "lib/templates/github-markdown-light.css",
+    "lib/templates/github-markdown-synthwave.css",
     "media/markserv-favicon-96x96.png",
     "media/markserv-logo-term.png"
   ],
