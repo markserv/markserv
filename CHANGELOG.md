@@ -8,9 +8,11 @@
 ### Added
 
 - Built-in WebSocket hot-reload: content updates in-place without full page reload and without any browser plugin.
-- Dark, light, and synthwave themes with in-browser toggle button (persists via localStorage).
+- Dark, light, synthwave, and solarized themes with in-browser toggle button (persists via localStorage).
 - `--hotreload` / `--no-hotreload` flag to enable/disable hot-reload.
-- `--light`, `--synthwave`, and `--theme` CLI flags for theme selection.
+- `--light`, `--synthwave`, and `--theme` CLI flags for theme selection (e.g. `--theme solarized`).
+- Solarized Dark theme with colors from [Better Solarized Dark](https://github.com/edheltzel/vscode-better-solarized), including highlight.js syntax highlighting.
+- Server-side initial stylesheet selection so `--theme` / `--light` / `--synthwave` render correctly from first paint.
 
 ### Changed
 
