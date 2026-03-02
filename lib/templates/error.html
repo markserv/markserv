@@ -6,9 +6,10 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>{{code}}: {{filePath}}</title>
 	<meta charset="utf-8">
-	<link rel="stylesheet" id="theme-dark" href="{markserv}templates/github-markdown-dark.css">
-	<link rel="stylesheet" id="theme-light" href="{markserv}templates/github-markdown-light.css" disabled>
-	<link rel="stylesheet" id="theme-synthwave" href="{markserv}templates/github-markdown-synthwave.css" disabled>
+	<link rel="stylesheet" id="theme-dark" href="{markserv}templates/github-markdown-dark.css"{{#unless themeDark}} disabled{{/unless}}>
+	<link rel="stylesheet" id="theme-light" href="{markserv}templates/github-markdown-light.css"{{#unless themeLight}} disabled{{/unless}}>
+	<link rel="stylesheet" id="theme-synthwave" href="{markserv}templates/github-markdown-synthwave.css"{{#unless themeSynthwave}} disabled{{/unless}}>
+	<link rel="stylesheet" id="theme-solarized" href="{markserv}templates/github-markdown-solarized.css"{{#unless themeSolarized}} disabled{{/unless}}>
 	<link rel="stylesheet" href="{markserv}templates/markserv.css">
 	<link rel="stylesheet" href="{markserv}templates/highlight-js-github-gist.css">
 	<link rel="stylesheet" href="{markserv}icons/icons.css">
@@ -24,8 +25,8 @@
 <button class="theme-toggle" id="theme-toggle" title="Toggle theme"></button>
 <script>
 (function() {
-	var themes = ['dark', 'light', 'synthwave'];
-	var icons = {dark: '\u{1F319}', light: '\u{2600}\u{FE0F}', synthwave: '\u{1F9D1}\u{200D}\u{1F3A4}'};
+	var themes = ['dark', 'light', 'synthwave', 'solarized'];
+	var icons = {dark: '\u{1F319}', light: '\u{2600}\u{FE0F}', synthwave: '\u{1F9D1}\u{200D}\u{1F3A4}', solarized: '\u{262F}\u{FE0F}'};
 	var serverTheme = '{{theme}}' || 'dark';
 	var current = localStorage.getItem('markserv-theme') || serverTheme;
 

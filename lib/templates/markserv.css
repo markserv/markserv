@@ -31,6 +31,16 @@
   --markserv-btn-border: #ff7edb44;
 }
 
+[data-theme="solarized"] {
+  --markserv-bg: #002b36;
+  --markserv-border: #073642;
+  --markserv-outline-color: #002b36;
+  --markserv-icon-color: #93a1a1;
+  --markserv-btn-bg: #073642;
+  --markserv-btn-color: #93a1a1;
+  --markserv-btn-border: #586e75;
+}
+
 body {
   width: 978px;
   margin: 16px auto;
@@ -180,6 +190,15 @@ a.button.back:hover {
 
 [data-theme="synthwave"] .theme-toggle:hover {
   box-shadow: 0 0 16px rgba(255, 126, 219, 0.5), 0 4px 12px rgba(0,0,0,0.4);
+}
+
+/* Solarized glow for toggle button */
+[data-theme="solarized"] .theme-toggle {
+  box-shadow: 0 0 10px rgba(42, 161, 152, 0.3), 0 2px 8px rgba(0,0,0,0.3);
+}
+
+[data-theme="solarized"] .theme-toggle:hover {
+  box-shadow: 0 0 16px rgba(42, 161, 152, 0.5), 0 4px 12px rgba(0,0,0,0.4);
 }
 
 /* Synthwave scanline overlay */

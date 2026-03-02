@@ -91,7 +91,7 @@ markserv --no-hotreload README.md
 
 ## :art: Themes
 
-Markserv ships with three themes: **dark** (default), **light**, and **synthwave**. You can set the theme from the CLI:
+Markserv ships with four themes: **dark** (default), **light**, **synthwave**, and **solarized**. You can set the theme from the CLI:
 
 ```shell
 # Use light theme
@@ -100,8 +100,8 @@ markserv --light README.md
 # Use synthwave theme
 markserv --synthwave README.md
 
-# Or use the --theme flag
-markserv --theme light README.md
+# Or use the --theme flag for any theme
+markserv --theme solarized README.md
 ```
 
 You can also toggle between themes in the browser using the theme button in the bottom-right corner. Your choice is saved in `localStorage` and persists across hot-reloads.
