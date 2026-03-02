@@ -16,8 +16,14 @@
 
 - Hot-reload uses `ws` package over WebSocket instead of `livereload` + `connect-livereload` on a separate port.
 - WebSocket port is auto-found via `get-port`, supporting multiple simultaneous instances.
+- HTTP port auto-finds a free port when no explicit `--port` is given, avoiding conflicts with other instances.
 - File watching uses Node.js built-in `fs.watch` (recursive) with 150ms debounce.
 - Updated README to document hot-reload and themes.
+
+### Fixed
+
+- Fixed path resolution when launched from external directories (e.g. from fstop or other tools).
+- Fixed misplaced folder icon in directory listing header.
 
 ### Removed
 

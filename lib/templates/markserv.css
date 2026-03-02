@@ -116,6 +116,7 @@ li.icon {
 }
 
 .dir h1.icon {
+    position: relative;
     padding-left: 48px;
 }
 
