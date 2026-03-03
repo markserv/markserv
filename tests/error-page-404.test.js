@@ -53,6 +53,7 @@ test.cb('start service and receive error page (404)', t => {
 						.replace(/<p class="errorMsg">(.*?)<\/p>/, '')
 						.replace(/<pre>(.*?)<\/pre>/s, '')
 						.replace(/<title>404: (.*?)\/markserv\/beep\/boop\/bwwwaaaaahhhggg<\/title>/, '')
+						.replace(/markserv-width:' \+ '.*?'/, 'markserv-width:\' + \'\'')
 				}
 
 				const bodyNonVariable = sanitize(body)

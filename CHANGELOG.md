@@ -3,6 +3,23 @@
 - Markserv uses [Semantic Versioning](http://semver.org/)
 - Markserv [Keeps a ChangeLog](https://keepachangelog.com/en/1.0.0/)
 
+## [1.19.0] - 2026-03-02
+
+### Added
+
+- Body width slider: adjustable slider next to the theme toggle button controls the `<body>` width from 0 to viewport width.
+- Pixel tooltip appears above the slider thumb while dragging or using arrow keys.
+- Width persists per project via localStorage, keyed by the served root directory.
+- Double-click the slider to reset to the default width (978px).
+- Theme-aware slider styling with custom track and thumb colors for all four themes.
+
+### Changed
+
+- Theme toggle button slightly smaller (40px → 34px) for a cleaner look.
+- Solarized page border slightly brighter for better visibility.
+- Width slider and theme button vertically aligned.
+- Width control hidden in print view alongside theme toggle.
+
 ## [1.18.0] - 2026-03-01
 
 ### Added

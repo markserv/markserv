@@ -9,6 +9,8 @@
   --markserv-btn-bg: #21262d;
   --markserv-btn-color: #c9d1d9;
   --markserv-btn-border: #363b42;
+  --markserv-slider-thumb: #58a6ff;
+  --markserv-slider-track: #2d333b;
 }
 
 [data-theme="light"] {
@@ -19,6 +21,8 @@
   --markserv-btn-bg: #f6f8fa;
   --markserv-btn-color: #24292f;
   --markserv-btn-border: #d0d7de;
+  --markserv-slider-thumb: #0969da;
+  --markserv-slider-track: #c5ccd3;
 }
 
 [data-theme="synthwave"] {
@@ -29,16 +33,20 @@
   --markserv-btn-bg: #1a1228;
   --markserv-btn-color: #ff7edb;
   --markserv-btn-border: #ff7edb44;
+  --markserv-slider-thumb: #ff7edb;
+  --markserv-slider-track: #46355e;
 }
 
 [data-theme="solarized"] {
   --markserv-bg: #002b36;
-  --markserv-border: #073642;
+  --markserv-border: #0e4f5e;
   --markserv-outline-color: #002b36;
   --markserv-icon-color: #93a1a1;
   --markserv-btn-bg: #073642;
   --markserv-btn-color: #93a1a1;
   --markserv-btn-border: #586e75;
+  --markserv-slider-thumb: #2aa198;
+  --markserv-slider-track: #0a4a58;
 }
 
 body {
@@ -82,6 +90,9 @@ body .markdown-body {
     display: none !important;
   }
   .theme-toggle {
+    display: none !important;
+  }
+  .width-control {
     display: none !important;
   }
 }
@@ -161,14 +172,14 @@ a.button.back:hover {
   bottom: 20px;
   right: 20px;
   z-index: 9999;
-  width: 40px;
-  height: 40px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   border: 1px solid var(--markserv-btn-border);
   background-color: var(--markserv-btn-bg);
   color: var(--markserv-btn-color);
   cursor: pointer;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 1;
   display: flex;
   align-items: center;
@@ -199,6 +210,72 @@ a.button.back:hover {
 
 [data-theme="solarized"] .theme-toggle:hover {
   box-shadow: 0 0 16px rgba(42, 161, 152, 0.5), 0 4px 12px rgba(0,0,0,0.4);
+}
+
+/* --- Width control --- */
+.width-control {
+    position: fixed;
+    bottom: 32px;
+    right: 62px;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+}
+
+#width-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 120px;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--markserv-slider-track);
+    cursor: pointer;
+    outline: none;
+}
+
+#width-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--markserv-slider-thumb);
+    border: none;
+    cursor: pointer;
+}
+
+#width-slider::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--markserv-slider-thumb);
+    border: none;
+    cursor: pointer;
+}
+
+#width-slider::-moz-range-track {
+    height: 6px;
+    border-radius: 3px;
+    background: var(--markserv-slider-track);
+}
+
+#width-tooltip {
+    position: absolute;
+    bottom: 24px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: var(--markserv-btn-bg);
+    color: var(--markserv-btn-color);
+    border: 1px solid var(--markserv-btn-border);
+    font-size: 11px;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+#width-tooltip.visible {
+    opacity: 1;
 }
 
 /* Synthwave scanline overlay */

@@ -48,8 +48,10 @@ test.cb('start service and receive tables markdown', t => {
 				// // Write expected:
 				// fs.writeFileSync(path.join(__dirname, 'service.expected.html'), body)
 
-				const bodyNoPid = body.replace(/PID: \d+</, 'PID: N/A<')
-				const expectedNoPid = expected.replace(/PID: \d+</, 'PID: N/A<')
+				const normalize = text => text.replace(/PID: \d+</, 'PID: N/A<')
+					.replace(/markserv-width:' \+ '.*?'/, 'markserv-width:\' + \'\'')
+				const bodyNoPid = normalize(body)
+				const expectedNoPid = normalize(expected)
 				t.is(bodyNoPid, expectedNoPid)
 
 				t.is(res.statusCode, 200)

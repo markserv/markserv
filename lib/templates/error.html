@@ -22,6 +22,10 @@
 <p><a class="button back" href="{{referer}}">Go Back</a></p>
 <footer><sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: {{pid}}</sup></footer>
 </article>
+<div class="width-control" id="width-control">
+    <span id="width-tooltip"></span>
+    <input type="range" id="width-slider" min="0" max="1920" value="978" step="1">
+</div>
 <button class="theme-toggle" id="theme-toggle" title="Toggle theme"></button>
 <script>
 (function() {
@@ -49,6 +53,93 @@
 		localStorage.setItem('markserv-theme', next);
 		applyTheme(next);
 	});
+})();
+</script>
+<script>
+(function() {
+    var slider = document.getElementById('width-slider');
+    var tooltip = document.getElementById('width-tooltip');
+    if (!slider) return;
+
+    var CSS_DEFAULT = 978;   // must match body { width } in markserv.css
+    var storageKey = 'markserv-width:' + '{{rootDir}}';
+    var stored = localStorage.getItem(storageKey);
+
+    function updateSliderMax() {
+        // Slider max = current viewport width so user can slide up to full-bleed
+        slider.max = window.innerWidth;
+    }
+
+    function applyWidth(px) {
+        if (px === CSS_DEFAULT) {
+            // Matches stylesheet default — remove inline style so CSS rules apply normally
+            document.body.style.width = '';
+        } else {
+            document.body.style.width = px + 'px';
+        }
+        slider.value = Math.min(px, parseInt(slider.max, 10));
+    }
+
+    // Initialize
+    updateSliderMax();
+    if (stored) {
+        applyWidth(parseInt(stored, 10));
+    } else {
+        // No stored value — keep the 978px stylesheet default; slider reflects it
+        slider.value = Math.min(CSS_DEFAULT, parseInt(slider.max, 10));
+    }
+
+    function positionTooltip() {
+        if (!tooltip) return;
+        var val = parseInt(slider.value, 10);
+        var min = parseInt(slider.min, 10);
+        var max = parseInt(slider.max, 10);
+        var pct = (val - min) / (max - min);
+        var sliderW = slider.offsetWidth;
+        var thumbW = 14;
+        var offset = thumbW / 2 + pct * (sliderW - thumbW);
+        tooltip.textContent = val + 'px';
+        tooltip.style.left = offset + 'px';
+        tooltip.style.transform = 'translateX(-50%)';
+    }
+
+    // Slider input → live update
+    slider.addEventListener('input', function() {
+        var val = parseInt(slider.value, 10);
+        applyWidth(val);
+        localStorage.setItem(storageKey, String(val));
+        if (tooltip) tooltip.classList.add('visible');
+        positionTooltip();
+    });
+
+    slider.addEventListener('mousedown', function() {
+        if (tooltip) tooltip.classList.add('visible');
+        positionTooltip();
+    });
+
+    window.addEventListener('mouseup', function() {
+        if (tooltip) tooltip.classList.remove('visible');
+    });
+
+    slider.addEventListener('focus', function() {
+        if (tooltip) tooltip.classList.add('visible');
+        positionTooltip();
+    });
+
+    slider.addEventListener('blur', function() {
+        if (tooltip) tooltip.classList.remove('visible');
+    });
+
+    // Double-click to reset to default width
+    slider.addEventListener('dblclick', function() {
+        applyWidth(CSS_DEFAULT);
+        localStorage.removeItem(storageKey);
+    });
+
+    // On window resize, update slider max to reflect new viewport
+    window.addEventListener('resize', function() {
+        updateSliderMax();
+    });
 })();
 </script>
 {{#if hotreload}}
