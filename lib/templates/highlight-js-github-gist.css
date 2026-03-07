@@ -173,14 +173,14 @@
   color: #36f9f6;
 }
 
-/* Solarized Dark theme */
+/* Solarized theme — Hopscotch syntax highlighting (github.com/idleberg/Hopscotch) */
 [data-theme="solarized"] .hljs {
-  background: #073642;
-  color: #839496;
+  background: #322931;
+  color: #b9b5b8;
 }
 [data-theme="solarized"] .hljs-comment,
 [data-theme="solarized"] .hljs-meta {
-  color: #586e75;
+  color: #797379;
   font-style: italic;
 }
 [data-theme="solarized"] .hljs-string,
@@ -189,25 +189,25 @@
 [data-theme="solarized"] .hljs-strong,
 [data-theme="solarized"] .hljs-emphasis,
 [data-theme="solarized"] .hljs-quote {
-  color: #2aa198;
+  color: #8fc13e;
 }
 [data-theme="solarized"] .hljs-keyword,
 [data-theme="solarized"] .hljs-selector-tag,
 [data-theme="solarized"] .hljs-type {
-  color: #6c71c4;
+  color: #c85e7c;
 }
 [data-theme="solarized"] .hljs-literal,
 [data-theme="solarized"] .hljs-symbol,
 [data-theme="solarized"] .hljs-bullet,
 [data-theme="solarized"] .hljs-attribute {
-  color: #cb4b16;
+  color: #fd8b19;
 }
 [data-theme="solarized"] .hljs-section,
 [data-theme="solarized"] .hljs-name {
-  color: #859900;
+  color: #dd464c;
 }
 [data-theme="solarized"] .hljs-tag {
-  color: #839496;
+  color: #b9b5b8;
 }
 [data-theme="solarized"] .hljs-title,
 [data-theme="solarized"] .hljs-attr,
@@ -215,29 +215,29 @@
 [data-theme="solarized"] .hljs-selector-class,
 [data-theme="solarized"] .hljs-selector-attr,
 [data-theme="solarized"] .hljs-selector-pseudo {
-  color: #268bd2;
+  color: #1290bf;
 }
 [data-theme="solarized"] .hljs-addition {
-  color: #859900;
-  background-color: #073642;
+  color: #8fc13e;
+  background-color: rgba(143, 193, 62, 0.1);
 }
 [data-theme="solarized"] .hljs-deletion {
-  color: #dc322f;
-  background-color: #073642;
+  color: #dd464c;
+  background-color: rgba(221, 70, 76, 0.1);
 }
 [data-theme="solarized"] .hljs-link {
   text-decoration: underline;
-  color: #268bd2;
+  color: #1290bf;
 }
 [data-theme="solarized"] .hljs-number {
-  color: #d33682;
+  color: #fd8b19;
 }
 [data-theme="solarized"] .hljs-built_in {
-  color: #b58900;
+  color: #fd8b19;
 }
 [data-theme="solarized"] .hljs-params {
-  color: #839496;
+  color: #b9b5b8;
 }
 [data-theme="solarized"] .hljs-regexp {
-  color: #dc322f;
+  color: #dd464c;
 }

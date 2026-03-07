@@ -23,7 +23,8 @@ test.cb('start service and get text file', t => {
 			hotreload: false,
 			address: 'localhost',
 			silent: true,
-			browser: false
+			browser: false,
+			templates: true
 		}
 
 		const done = () => {

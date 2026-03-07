@@ -122,7 +122,13 @@ Example link:
 
 ## :stopwatch: Just in Time Templating
 
-Markserv allows you to include nested content. Templates are fetched and rendered when you request them in your browser. The `maxDepth` of includes is set to `10`.
+Markserv allows you to include nested content using `--templates`. Templates are fetched and rendered when you request them in your browser. The `maxDepth` of includes is set to `10`.
+
+**Note:** Templating is disabled by default. Enable it with `--templates`:
+
+```shell
+markserv --templates README.md
+```
 
 If you would like to look at an example, you can look in the [tests/templates](tests/templates/) directory of this repo.
 
@@ -131,7 +137,7 @@ To see the server output of this templating example:
 ```shell
 $ git clone@github.com/f1lt3r/markserv.git
 $ cd markserv
-$ markserv tests/templates/index.html
+$ markserv --templates tests/templates/index.html
 ```
 
 ### Include Markdown
