@@ -144,11 +144,17 @@
 {{#if hotreload}}
 <script>
 (function() {
-	var ws, retry;
+	var ws;
+	var delay = 1000;
+	var maxDelay = 30000;
+	var maxRetries = 20;
+	var retries = 0;
+
 	function connect() {
 		ws = new WebSocket('ws://localhost:{{wsPort}}');
 		ws.onopen = function() {
-			clearInterval(retry);
+			delay = 1000;
+			retries = 0;
 			ws.send(JSON.stringify({path: location.pathname}));
 		};
 		ws.onmessage = function(e) {
@@ -156,7 +162,11 @@
 			if (el) el.innerHTML = e.data;
 		};
 		ws.onclose = function() {
-			retry = setInterval(connect, 1000);
+			if (retries < maxRetries) {
+				retries++;
+				setTimeout(connect, delay);
+				delay = Math.min(delay * 2, maxDelay);
+			}
 		};
 	}
 	connect();

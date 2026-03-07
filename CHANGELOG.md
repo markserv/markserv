@@ -3,6 +3,12 @@
 - Markserv uses [Semantic Versioning](http://semver.org/)
 - Markserv [Keeps a ChangeLog](https://keepachangelog.com/en/1.0.0/)
 
+## [1.19.1] - 2026-03-07
+
+### Fixed
+
+- WebSocket reconnection no longer overwhelms the browser when the server is stopped. Previously, `setInterval` calls stacked exponentially on disconnect, causing "not responding" hangs. Now uses `setTimeout` with exponential backoff (1s → 30s cap, max 20 retries).
+
 ## [1.19.0] - 2026-03-02
 
 ### Added
