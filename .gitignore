@@ -48,3 +48,7 @@ tmp/
 
 # CI
 .coveralls.yml
+
+# docker-compose
+files/*
+!files/.gitkeep
