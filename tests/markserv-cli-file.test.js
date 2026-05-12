@@ -1,48 +1,46 @@
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path, {dirname} from 'node:path'
+import {fileURLToPath} from 'node:url'
 import request from 'request'
 import test from 'ava'
 import getPort from 'get-port'
-import cli from '../lib/cli'
+import {run} from '../lib/cli.js'
 
-test.cb('start markserv via "cli" command opening file in same dir', t => {
-	t.plan(3)
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
-	const expected = String(
-		fs.readFileSync(
-			path.join(__dirname, 'markserv-cli-file.expected.html')
-		)
-	)
+test('start markserv via "cli" command opening file in same dir', async t => {
+
+	const expected = String(fs.readFileSync(path.join(__dirname, 'markserv-cli-file.expected.html')))
 
 	getPort().then(port => {
-		const cliOpts = {
+		const cliOptions = {
 			input: ['README.md'],
 			flags: {
 				port,
 				hotreload: false,
 				address: 'localhost',
 				silent: true,
-				browser: false
-			}
+				browser: false,
+			},
 		}
 
 		const done = () => {
-			t.end()
+
 		}
 
-		cli.run(cliOpts).then(service => {
+		run(cliOptions).then(service => {
 			const closeServer = () => {
 				service.httpServer.close(done)
 			}
 
-			const opts = {
+			const options = {
 				url: service.launchUrl,
-				timeout: 1000 * 2
+				timeout: 1000 * 2,
 			}
 
-			request(opts, (err, res, body) => {
-				if (err) {
-					t.fail(err)
+			request(options, (error, res, body) => {
+				if (error) {
+					t.fail(error)
 					closeServer()
 				}
 
@@ -54,49 +52,44 @@ test.cb('start markserv via "cli" command opening file in same dir', t => {
 			})
 		}).catch(error => {
 			t.fail(error)
-			t.end()
+
 		})
 	})
 })
 
-test.cb('start markserv via "cli" command opening file in same dir with preceeding ./', t => {
-	t.plan(3)
+test('start markserv via "cli" command opening file in same dir with preceeding ./', async t => {
 
-	const expected = String(
-		fs.readFileSync(
-			path.join(__dirname, 'markserv-cli-file.expected.html')
-		)
-	)
+	const expected = String(fs.readFileSync(path.join(__dirname, 'markserv-cli-file.expected.html')))
 
 	getPort().then(port => {
-		const cliOpts = {
+		const cliOptions = {
 			input: ['./README.md'],
 			flags: {
 				port,
 				hotreload: false,
 				address: 'localhost',
 				silent: true,
-				browser: false
-			}
+				browser: false,
+			},
 		}
 
 		const done = () => {
-			t.end()
+
 		}
 
-		cli.run(cliOpts).then(service => {
+		run(cliOptions).then(service => {
 			const closeServer = () => {
 				service.httpServer.close(done)
 			}
 
-			const opts = {
+			const options = {
 				url: service.launchUrl,
-				timeout: 1000 * 2
+				timeout: 1000 * 2,
 			}
 
-			request(opts, (err, res, body) => {
-				if (err) {
-					t.fail(err)
+			request(options, (error, res, body) => {
+				if (error) {
+					t.fail(error)
 					closeServer()
 				}
 
@@ -108,7 +101,7 @@ test.cb('start markserv via "cli" command opening file in same dir with preceedi
 			})
 		}).catch(error => {
 			t.fail(error)
-			t.end()
+
 		})
 	})
 })

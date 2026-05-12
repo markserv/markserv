@@ -1,12 +1,14 @@
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path, {dirname} from 'node:path'
+import {fileURLToPath} from 'node:url'
 import request from 'request'
 import test from 'ava'
 import getPort from 'get-port'
-import markserv from '../lib/server'
+import {init} from '../lib/server.js'
 
-test.cb('start service and get text file', t => {
-	t.plan(3)
+const __dirname = dirname(fileURLToPath(import.meta.url))
+
+test('start service and get text file', async t => {
 
 	const expected = String(
 		fs.readFileSync(
@@ -14,50 +16,53 @@ test.cb('start service and get text file', t => {
 		)
 	)
 
-	const dir = path.join(__dirname)
+	const dir = path.join(__dirname, '..')
 
-	getPort().then(port => {
-		const flags = {
-			port,
-			dir,
-			hotreload: false,
-			address: 'localhost',
-			silent: true,
-			browser: false,
-			templates: true
-		}
+	const port = await getPort()
 
-		const done = () => {
-			t.end()
-		}
+	const flags = {
+		dir,
+		port,
+		hotreload: false,
+		address: 'localhost',
+		silent: true
+	}
 
-		markserv.init(flags).then(service => {
-			const closeServer = () => {
-				service.httpServer.close(done)
-			}
+	const service = await init(flags)
 
-			const opts = {
-				url: `http://localhost:${port}/implant-file.render-fixture.md`,
-				timeout: 1000 * 2
-			}
+	const closeServer = () => {
+		service.httpServer.close()
+	}
 
-			request(opts, (err, res, body) => {
-				if (err) {
-					t.fail(err)
-					closeServer()
-				}
+	const opts = {
+		url: `http://localhost:${port}/implant-file.render-fixture.md`,
+		timeout: 1000 * 2
+	}
 
-				// Write expected:
-				// fs.writeFileSync(path.join(__dirname, 'implant-file.expected.html'), body)
+	await new Promise((resolve, reject) => {
+		request(opts, (err, res, body) => {
+			if (err) {
+				t.fail(err)
+				closeServer()
+				reject(err)
+			} else {
+				const normalize = text => text.replace(/PID: \d+</, 'PID: N/A<')
+					.replace(/markserv-width:' \+ '.*?'/, 'markserv-width:\' + \'\'')
+				const bodyNoPid = normalize(body)
+				const expectedNoPid = normalize(expected)
+				t.is(bodyNoPid, expectedNoPid)
 
-				t.true(body.includes(expected))
 				t.is(res.statusCode, 200)
 				t.pass()
 				closeServer()
-			})
+				resolve()
+			}
+		})
+	})
+})
 		}).catch(error => {
 			t.fail(error)
-			t.end()
+
 		})
 	})
 })

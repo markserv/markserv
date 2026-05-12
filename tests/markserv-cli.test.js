@@ -1,48 +1,46 @@
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path, {dirname} from 'node:path'
+import {fileURLToPath} from 'node:url'
 import request from 'request'
 import test from 'ava'
 import getPort from 'get-port'
-import readme from '../lib/readme'
+import {run} from '../lib/readme.js'
 
-test.cb('start markserv via "readme" command', t => {
-	t.plan(3)
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
-	const expected = String(
-		fs.readFileSync(
-			path.join(__dirname, 'markserv-cli.expected.html')
-		)
-	)
+test('start markserv via "readme" command', async t => {
+
+	const expected = String(fs.readFileSync(path.join(__dirname, 'markserv-cli.expected.html')))
 
 	getPort().then(port => {
-		const cliOpts = {
+		const cliOptions = {
 			input: [],
 			flags: {
 				port,
 				hotreload: false,
 				address: 'localhost',
 				silent: true,
-				browser: false
-			}
+				browser: false,
+			},
 		}
 
 		const done = () => {
-			t.end()
+	
 		}
 
-		readme.run(cliOpts).then(service => {
+		run(cliOptions).then(service => {
 			const closeServer = () => {
 				service.httpServer.close(done)
 			}
 
-			const opts = {
+			const options = {
 				url: service.launchUrl,
-				timeout: 1000 * 2
+				timeout: 1000 * 2,
 			}
 
-			request(opts, (err, res, body) => {
-				if (err) {
-					t.fail(err)
+			request(options, (error, res, body) => {
+				if (error) {
+					t.fail(error)
 					closeServer()
 				}
 
@@ -54,7 +52,7 @@ test.cb('start markserv via "readme" command', t => {
 			})
 		}).catch(error => {
 			t.fail(error)
-			t.end()
+	
 		})
 	})
 })

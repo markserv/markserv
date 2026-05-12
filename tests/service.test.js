@@ -1,12 +1,14 @@
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path, {dirname} from 'node:path'
+import {fileURLToPath} from 'node:url'
 import request from 'request'
 import test from 'ava'
 import getPort from 'get-port'
-import markserv from '../lib/server'
+import {init} from '../lib/server.js'
 
-test.cb('start service and receive tables markdown', t => {
-	t.plan(3)
+const __dirname = dirname(fileURLToPath(import.meta.url))
+
+test('start service and receive tables markdown', async t => {
 
 	const expected = String(
 		fs.readFileSync(
@@ -16,38 +18,34 @@ test.cb('start service and receive tables markdown', t => {
 
 	const dir = path.join(__dirname, '..')
 
-	getPort().then(port => {
-		const flags = {
-			dir,
-			port,
-			hotreload: false,
-			address: 'localhost',
-			silent: true
-		}
+	const port = await getPort()
 
-		const done = () => {
-			t.end()
-		}
+	const flags = {
+		dir,
+		port,
+		hotreload: false,
+		address: 'localhost',
+		silent: true
+	}
 
-		markserv.init(flags).then(service => {
-			const closeServer = () => {
-				service.httpServer.close(done)
-			}
+	const service = await init(flags)
 
-			const opts = {
-				url: `http://localhost:${port}/tests/tables.md`,
-				timeout: 1000 * 2
-			}
+	const closeServer = () => {
+		service.httpServer.close()
+	}
 
-			request(opts, (err, res, body) => {
-				if (err) {
-					t.fail(err)
-					closeServer()
-				}
+	const opts = {
+		url: `http://localhost:${port}/tests/tables.md`,
+		timeout: 1000 * 2
+	}
 
-				// // Write expected:
-				// fs.writeFileSync(path.join(__dirname, 'service.expected.html'), body)
-
+	await new Promise((resolve, reject) => {
+		request(opts, (err, res, body) => {
+			if (err) {
+				t.fail(err)
+				closeServer()
+				reject(err)
+			} else {
 				const normalize = text => text.replace(/PID: \d+</, 'PID: N/A<')
 					.replace(/markserv-width:' \+ '.*?'/, 'markserv-width:\' + \'\'')
 				const bodyNoPid = normalize(body)
@@ -57,7 +55,11 @@ test.cb('start service and receive tables markdown', t => {
 				t.is(res.statusCode, 200)
 				t.pass()
 				closeServer()
-			})
+				resolve()
+			}
+		})
+	})
+})
 		}).catch(error => {
 			t.fail(error)
 			t.end()

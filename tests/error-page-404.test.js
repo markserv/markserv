@@ -1,18 +1,16 @@
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path, {dirname} from 'node:path'
+import {fileURLToPath} from 'node:url'
 import request from 'request'
 import test from 'ava'
 import getPort from 'get-port'
-import markserv from '../lib/server'
+import {init} from '../lib/server.js'
 
-test.cb('start service and receive error page (404)', t => {
-	t.plan(3)
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
-	const expected = String(
-		fs.readFileSync(
-			path.join(__dirname, 'error-page-404.expected.html')
-		)
-	)
+test('start service and receive error page (404)', async t => {
+
+	const expected = String(fs.readFileSync(path.join(__dirname, 'error-page-404.expected.html')))
 
 	const dir = path.join(__dirname, '..')
 
@@ -22,39 +20,37 @@ test.cb('start service and receive error page (404)', t => {
 			port,
 			hotreload: false,
 			address: 'localhost',
-			silent: true
+			silent: true,
 		}
 
 		const done = () => {
-			t.end()
+
 		}
 
-		markserv.init(flags).then(service => {
+		init(flags).then(service => {
 			const closeServer = () => {
 				service.httpServer.close(done)
 			}
 
-			const opts = {
+			const options = {
 				url: `http://localhost:${port}/beep/boop/bwwwaaaaahhhggg`,
-				timeout: 1000 * 2
+				timeout: 1000 * 2,
 			}
 
-			request(opts, (err, res, body) => {
-				if (err) {
-					t.fail(err)
+			request(options, (error, res, body) => {
+				if (error) {
+					t.fail(error)
 					closeServer()
 				}
 
 				// // Write expected:
 				// fs.writeFileSync(path.join(__dirname, 'service.expected.html'), body)
 
-				const sanitize = text => {
-					return text.replace(/PID: \d+</, 'PID: N/A<')
-						.replace(/<p class="errorMsg">(.*?)<\/p>/, '')
-						.replace(/<pre>(.*?)<\/pre>/s, '')
-						.replace(/<title>404: (.*?)\/markserv\/beep\/boop\/bwwwaaaaahhhggg<\/title>/, '')
-						.replace(/markserv-width:' \+ '.*?'/, 'markserv-width:\' + \'\'')
-				}
+				const sanitize = text => text.replace(/PID: \d+</, 'PID: N/A<')
+					.replace(/<p class="errorMsg">(.*?)<\/p>/, '')
+					.replace(/<pre>(.*?)<\/pre>/s, '')
+					.replace(/<title>404: (.*?)\/markserv\/beep\/boop\/bwwwaaaaahhhggg<\/title>/, '')
+					.replace(/markserv-width:' \+ '.*?'/, 'markserv-width:\' + \'\'')
 
 				const bodyNonVariable = sanitize(body)
 				const expectedNonVariable = sanitize(expected)
@@ -67,7 +63,7 @@ test.cb('start service and receive error page (404)', t => {
 			})
 		}).catch(error => {
 			t.fail(error)
-			t.end()
+
 		})
 	})
 })

@@ -1,18 +1,16 @@
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path, {dirname} from 'node:path'
+import {fileURLToPath} from 'node:url'
 import request from 'request'
 import test from 'ava'
 import getPort from 'get-port'
-import markserv from '../lib/server'
+import {init} from '../lib/server.js'
 
-test.cb('start service and get directory listing', t => {
-	t.plan(3)
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
-	const expected = String(
-		fs.readFileSync(
-			path.join(__dirname, 'dir.expected.html')
-		)
-	)
+test('start service and get directory listing', async t => {
+
+	const expected = String(fs.readFileSync(path.join(__dirname, 'dir.expected.html')))
 
 	const dir = path.join(__dirname, '..')
 
@@ -22,26 +20,26 @@ test.cb('start service and get directory listing', t => {
 			dir,
 			hotreload: false,
 			address: 'localhost',
-			silent: true
+			silent: true,
 		}
 
 		const done = () => {
-			t.end()
+
 		}
 
-		markserv.init(flags).then(service => {
+		init(flags).then(service => {
 			const closeServer = () => {
 				service.httpServer.close(done)
 			}
 
-			const opts = {
+			const options = {
 				url: `http://localhost:${port}/tests/testdir/`,
-				timeout: 1000 * 2
+				timeout: 1000 * 2,
 			}
 
-			request(opts, (err, res, body) => {
-				if (err) {
-					t.fail(err)
+			request(options, (error, res, body) => {
+				if (error) {
+					t.fail(error)
 					closeServer()
 				}
 
@@ -59,7 +57,7 @@ test.cb('start service and get directory listing', t => {
 			})
 		}).catch(error => {
 			t.fail(error)
-			t.end()
+
 		})
 	})
 })
