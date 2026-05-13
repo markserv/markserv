@@ -1,18 +1,17 @@
-import fs from 'node:fs'
-import path, {dirname} from 'node:path'
-import {fileURLToPath} from 'node:url'
-import request from 'request'
-import test from 'ava'
-import getPort from 'get-port'
-import {init} from '../lib/server.js'
+import fs from 'node:fs';
+import path, {dirname} from 'node:path';
+import {fileURLToPath} from 'node:url';
+import request from 'request';
+import test from 'ava';
+import getPort from 'get-port';
+import {init} from '../lib/server.js';
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 test('start service and receive error page (404)', async t => {
+	const expected = String(fs.readFileSync(path.join(__dirname, 'error-page-404.expected.html')));
 
-	const expected = String(fs.readFileSync(path.join(__dirname, 'error-page-404.expected.html')))
-
-	const dir = path.join(__dirname, '..')
+	const dir = path.join(__dirname, '..');
 
 	getPort().then(port => {
 		const flags = {
@@ -21,26 +20,25 @@ test('start service and receive error page (404)', async t => {
 			hotreload: false,
 			address: 'localhost',
 			silent: true,
-		}
+		};
 
 		const done = () => {
-
-		}
+};
 
 		init(flags).then(service => {
 			const closeServer = () => {
-				service.httpServer.close(done)
-			}
+				service.httpServer.close(done);
+			};
 
 			const options = {
 				url: `http://localhost:${port}/beep/boop/bwwwaaaaahhhggg`,
 				timeout: 1000 * 2,
-			}
+			};
 
 			request(options, (error, res, body) => {
 				if (error) {
-					t.fail(error)
-					closeServer()
+					t.fail(error);
+					closeServer();
 				}
 
 				// // Write expected:
@@ -50,20 +48,19 @@ test('start service and receive error page (404)', async t => {
 					.replace(/<p class="errorMsg">(.*?)<\/p>/, '')
 					.replace(/<pre>(.*?)<\/pre>/s, '')
 					.replace(/<title>404: (.*?)\/markserv\/beep\/boop\/bwwwaaaaahhhggg<\/title>/, '')
-					.replace(/markserv-width:' \+ '.*?'/, 'markserv-width:\' + \'\'')
+					.replace(/markserv-width:' \+ '.*?'/, 'markserv-width:\' + \'\'');
 
-				const bodyNonVariable = sanitize(body)
-				const expectedNonVariable = sanitize(expected)
+				const bodyNonVariable = sanitize(body);
+				const expectedNonVariable = sanitize(expected);
 
-				t.is(bodyNonVariable, expectedNonVariable)
+				t.is(bodyNonVariable, expectedNonVariable);
 
-				t.is(res.statusCode, 200)
-				t.pass()
-				closeServer()
-			})
+				t.is(res.statusCode, 200);
+				t.pass();
+				closeServer();
+			});
 		}).catch(error => {
-			t.fail(error)
-
-		})
-	})
-})
+			t.fail(error);
+		});
+	});
+});

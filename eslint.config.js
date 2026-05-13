@@ -1,4 +1,4 @@
-import eslintConfigXo from 'eslint-config-xo'
+import eslintConfigXo from 'eslint-config-xo';
 
 export default [
 
@@ -30,10 +30,10 @@ export default [
 
 			'@stylistic/comma-dangle': 'off',
 
-			'json/no-empty-keys': 'off'
+			'json/no-empty-keys': 'off',
 
-		}
+		},
 
-	}
+	},
 
-]
+];
