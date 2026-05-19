@@ -5,9 +5,7 @@
   "preferGlobal": true,
   "type": "module",
   "scripts": {
-    "test": "eslint . && npm run cover",
-    "cover": "nyc --reporter=lcov --reporter=html --reporter=text ava",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls -v"
+    "test": "eslint . && ava"
   },
   "keywords": [
     "code",
@@ -96,12 +94,10 @@
   "devDependencies": {
     "all-contributors-cli": "^6.11.2",
     "ava": "^4.0.0",
-    "coveralls": "^3.0.9",
     "eslint": "^10.3.0",
     "eslint-config-xo": "^0.51.0",
     "eslint-plugin-n": "^18.0.1",
     "husky": "^8.0.0",
-    "nyc": "^15.1.0",
     "request": "^2.88.0",
     "xo": "^2.0.2"
   },
