@@ -5,6 +5,7 @@
   "preferGlobal": true,
   "type": "module",
   "scripts": {
+    "prepare": "husky",
     "test": "eslint . && ava"
   },
   "keywords": [
