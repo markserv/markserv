@@ -76,7 +76,6 @@
     "emoji-regex": "^8.0.0",
     "get-port": "^5.1.0",
     "handlebars": "^4.5.3",
-    "implant": "^2.0.3",
     "is-online": "^8.2.1",
     "less": "^3.10.3",
     "markdown-it": "^14.1.0",
