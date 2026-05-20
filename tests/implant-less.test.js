@@ -38,14 +38,13 @@ test('start service and get text file', async t => {
 
 			axios(options)
 				.then(response => {
-					const res = response;
 					const body = response.data;
 
 					// Write expected:
 					fs.writeFileSync(path.join(__dirname, 'implant-less.expected.html'), body);
 
 					t.true(body.includes(expected));
-					t.is(res.status, 200);
+					t.is(response.status, 200);
 					t.pass();
 					closeServer();
 				})

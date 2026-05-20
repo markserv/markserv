@@ -37,12 +37,11 @@ test('start markserv via "cli" command opening file in same dir', async t => {
 
 			axios(options)
 				.then(response => {
-					const res = response;
 					const body = response.data;
 
 					t.true(body.includes(expected));
 
-					t.is(res.status, 200);
+					t.is(response.status, 200);
 					t.pass();
 					closeServer();
 				})
@@ -85,12 +84,11 @@ test('start markserv via "cli" command opening file in same dir with preceeding 
 
 			axios(options)
 				.then(response => {
-					const res = response;
 					const body = response.data;
 
 					t.true(body.includes(expected));
 
-					t.is(res.status, 200);
+					t.is(response.status, 200);
 					t.pass();
 					closeServer();
 				})

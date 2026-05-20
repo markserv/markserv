@@ -36,7 +36,6 @@ test('start service and receive error page (404)', async t => {
 
 			axios(options)
 				.then(response => {
-					const res = response;
 					const body = response.data;
 
 					// // Write expected:
@@ -52,7 +51,7 @@ test('start service and receive error page (404)', async t => {
 
 					t.is(bodyNonVariable, expectedNonVariable);
 
-					t.is(res.status, 200);
+					t.is(response.status, 200);
 					t.pass();
 					closeServer();
 				})

@@ -39,12 +39,11 @@ test('start markserv via "readme" command', async t => {
 
 			axios(options)
 				.then(response => {
-					const res = response;
 					const body = response.data;
 
 					t.true(body.includes(expected));
 
-					t.is(res.status, 200);
+					t.is(response.status, 200);
 					t.pass();
 					closeServer();
 				})

@@ -36,7 +36,6 @@ test('start service and get directory listing', async t => {
 
 			axios(options)
 				.then(response => {
-					const res = response;
 					const body = response.data;
 
 					// // Write expected:
@@ -47,7 +46,7 @@ test('start service and get directory listing', async t => {
 					const bodyNoPid = normalize(body);
 					const expectedNoPid = normalize(expected);
 					t.is(bodyNoPid, expectedNoPid);
-					t.is(res.status, 200);
+					t.is(response.status, 200);
 					t.pass();
 					closeServer();
 				})
