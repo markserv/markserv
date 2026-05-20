@@ -1,12 +1,12 @@
 import fs from 'node:fs';
-import path, {dirname} from 'node:path';
+import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import axios from 'axios';
 import test from 'ava';
 import getPort from 'get-port';
 import {init} from '../lib/server.js';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 test('start service and get directory listing', async t => {
 	const expected = String(fs.readFileSync(path.join(__dirname, 'dir.expected.html')));
@@ -22,8 +22,7 @@ test('start service and get directory listing', async t => {
 			silent: true,
 		};
 
-		const done = () => {
-};
+		const done = () => {};
 
 		init(flags).then(service => {
 			const closeServer = () => {
@@ -43,8 +42,8 @@ test('start service and get directory listing', async t => {
 					// // Write expected:
 					// fs.writeFileSync(path.join(__dirname, 'dir.expected.html'), body)
 
-					const normalize = text => text.replace(/PID: \d+</, 'PID: N/A<')
-						.replace(/markserv-width:' \+ '.*?'/, 'markserv-width:\' + \'\'');
+					const normalize = text => text.replace(/PID: \d+</v, 'PID: N/A<')
+						.replace(/markserv-width:' \+ '.*?'/v, 'markserv-width:\' + \'\'');
 					const bodyNoPid = normalize(body);
 					const expectedNoPid = normalize(expected);
 					t.is(bodyNoPid, expectedNoPid);

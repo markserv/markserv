@@ -1,9 +1,9 @@
-import path, {dirname} from 'node:path';
+import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import test from 'ava';
 import {getFile, markdownToHTML} from '../lib/server.js';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 test('markdown tables', async t => {
 	const markdown = await getFile(path.join(__dirname, 'tables.md'));

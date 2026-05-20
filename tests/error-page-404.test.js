@@ -1,12 +1,12 @@
 import fs from 'node:fs';
-import path, {dirname} from 'node:path';
+import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import axios from 'axios';
 import test from 'ava';
 import getPort from 'get-port';
 import {init} from '../lib/server.js';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 test('start service and receive error page (404)', async t => {
 	const expected = String(fs.readFileSync(path.join(__dirname, 'error-page-404.expected.html')));
@@ -22,8 +22,7 @@ test('start service and receive error page (404)', async t => {
 			silent: true,
 		};
 
-		const done = () => {
-};
+		const done = () => {};
 
 		init(flags).then(service => {
 			const closeServer = () => {
@@ -43,11 +42,11 @@ test('start service and receive error page (404)', async t => {
 					// // Write expected:
 					// fs.writeFileSync(path.join(__dirname, 'service.expected.html'), body)
 
-					const sanitize = text => text.replace(/PID: \d+</, 'PID: N/A<')
-						.replace(/<p class="errorMsg">(.*?)<\/p>/, '')
-						.replace(/<pre>(.*?)<\/pre>/s, '')
-						.replace(/<title>404: (.*?)\/markserv\/beep\/boop\/bwwwaaaaahhhggg<\/title>/, '')
-						.replace(/markserv-width:' \+ '.*?'/, 'markserv-width:\' + \'\'');
+					const sanitize = text => text.replace(/PID: \d+</v, 'PID: N/A<')
+						.replace(/<p class="errorMsg">(.*?)<\/p>/v, '')
+						.replace(/<pre>(.*?)<\/pre>/sv, '')
+						.replace(/<title>404: (.*?)\/markserv\/beep\/boop\/bwwwaaaaahhhggg<\/title>/v, '')
+						.replace(/markserv-width:' \+ '.*?'/v, 'markserv-width:\' + \'\'');
  
 					const bodyNonVariable = sanitize(body);
 					const expectedNonVariable = sanitize(expected);

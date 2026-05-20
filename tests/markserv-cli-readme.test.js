@@ -1,12 +1,12 @@
 import fs from 'node:fs';
-import path, {dirname} from 'node:path';
+import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import axios from 'axios';
 import test from 'ava';
 import getPort from 'get-port';
 import {run} from '../lib/readme.js';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 test('start markserv via "readme" command', async t => {
 	const expected = String(fs.readFileSync(path.join(__dirname, 'markserv-cli-readme.expected.html')));
@@ -25,8 +25,7 @@ test('start markserv via "readme" command', async t => {
 			},
 		};
 
-		const done = () => {
-};
+		const done = () => {};
 
 		run(cliOptions).then(service => {
 			const closeServer = () => {
