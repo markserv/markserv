@@ -22,7 +22,7 @@ test('start service and get directory listing', async t => {
 			silent: true,
 		};
 
-		const done = () => {};
+		const done = () => undefined;
 
 		init(flags).then(service => {
 			const closeServer = () => {

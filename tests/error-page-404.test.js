@@ -22,7 +22,7 @@ test('start service and receive error page (404)', async t => {
 			silent: true,
 		};
 
-		const done = () => {};
+		const done = () => undefined;
 
 		init(flags).then(service => {
 			const closeServer = () => {
@@ -47,7 +47,6 @@ test('start service and receive error page (404)', async t => {
 						.replace(/<pre>(.*?)<\/pre>/sv, '')
 						.replace(/<title>404: (.*?)\/markserv\/beep\/boop\/bwwwaaaaahhhggg<\/title>/v, '')
 						.replace(/markserv-width:' \+ '.*?'/v, 'markserv-width:\' + \'\'');
- 
 					const bodyNonVariable = sanitize(body);
 					const expectedNonVariable = sanitize(expected);
 

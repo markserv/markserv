@@ -23,7 +23,7 @@ test('start markserv via "cli" command opening file in different dir', async t =
 			},
 		};
 
-		const done = () => {};
+		const done = () => undefined;
 
 		run(cliOptions).then(service => {
 			const closeServer = () => {
@@ -71,7 +71,7 @@ test('start markserv via "cli" command opening file in different dir with precee
 			},
 		};
 
-		const done = () => {};
+		const done = () => undefined;
 
 		run(cliOptions).then(service => {
 			const closeServer = () => {

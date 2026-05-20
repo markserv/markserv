@@ -25,7 +25,7 @@ test('start markserv via "readme" command', async t => {
 			},
 		};
 
-		const done = () => {};
+		const done = () => undefined;
 
 		run(cliOptions).then(service => {
 			const closeServer = () => {

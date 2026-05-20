@@ -24,7 +24,7 @@ test('start service and get text file', async t => {
 			templates: true,
 		};
 
-		const done = () => {};
+		const done = () => undefined;
 
 		init(flags).then(service => {
 			const closeServer = () => {
