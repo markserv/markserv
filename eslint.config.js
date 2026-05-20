@@ -1,6 +1,6 @@
 import eslintConfigXo from 'eslint-config-xo';
 
-export default [
+const xoConfig = [
 
 	...eslintConfigXo({semicolon: false}),
 
@@ -37,3 +37,5 @@ export default [
 	},
 
 ];
+
+export default xoConfig;
