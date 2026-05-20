@@ -27,12 +27,13 @@ test('start service and get text file', async t => {
 	const done = () => undefined;
 
 	const service = await init(flags);
+	const actualPort = service.httpServer.address().port;
 	const closeServer = () => {
 		service.httpServer.close(done);
 	};
 
 	const options = {
-		url: `http://localhost:${port}/implant-less.render-fixture.html`,
+		url: `http://localhost:${actualPort}/implant-less.render-fixture.html`,
 		timeout: 1000 * 2,
 	};
 
@@ -40,10 +41,12 @@ test('start service and get text file', async t => {
 	try {
 		response = await axios(options);
 	} catch (error) {
-		t.fail(error);
+		// eslint-disable-next-line ava/no-conditional-assertion, ava/assertion-arguments
+		t.fail(String(error));
 		closeServer();
 		return;
 	}
+
 	const body = response.data;
 
 	// Write expected:

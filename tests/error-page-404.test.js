@@ -25,12 +25,13 @@ test('start service and receive error page (404)', async t => {
 	const done = () => undefined;
 
 	const service = await init(flags);
+	const actualPort = service.httpServer.address().port;
 	const closeServer = () => {
 		service.httpServer.close(done);
 	};
 
 	const options = {
-		url: `http://localhost:${port}/beep/boop/bwwwaaaaahhhggg`,
+		url: `http://localhost:${actualPort}/beep/boop/bwwwaaaaahhhggg`,
 		timeout: 1000 * 2,
 	};
 
@@ -38,10 +39,12 @@ test('start service and receive error page (404)', async t => {
 	try {
 		response = await axios(options);
 	} catch (error) {
-		t.fail(error);
+		// eslint-disable-next-line ava/no-conditional-assertion, ava/assertion-arguments
+		t.fail(String(error));
 		closeServer();
 		return;
 	}
+
 	const body = response.data;
 
 	// // Write expected:

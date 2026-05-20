@@ -39,10 +39,12 @@ test('start markserv via "cli" command opening file in same dir', async t => {
 	try {
 		response = await axios(options);
 	} catch (error) {
-		t.fail(error);
+		// eslint-disable-next-line ava/no-conditional-assertion, ava/assertion-arguments
+		t.fail(String(error));
 		closeServer();
 		return;
 	}
+
 	const body = response.data;
 
 	t.true(body.includes(expected));
@@ -82,10 +84,12 @@ test('start markserv via "cli" command opening file in same dir with preceeding 
 	try {
 		response = await axios(options);
 	} catch (error) {
-		t.fail(error);
+		// eslint-disable-next-line ava/no-conditional-assertion, ava/assertion-arguments
+		t.fail(String(error));
 		closeServer();
 		return;
 	}
+
 	const body = response.data;
 
 	t.true(body.includes(expected));

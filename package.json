@@ -99,6 +99,7 @@
     "xo": "^2.0.2"
   },
   "ava": {
-    "failfast": true
+    "failfast": true,
+    "serial": true
   }
 }
