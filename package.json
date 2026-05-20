@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "prepare": "husky",
-    "test": "xo && ava"
+    "test": "xo && ava",
+    "cover": "node scripts/c8.cjs --reporter=lcov --reporter=html --reporter=text ava"
   },
   "keywords": [
     "code",
@@ -92,6 +93,7 @@
     "all-contributors-cli": "^6.11.2",
     "ava": "^4.0.0",
     "axios": "^1.16.1",
+    "c8": "^9.1.0",
     "eslint": "^10.3.0",
     "eslint-config-xo": "^0.51.0",
     "eslint-plugin-n": "^18.0.1",
