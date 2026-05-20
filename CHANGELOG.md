@@ -8,14 +8,14 @@
 ### Added
 
 - `--browser` CLI flag.
-- `npm run cover` using c8.
+- `npm run cover` using nyc.
 - Favicon for apple-touch-icon requests.
 
 ### Changed
 
 - Full ESM migration (`"type": "module"`).
 - Replaced `implant` with custom helper.
-- Switched coverage from nyc/coveralls to c8.
+- Switched coverage from coveralls to nyc.
 - Husky v8+ via `prepare` script.
 - Test script uses `xo && ava`.
 - Updated dependencies (chalk 5, markdown-it 14, meow 13, open 10, ws 8, etc.).
@@ -26,7 +26,7 @@
 
 ### Removed
 
-- Obsolete coveralls/nyc scripts and husky v4 config.
+- Obsolete coveralls scripts and husky v4 config.
 
 ## [1.19.1] - 2026-03-07
 
