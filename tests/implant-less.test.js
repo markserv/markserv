@@ -13,47 +13,43 @@ test('start service and get text file', async t => {
 
 	const dir = path.join(__dirname);
 
-	getPort().then(port => {
-		const flags = {
-			port,
-			dir,
-			hotreload: false,
-			address: 'localhost',
-			silent: true,
-			browser: false,
-			templates: true,
-		};
+	const port = await getPort();
+	const flags = {
+		port,
+		dir,
+		hotreload: false,
+		address: 'localhost',
+		silent: true,
+		browser: false,
+		templates: true,
+	};
 
-		const done = () => undefined;
+	const done = () => undefined;
 
-		init(flags).then(service => {
-			const closeServer = () => {
-				service.httpServer.close(done);
-			};
+	const service = await init(flags);
+	const closeServer = () => {
+		service.httpServer.close(done);
+	};
 
-			const options = {
-				url: `http://localhost:${port}/implant-less.render-fixture.html`,
-				timeout: 1000 * 2,
-			};
+	const options = {
+		url: `http://localhost:${port}/implant-less.render-fixture.html`,
+		timeout: 1000 * 2,
+	};
 
-			axios(options)
-				.then(response => {
-					const body = response.data;
+	let response;
+	try {
+		response = await axios(options);
+	} catch (error) {
+		t.fail(error);
+		closeServer();
+		return;
+	}
+	const body = response.data;
 
-					// Write expected:
-					fs.writeFileSync(path.join(__dirname, 'implant-less.expected.html'), body);
+	// Write expected:
+	fs.writeFileSync(path.join(__dirname, 'implant-less.expected.html'), body);
 
-					t.true(body.includes(expected));
-					t.is(response.status, 200);
-					t.pass();
-					closeServer();
-				})
-				.catch(error => {
-					t.fail(error);
-					closeServer();
-				});
-		}).catch(error => {
-			t.fail(error);
-		});
-	});
+	t.true(body.includes(expected));
+	t.is(response.status, 200);
+	closeServer();
 });

@@ -11,48 +11,44 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 test('start markserv via "readme" command', async t => {
 	const expected = String(fs.readFileSync(path.join(__dirname, 'markserv-cli-readme-dir-down.expected.html')));
 
-	getPort().then(port => {
-		const dir = path.join(__dirname, '..');
+	const port = await getPort();
+	const dir = path.join(__dirname, '..');
 
-		const cliOptions = {
-			input: [dir],
-			flags: {
-				port,
-				hotreload: false,
-				address: 'localhost',
-				silent: true,
-				browser: false,
-			},
-		};
+	const cliOptions = {
+		input: [dir],
+		flags: {
+			port,
+			hotreload: false,
+			address: 'localhost',
+			silent: true,
+			browser: false,
+		},
+	};
 
-		const done = () => undefined;
+	const done = () => undefined;
 
-		run(cliOptions).then(service => {
-			const closeServer = () => {
-				service.httpServer.close(done);
-			};
+	const service = await run(cliOptions);
+	const closeServer = () => {
+		service.httpServer.close(done);
+	};
 
-			const options = {
-				url: service.launchUrl,
-				timeout: 1000 * 2,
-			};
+	const options = {
+		url: service.launchUrl,
+		timeout: 1000 * 2,
+	};
 
-			axios(options)
-				.then(response => {
-					const body = response.data;
+	let response;
+	try {
+		response = await axios(options);
+	} catch (error) {
+		t.fail(error);
+		closeServer();
+		return;
+	}
+	const body = response.data;
 
-					t.true(body.includes(expected));
+	t.true(body.includes(expected));
 
-					t.is(response.status, 200);
-					t.pass();
-					closeServer();
-				})
-				.catch(error => {
-					t.fail(error);
-					closeServer();
-				});
-		}).catch(error => {
-			t.fail(error);
-		});
-	});
+	t.is(response.status, 200);
+	closeServer();
 });
