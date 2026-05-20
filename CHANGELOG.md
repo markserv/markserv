@@ -3,6 +3,31 @@
 - Markserv uses [Semantic Versioning](http://semver.org/)
 - Markserv [Keeps a ChangeLog](https://keepachangelog.com/en/1.0.0/)
 
+## [1.20.0] - 2026-05-20
+
+### Added
+
+- `--browser` CLI flag.
+- `npm run cover` using c8.
+- Favicon for apple-touch-icon requests.
+
+### Changed
+
+- Full ESM migration (`"type": "module"`).
+- Replaced `implant` with custom helper.
+- Switched coverage from nyc/coveralls to c8.
+- Husky v8+ via `prepare` script.
+- Test script uses `xo && ava`.
+- Updated dependencies (chalk 5, markdown-it 14, meow 13, open 10, ws 8, etc.).
+- Removed unused deps (commander, micromatch, mime, snyk, etc.).
+- Port auto-selection in [preferredPort, preferredPort+249].
+- Chalk output and npx symlink fixes.
+- Extensive lint and code quality fixes.
+
+### Removed
+
+- Obsolete coveralls/nyc scripts and husky v4 config.
+
 ## [1.19.1] - 2026-03-07
 
 ### Fixed
