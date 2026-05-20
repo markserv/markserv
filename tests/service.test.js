@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path, {dirname} from 'node:path'
 import {fileURLToPath} from 'node:url'
-import request from 'request'
+import axios from 'axios'
 import test from 'ava'
 import getPort from 'get-port'
 import {init} from '../lib/server.js'
@@ -39,26 +39,21 @@ test('start service and receive tables markdown', async t => {
 		timeout: 1000 * 2
 	}
 
-	await new Promise((resolve, reject) => {
-		request(opts, (err, res, body) => {
-			if (err) {
-				t.fail(err)
-				closeServer()
-				reject(err)
-			} else {
-				const normalize = text => text.replace(/PID: \d+</, 'PID: N/A<')
-					.replace(/markserv-width:' \+ '.*?'/, 'markserv-width:\' + \'\'')
-				const bodyNoPid = normalize(body)
-				const expectedNoPid = normalize(expected)
-				t.is(bodyNoPid, expectedNoPid)
+	try {
+		const response = await axios(opts)
+		const normalize = text => text.replace(/PID: \d+</, 'PID: N/A<')
+			.replace(/markserv-width:' \+ '.*?'/, 'markserv-width:\' + \'\'')
+		const bodyNoPid = normalize(response.data)
+		const expectedNoPid = normalize(expected)
+		t.is(bodyNoPid, expectedNoPid)
 
-				t.is(res.statusCode, 200)
-				t.pass()
-				closeServer()
-				resolve()
-			}
-		})
-	})
+		t.is(response.status, 200)
+		t.pass()
+		closeServer()
+	} catch (err) {
+		t.fail(err)
+		closeServer()
+	}
 })
 		}).catch(error => {
 			t.fail(error)

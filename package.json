@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "prepare": "husky",
-    "test": "eslint . && ava"
+    "test": "xo && ava"
   },
   "keywords": [
     "code",
@@ -67,15 +67,12 @@
     "url": "http://github.com/markserv/markserv.git"
   },
   "dependencies": {
-    "analyze-deps": "^2.0.0",
-    "bluebird": "^3.7.2",
     "chalk": "^5.6.2",
     "connect": "^3.7.0",
     "deepmerge": "^4.2.2",
     "emoji-regex": "^8.0.0",
     "get-port": "^5.1.0",
     "handlebars": "^4.5.3",
-    "is-online": "^8.2.1",
     "less": "^3.10.3",
     "markdown-it": "^14.1.0",
     "markdown-it-anchor": "^5.2.5",
@@ -87,7 +84,6 @@
     "markdown-it-task-lists": "^2.1.1",
     "meow": "^13.0.0",
     "open": "^10.1.0",
-    "promptly": "^3.0.3",
     "send": "^0.18.0",
     "term-img": "^4.1.0",
     "ws": "^8.17.1"
@@ -95,11 +91,11 @@
   "devDependencies": {
     "all-contributors-cli": "^6.11.2",
     "ava": "^4.0.0",
+    "axios": "^1.16.1",
     "eslint": "^10.3.0",
     "eslint-config-xo": "^0.51.0",
     "eslint-plugin-n": "^18.0.1",
     "husky": "^8.0.0",
-    "request": "^2.88.0",
     "xo": "^2.0.2"
   },
   "ava": {

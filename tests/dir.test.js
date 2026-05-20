@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path, {dirname} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import request from 'request';
+import axios from 'axios';
 import test from 'ava';
 import getPort from 'get-port';
 import {init} from '../lib/server.js';
@@ -35,24 +35,27 @@ test('start service and get directory listing', async t => {
 				timeout: 1000 * 2,
 			};
 
-			request(options, (error, res, body) => {
-				if (error) {
+			axios(options)
+				.then(response => {
+					const res = response;
+					const body = response.data;
+
+					// // Write expected:
+					// fs.writeFileSync(path.join(__dirname, 'dir.expected.html'), body)
+
+					const normalize = text => text.replace(/PID: \d+</, 'PID: N/A<')
+						.replace(/markserv-width:' \+ '.*?'/, 'markserv-width:\' + \'\'');
+					const bodyNoPid = normalize(body);
+					const expectedNoPid = normalize(expected);
+					t.is(bodyNoPid, expectedNoPid);
+					t.is(res.status, 200);
+					t.pass();
+					closeServer();
+				})
+				.catch(error => {
 					t.fail(error);
 					closeServer();
-				}
-
-				// // Write expected:
-				// fs.writeFileSync(path.join(__dirname, 'dir.expected.html'), body)
-
-				const normalize = text => text.replace(/PID: \d+</, 'PID: N/A<')
-					.replace(/markserv-width:' \+ '.*?'/, 'markserv-width:\' + \'\'');
-				const bodyNoPid = normalize(body);
-				const expectedNoPid = normalize(expected);
-				t.is(bodyNoPid, expectedNoPid);
-				t.is(res.statusCode, 200);
-				t.pass();
-				closeServer();
-			});
+				});
 		}).catch(error => {
 			t.fail(error);
 		});

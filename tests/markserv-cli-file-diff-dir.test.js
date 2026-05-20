@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path, {dirname} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import request from 'request';
+import axios from 'axios';
 import test from 'ava';
 import getPort from 'get-port';
 import {run} from '../lib/cli.js';
@@ -36,18 +36,21 @@ test('start markserv via "cli" command opening file in different dir', async t =
 				timeout: 1000 * 2,
 			};
 
-			request(options, (error, res, body) => {
-				if (error) {
+			axios(options)
+				.then(response => {
+					const res = response;
+					const body = response.data;
+
+					t.true(body.includes(expected));
+
+					t.is(res.status, 200);
+					t.pass();
+					closeServer();
+				})
+				.catch(error => {
 					t.fail(error);
 					closeServer();
-				}
-
-				t.true(body.includes(expected));
-
-				t.is(res.statusCode, 200);
-				t.pass();
-				closeServer();
-			});
+				});
 		}).catch(error => {
 			t.fail(error);
 		});
@@ -82,18 +85,21 @@ test('start markserv via "cli" command opening file in different dir with precee
 				timeout: 1000 * 2,
 			};
 
-			request(options, (error, res, body) => {
-				if (error) {
+			axios(options)
+				.then(response => {
+					const res = response;
+					const body = response.data;
+
+					t.true(body.includes(expected));
+
+					t.is(res.status, 200);
+					t.pass();
+					closeServer();
+				})
+				.catch(error => {
 					t.fail(error);
 					closeServer();
-				}
-
-				t.true(body.includes(expected));
-
-				t.is(res.statusCode, 200);
-				t.pass();
-				closeServer();
-			});
+				});
 		}).catch(error => {
 			t.fail(error);
 		});
