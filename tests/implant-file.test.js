@@ -1,63 +1,56 @@
-import fs from 'fs'
-import path from 'path'
-import request from 'request'
-import test from 'ava'
-import getPort from 'get-port'
-import markserv from '../lib/server'
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import axios from 'axios';
+import test from 'ava';
+import getPort from 'get-port';
+import {init} from '../lib/server.js';
 
-test.cb('start service and get text file', t => {
-	t.plan(3)
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-	const expected = String(
-		fs.readFileSync(
-			path.join(__dirname, 'implant-file.expected.html')
-		)
-	)
+test('start service and get text file', async t => {
+	const expected = String(fs.readFileSync(path.join(__dirname, 'implant-file.expected.html')));
 
-	const dir = path.join(__dirname)
+	const dir = __dirname;
 
-	getPort().then(port => {
-		const flags = {
-			port,
-			dir,
-			hotreload: false,
-			address: 'localhost',
-			silent: true,
-			browser: false,
-			templates: true
-		}
+	const port = await getPort();
 
-		const done = () => {
-			t.end()
-		}
+	const flags = {
+		dir,
+		port,
+		hotreload: false,
+		address: 'localhost',
+		silent: true,
+		templates: true,
+	};
 
-		markserv.init(flags).then(service => {
-			const closeServer = () => {
-				service.httpServer.close(done)
-			}
+	const service = await init(flags);
+	const actualPort = service.httpServer.address().port;
+	const closeServer = () => {
+		service.httpServer.close();
+	};
 
-			const opts = {
-				url: `http://localhost:${port}/implant-file.render-fixture.md`,
-				timeout: 1000 * 2
-			}
+	const options = {
+		url: `http://localhost:${actualPort}/implant-file.render-fixture.md`,
+		timeout: 1000 * 2,
+	};
 
-			request(opts, (err, res, body) => {
-				if (err) {
-					t.fail(err)
-					closeServer()
-				}
+	let response;
+	try {
+		response = await axios(options);
+	} catch (error) {
+		// eslint-disable-next-line ava/no-conditional-assertion, ava/assertion-arguments
+		t.fail(String(error));
+		closeServer();
+		return;
+	}
 
-				// Write expected:
-				// fs.writeFileSync(path.join(__dirname, 'implant-file.expected.html'), body)
+	const normalize = text => text.replace(/PID: \d+</v, 'PID: N/A<')
+		.replace(/markserv-width:' \+ '.*?'/v, 'markserv-width:\' + \'\'');
+	const bodyNoPid = normalize(response.data);
+	const expectedNoPid = normalize(expected);
+	t.true(bodyNoPid.includes(expectedNoPid));
 
-				t.true(body.includes(expected))
-				t.is(res.statusCode, 200)
-				t.pass()
-				closeServer()
-			})
-		}).catch(error => {
-			t.fail(error)
-			t.end()
-		})
-	})
-})
+	t.is(response.status, 200);
+	closeServer();
+});

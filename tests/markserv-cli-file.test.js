@@ -1,115 +1,100 @@
-import fs from 'fs'
-import path from 'path'
-import request from 'request'
-import test from 'ava'
-import getPort from 'get-port'
-import cli from '../lib/cli'
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import axios from 'axios';
+import test from 'ava';
+import getPort from 'get-port';
+import {run} from '../lib/cli.js';
 
-test.cb('start markserv via "cli" command opening file in same dir', t => {
-	t.plan(3)
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-	const expected = String(
-		fs.readFileSync(
-			path.join(__dirname, 'markserv-cli-file.expected.html')
-		)
-	)
+test('start markserv via "cli" command opening file in same dir', async t => {
+	const expected = String(fs.readFileSync(path.join(__dirname, 'markserv-cli-file.expected.html')));
 
-	getPort().then(port => {
-		const cliOpts = {
-			input: ['README.md'],
-			flags: {
-				port,
-				hotreload: false,
-				address: 'localhost',
-				silent: true,
-				browser: false
-			}
-		}
+	const port = await getPort();
+	const cliOptions = {
+		input: ['README.md'],
+		flags: {
+			port,
+			hotreload: false,
+			address: 'localhost',
+			silent: true,
+			browser: false,
+		},
+	};
 
-		const done = () => {
-			t.end()
-		}
+	const done = () => undefined;
 
-		cli.run(cliOpts).then(service => {
-			const closeServer = () => {
-				service.httpServer.close(done)
-			}
+	const service = await run(cliOptions);
+	const closeServer = () => {
+		service.httpServer.close(done);
+	};
 
-			const opts = {
-				url: service.launchUrl,
-				timeout: 1000 * 2
-			}
+	const options = {
+		url: service.launchUrl,
+		timeout: 1000 * 2,
+	};
 
-			request(opts, (err, res, body) => {
-				if (err) {
-					t.fail(err)
-					closeServer()
-				}
+	let response;
+	try {
+		response = await axios(options);
+	} catch (error) {
+		// eslint-disable-next-line ava/no-conditional-assertion, ava/assertion-arguments
+		t.fail(String(error));
+		closeServer();
+		return;
+	}
 
-				t.true(body.includes(expected))
+	const body = response.data;
 
-				t.is(res.statusCode, 200)
-				t.pass()
-				closeServer()
-			})
-		}).catch(error => {
-			t.fail(error)
-			t.end()
-		})
-	})
-})
+	t.true(body.includes(expected));
 
-test.cb('start markserv via "cli" command opening file in same dir with preceeding ./', t => {
-	t.plan(3)
+	t.is(response.status, 200);
+	closeServer();
+});
 
-	const expected = String(
-		fs.readFileSync(
-			path.join(__dirname, 'markserv-cli-file.expected.html')
-		)
-	)
+test('start markserv via "cli" command opening file in same dir with preceeding ./', async t => {
+	const expected = String(fs.readFileSync(path.join(__dirname, 'markserv-cli-file.expected.html')));
 
-	getPort().then(port => {
-		const cliOpts = {
-			input: ['./README.md'],
-			flags: {
-				port,
-				hotreload: false,
-				address: 'localhost',
-				silent: true,
-				browser: false
-			}
-		}
+	const port = await getPort();
+	const cliOptions = {
+		input: ['./README.md'],
+		flags: {
+			port,
+			hotreload: false,
+			address: 'localhost',
+			silent: true,
+			browser: false,
+		},
+	};
 
-		const done = () => {
-			t.end()
-		}
+	const done = () => undefined;
 
-		cli.run(cliOpts).then(service => {
-			const closeServer = () => {
-				service.httpServer.close(done)
-			}
+	const service = await run(cliOptions);
+	const closeServer = () => {
+		service.httpServer.close(done);
+	};
 
-			const opts = {
-				url: service.launchUrl,
-				timeout: 1000 * 2
-			}
+	const options = {
+		url: service.launchUrl,
+		timeout: 1000 * 2,
+	};
 
-			request(opts, (err, res, body) => {
-				if (err) {
-					t.fail(err)
-					closeServer()
-				}
+	let response;
+	try {
+		response = await axios(options);
+	} catch (error) {
+		// eslint-disable-next-line ava/no-conditional-assertion, ava/assertion-arguments
+		t.fail(String(error));
+		closeServer();
+		return;
+	}
 
-				t.true(body.includes(expected))
+	const body = response.data;
 
-				t.is(res.statusCode, 200)
-				t.pass()
-				closeServer()
-			})
-		}).catch(error => {
-			t.fail(error)
-			t.end()
-		})
-	})
-})
+	t.true(body.includes(expected));
+
+	t.is(response.status, 200);
+	closeServer();
+});
 

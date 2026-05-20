@@ -7,7 +7,7 @@
 [![Gitter](https://img.shields.io/badge/gitter-join%20chat%20%E2%86%92-FF69B4.svg?style=flat-square&logo=gitter-white&link=https://gitter.im/markserv)](https://gitter.im/markserv)
 [![CHANGELOG](https://img.shields.io/badge/changelog-&nbsp;✔️-orange.svg?style=flat-square)](CHANGELOG.md)
 [![Build Status](https://travis-ci.org/markserv/markserv.svg?branch=master&style=flat-square)](https://travis-ci.org/markserv/markserv)
-[![Coverage Status](https://coveralls.io/repos/github/markserv/markserv/badge.svg?branch=master&style=flat-square)](https://coveralls.io/github/markserv/markserv?branch=master) [![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors) [![Npm Version](https://img.shields.io/npm/v/markserv.svg?style=flat-square)](https://www.npmjs.com/package/markserv)
+[![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors) [![Npm Version](https://img.shields.io/npm/v/markserv.svg?style=flat-square)](https://www.npmjs.com/package/markserv)
 [![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg?style=flat-square)](https://github.com/sindresorhus/xo)
 [![Known Vulnerabilities](https://snyk.io/test/github/markserv/markserv/badge.svg?style=flat-square)](https://snyk.io/test/github/markserv/markserv)
 

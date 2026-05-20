@@ -1,73 +1,65 @@
-import fs from 'fs'
-import path from 'path'
-import request from 'request'
-import test from 'ava'
-import getPort from 'get-port'
-import markserv from '../lib/server'
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import axios from 'axios';
+import test from 'ava';
+import getPort from 'get-port';
+import {init} from '../lib/server.js';
 
-test.cb('start service and receive error page (404)', t => {
-	t.plan(3)
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-	const expected = String(
-		fs.readFileSync(
-			path.join(__dirname, 'error-page-404.expected.html')
-		)
-	)
+test('start service and receive error page (404)', async t => {
+	const expected = String(fs.readFileSync(path.join(__dirname, 'error-page-404.expected.html')));
 
-	const dir = path.join(__dirname, '..')
+	const dir = path.join(__dirname, '..');
 
-	getPort().then(port => {
-		const flags = {
-			dir,
-			port,
-			hotreload: false,
-			address: 'localhost',
-			silent: true
-		}
+	const port = await getPort();
+	const flags = {
+		dir,
+		port,
+		hotreload: false,
+		address: 'localhost',
+		silent: true,
+	};
 
-		const done = () => {
-			t.end()
-		}
+	const done = () => undefined;
 
-		markserv.init(flags).then(service => {
-			const closeServer = () => {
-				service.httpServer.close(done)
-			}
+	const service = await init(flags);
+	const actualPort = service.httpServer.address().port;
+	const closeServer = () => {
+		service.httpServer.close(done);
+	};
 
-			const opts = {
-				url: `http://localhost:${port}/beep/boop/bwwwaaaaahhhggg`,
-				timeout: 1000 * 2
-			}
+	const options = {
+		url: `http://localhost:${actualPort}/beep/boop/bwwwaaaaahhhggg`,
+		timeout: 1000 * 2,
+	};
 
-			request(opts, (err, res, body) => {
-				if (err) {
-					t.fail(err)
-					closeServer()
-				}
+	let response;
+	try {
+		response = await axios(options);
+	} catch (error) {
+		// eslint-disable-next-line ava/no-conditional-assertion, ava/assertion-arguments
+		t.fail(String(error));
+		closeServer();
+		return;
+	}
 
-				// // Write expected:
-				// fs.writeFileSync(path.join(__dirname, 'service.expected.html'), body)
+	const body = response.data;
 
-				const sanitize = text => {
-					return text.replace(/PID: \d+</, 'PID: N/A<')
-						.replace(/<p class="errorMsg">(.*?)<\/p>/, '')
-						.replace(/<pre>(.*?)<\/pre>/s, '')
-						.replace(/<title>404: (.*?)\/markserv\/beep\/boop\/bwwwaaaaahhhggg<\/title>/, '')
-						.replace(/markserv-width:' \+ '.*?'/, 'markserv-width:\' + \'\'')
-				}
+	// // Write expected:
+	// fs.writeFileSync(path.join(__dirname, 'service.expected.html'), body)
 
-				const bodyNonVariable = sanitize(body)
-				const expectedNonVariable = sanitize(expected)
+	const sanitize = text => text.replace(/PID: \d+</v, 'PID: N/A<')
+		.replace(/<p class="errorMsg">(.*?)<\/p>/v, '')
+		.replace(/<pre>(.*?)<\/pre>/sv, '')
+		.replace(/<title>404: (.*?)\/markserv\/beep\/boop\/bwwwaaaaahhhggg<\/title>/v, '')
+		.replace(/markserv-width:' \+ '.*?'/v, 'markserv-width:\' + \'\'');
+	const bodyNonVariable = sanitize(body);
+	const expectedNonVariable = sanitize(expected);
 
-				t.is(bodyNonVariable, expectedNonVariable)
+	t.is(bodyNonVariable, expectedNonVariable);
 
-				t.is(res.statusCode, 200)
-				t.pass()
-				closeServer()
-			})
-		}).catch(error => {
-			t.fail(error)
-			t.end()
-		})
-	})
-})
+	t.is(response.status, 200);
+	closeServer();
+});
