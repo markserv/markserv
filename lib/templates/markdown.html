@@ -15,6 +15,10 @@
 	<script type="text/javascript" id="MathJax-script" async
 	      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
         </script>
+	<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+	<script>
+		mermaid.initialize({ startOnLoad: true, theme: 'default' });
+	</script>
 </head>
 <body>
 <article class="markdown-body">
@@ -160,6 +164,7 @@
 		ws.onmessage = function(e) {
 			var el = document.querySelector('.markdown-body');
 			if (el) el.innerHTML = e.data;
+			if (window.mermaid) mermaid.contentLoaded();
 		};
 		ws.onclose = function() {
 			if (retries < maxRetries) {
