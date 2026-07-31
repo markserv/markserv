@@ -12,3 +12,4 @@ Options
 	--light  Use light theme (default: dark)
 	--synthwave  Use synthwave/retro-neon theme (default: dark)
 	--templates  Enable {file:}, {markdown:}, {html:}, {less:} templating (false)
+	--redirect-root  Redirect the root URL to the served file (false)

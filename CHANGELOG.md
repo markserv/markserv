@@ -3,6 +3,12 @@
 - Markserv uses [Semantic Versioning](http://semver.org/)
 - Markserv [Keeps a ChangeLog](https://keepachangelog.com/en/1.0.0/)
 
+## [Unreleased]
+
+### Added
+
+- `--redirect-root` flag: when launching Markserv with a file path, redirects the root URL `/` to the served file with an HTTP 302, instead of showing the parent directory index. Disabled by default; directory mode is unaffected.
+
 ## [1.19.1] - 2026-03-07
 
 ### Fixed

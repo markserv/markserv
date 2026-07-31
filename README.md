@@ -213,6 +213,18 @@ a {
 </style>
 ```
 
+## :twisted_rightwards_arrows: Redirect Root
+
+When Markserv is launched with a file path (not a directory), you can have the root URL `/` redirect straight to that file instead of showing the parent directory's index. This helps clients that can only reach `/` easily, such as mobile port-forwarders where typing a path is inconvenient.
+
+**Note:** Redirecting is disabled by default. Enable it with `--redirect-root`:
+
+```shell
+markserv --redirect-root README.md
+```
+
+With `--redirect-root` set, `GET /` responds with an HTTP 302 redirect to `/README.md`. Directory mode is unaffected — `/` still shows the directory index as usual.
+
 ## :crossed_flags: Flags
 
 To list the options/flags for the markserv CLI tool:
