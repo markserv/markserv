@@ -70,7 +70,7 @@ raw Markdown line up prettily. You can also use inline Markdown.</p>
 </tbody>
 </table>
 
-<footer><sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: 58960</sup></footer>
+<footer><sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: 36707</sup></footer>
 </article>
 <div class="width-control" id="width-control">
     <span id="width-tooltip"></span>
@@ -93,6 +93,12 @@ raw Markdown line up prettily. You can also use inline Markdown.</p>
 		var btn = document.getElementById('theme-toggle');
 		if (btn) btn.textContent = icons[t] || icons.dark;
 		current = t;
+
+		// Re-render mermaid diagrams so they follow the new theme
+		// (mermaid bakes theme CSS into the SVG at render time)
+		if (window.markservRenderMermaid) {
+			window.markservRenderMermaid();
+		}
 	}
 
 	applyTheme(current);
@@ -190,6 +196,78 @@ raw Markdown line up prettily. You can also use inline Markdown.</p>
     window.addEventListener('resize', function() {
         updateSliderMax();
     });
+})();
+</script>
+<script>
+(function() {
+	// Lazy mermaid loader: costs nothing (no network) on pages without a
+	// mermaid fence, and degrades to the plain source text when the CDN is
+	// unreachable. The script is appended asynchronously and rendered via
+	// contentLoaded(), because startOnLoad hooks the window load event,
+	// which may already have fired by the time the CDN answers.
+	var loading = false;
+	var sourceCache = new WeakMap();
+
+	function mermaidThemeFor(theme) {
+		return theme === 'light' ? 'default' : (theme === 'solarized' ? 'neutral' : 'dark')
+	}
+
+	// Render/re-render all mermaid fences with the page's current theme.
+	// Mermaid replaces a fence's content with the SVG, so previously
+	// rendered fences get their source restored from the cache first.
+	window.markservRenderMermaid = function() {
+		// window.mermaid can be a named element (e.g. <h1 id="mermaid">);
+		// only treat it as the library if it actually exposes the API
+		var mermaidLib = window.mermaid;
+		if (!mermaidLib || typeof mermaidLib.contentLoaded !== 'function') {
+			return
+		}
+
+		var els = document.querySelectorAll('pre.mermaid');
+		els.forEach(function(el) {
+			if (!sourceCache.has(el)) {
+				sourceCache.set(el, el.innerHTML);
+			}
+		});
+		els.forEach(function(el) {
+			if (el.getAttribute('data-processed')) {
+				el.innerHTML = sourceCache.get(el);
+				el.removeAttribute('data-processed');
+			}
+		});
+
+		var theme = document.documentElement.getAttribute('data-theme') || 'dark';
+		mermaidLib.initialize({ theme: mermaidThemeFor(theme) });
+		mermaidLib.contentLoaded();
+	};
+
+	window.markservLoadMermaid = function() {
+		var mermaidLib = window.mermaid;
+		if (mermaidLib && typeof mermaidLib.contentLoaded === 'function') {
+			window.markservRenderMermaid();
+			return
+		}
+
+		if (loading) {
+			return
+		}
+
+		loading = true;
+		var script = document.createElement('script');
+		script.src = 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js';
+		script.onload = function() {
+			window.markservRenderMermaid();
+		};
+		script.onerror = function() {
+			// Offline or CDN unreachable: keep the diagram source as plain text
+			loading = false;
+		};
+		document.head.appendChild(script);
+	};
+
+	if (document.querySelector('pre.mermaid')) {
+		window.markservLoadMermaid();
+	}
 })();
 </script>
 </body>
