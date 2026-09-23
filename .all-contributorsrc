@@ -134,6 +134,33 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "icholy",
+      "name": "Ilia Choly",
+      "avatar_url": "https://avatars.githubusercontent.com/u/943597?v=4",
+      "profile": "https://choly.ca/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "rcarrionr",
+      "name": "Richard Carrion",
+      "avatar_url": "https://avatars.githubusercontent.com/u/26934511?v=4",
+      "profile": "https://github.com/rcarrionr",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "alysonfs",
+      "name": "Alyson Felipe",
+      "avatar_url": "https://avatars.githubusercontent.com/u/928412?v=4",
+      "profile": "https://github.com/alysonfs",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,

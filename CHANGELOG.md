@@ -3,6 +3,14 @@
 - Markserv uses [Semantic Versioning](http://semver.org/)
 - Markserv [Keeps a ChangeLog](https://keepachangelog.com/en/1.0.0/)
 
+## [Unreleased]
+
+### Added
+
+- Mermaid diagram support: ` ```mermaid ` fences render as client-side diagrams (Mermaid v10). The library lazy-loads from the same CDN as MathJax only on pages that contain a mermaid fence, so other pages cost nothing, and diagrams degrade to their source text when the CDN is unreachable.
+- Diagrams follow the page theme (dark/light/solarized) and re-render when the theme is toggled.
+- Diagrams re-render on hot-reload, including when a mermaid fence is added to a previously plain page.
+
 ## [1.19.1] - 2026-03-07
 
 ### Fixed
