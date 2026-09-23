@@ -3,7 +3,7 @@
 - Markserv uses [Semantic Versioning](http://semver.org/)
 - Markserv [Keeps a ChangeLog](https://keepachangelog.com/en/1.0.0/)
 
-## [Unreleased]
+## [1.20.0] - 2026-09-22
 
 ### Added
 
