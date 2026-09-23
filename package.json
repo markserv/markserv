@@ -28,6 +28,8 @@
     "marked",
     "markitdown",
     "md",
+    "mermaid",
+    "mathjax",
     "realtime",
     "reload",
     "server",
