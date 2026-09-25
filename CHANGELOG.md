@@ -5,6 +5,8 @@
 
 ## [Unreleased]
 
+## [1.20.1] - 2026-09-25
+
 ### Fixed
 
 - `npm test` on Node 24+ (legacy `util.isDate`/`util.isRegExp` removed): `xo` crashed before ava ever ran because `eslint-plugin-ava` → `deep-strict-equal` → `core-assert` call those removed APIs in `_deepEqual`. A `patch-package` patch (`patches/core-assert+0.2.1.patch`) replaces them with `instanceof Date` / `instanceof RegExp` (identical semantics) and is applied on `postinstall`.
