@@ -9,146 +9,146 @@
 
 ### Fixed
 
-- `npm test` on Node 24+ (legacy `util.isDate`/`util.isRegExp` removed): `xo` crashed before ava ever ran because `eslint-plugin-ava` → `deep-strict-equal` → `core-assert` call those removed APIs in `_deepEqual`. A `patch-package` patch (`patches/core-assert+0.2.1.patch`) replaces them with `instanceof Date` / `instanceof RegExp` (identical semantics) and is applied on `postinstall`.
+- `npm test` on Node 24+ (legacy `util.isDate`/`util.isRegExp` removed): `xo` crashed before ava ever ran because `eslint-plugin-ava` → `deep-strict-equal` → `core-assert` call those removed APIs in `_deepEqual`. A `patch-package` patch (`patches/core-assert+0.2.1.patch`) replaces them with `instanceof Date` / `instanceof RegExp` (identical semantics) and is applied on `postinstall`: [8920788](https://github.com/markserv/markserv/commit/8920788)
 
 ### Security
 
-- Path traversal (CWE-22): request paths and implant file reads (`{file:}`, `{markdown:}`, `{html:}`, `{less:}`) are now confined to the served root. Out-of-root request paths return `403`, hot-reload no longer pushes out-of-root content, and escaping implants are refused instead of inlined into rendered pages or hot-reload pushes (#139).
+- Path traversal (CWE-22): request paths and implant file reads (`{file:}`, `{markdown:}`, `{html:}`, `{less:}`) are now confined to the served root. Out-of-root request paths return `403`, hot-reload no longer pushes out-of-root content, and escaping implants are refused instead of inlined into rendered pages or hot-reload pushes (#139): PR [#147](https://github.com/markserv/markserv/pull/147)
 
 ## [1.20.0] - 2026-09-22
 
 ### Added
 
-- Mermaid diagram support: ` ```mermaid ` fences render as client-side diagrams (Mermaid v10). The library lazy-loads from the same CDN as MathJax only on pages that contain a mermaid fence, so other pages cost nothing, and diagrams degrade to their source text when the CDN is unreachable.
-- Diagrams follow the page theme (dark/light/solarized) and re-render when the theme is toggled.
-- Diagrams re-render on hot-reload, including when a mermaid fence is added to a previously plain page.
+- Mermaid diagram support: ` ```mermaid ` fences render as client-side diagrams (Mermaid v10). The library lazy-loads from the same CDN as MathJax only on pages that contain a mermaid fence, so other pages cost nothing, and diagrams degrade to their source text when the CDN is unreachable: [75acf21](https://github.com/markserv/markserv/commit/75acf21)
+- Diagrams follow the page theme (dark/light/solarized) and re-render when the theme is toggled: [75acf21](https://github.com/markserv/markserv/commit/75acf21)
+- Diagrams re-render on hot-reload, including when a mermaid fence is added to a previously plain page: [75acf21](https://github.com/markserv/markserv/commit/75acf21)
 
 ## [1.19.1] - 2026-03-07
 
 ### Fixed
 
-- WebSocket reconnection no longer overwhelms the browser when the server is stopped. Previously, `setInterval` calls stacked exponentially on disconnect, causing "not responding" hangs. Now uses `setTimeout` with exponential backoff (1s → 30s cap, max 20 retries).
+- WebSocket reconnection no longer overwhelms the browser when the server is stopped. Previously, `setInterval` calls stacked exponentially on disconnect, causing "not responding" hangs. Now uses `setTimeout` with exponential backoff (1s → 30s cap, max 20 retries): [cbc1f9f](https://github.com/markserv/markserv/commit/cbc1f9f)
 
 ## [1.19.0] - 2026-03-02
 
 ### Added
 
-- Body width slider: adjustable slider next to the theme toggle button controls the `<body>` width from 0 to viewport width.
-- Pixel tooltip appears above the slider thumb while dragging or using arrow keys.
-- Width persists per project via localStorage, keyed by the served root directory.
-- Double-click the slider to reset to the default width (978px).
-- Theme-aware slider styling with custom track and thumb colors for all four themes.
+- Body width slider: adjustable slider next to the theme toggle button controls the `<body>` width from 0 to viewport width: [e07bd4a](https://github.com/markserv/markserv/commit/e07bd4a)
+- Pixel tooltip appears above the slider thumb while dragging or using arrow keys: [e07bd4a](https://github.com/markserv/markserv/commit/e07bd4a)
+- Width persists per project via localStorage, keyed by the served root directory: [e07bd4a](https://github.com/markserv/markserv/commit/e07bd4a)
+- Double-click the slider to reset to the default width (978px): [e07bd4a](https://github.com/markserv/markserv/commit/e07bd4a)
+- Theme-aware slider styling with custom track and thumb colors for all four themes: [e07bd4a](https://github.com/markserv/markserv/commit/e07bd4a)
 
 ### Changed
 
-- Theme toggle button slightly smaller (40px → 34px) for a cleaner look.
-- Solarized page border slightly brighter for better visibility.
-- Width slider and theme button vertically aligned.
-- Width control hidden in print view alongside theme toggle.
+- Theme toggle button slightly smaller (40px → 34px) for a cleaner look: [e07bd4a](https://github.com/markserv/markserv/commit/e07bd4a)
+- Solarized page border slightly brighter for better visibility: [e07bd4a](https://github.com/markserv/markserv/commit/e07bd4a)
+- Width slider and theme button vertically aligned: [e07bd4a](https://github.com/markserv/markserv/commit/e07bd4a)
+- Width control hidden in print view alongside theme toggle: [e07bd4a](https://github.com/markserv/markserv/commit/e07bd4a)
 
 ## [1.18.0] - 2026-03-01
 
 ### Added
 
-- Built-in WebSocket hot-reload: content updates in-place without full page reload and without any browser plugin.
-- Dark, light, synthwave, and solarized themes with in-browser toggle button (persists via localStorage).
-- `--hotreload` / `--no-hotreload` flag to enable/disable hot-reload.
-- `--light`, `--synthwave`, and `--theme` CLI flags for theme selection (e.g. `--theme solarized`).
-- Solarized Dark theme with colors from [Better Solarized Dark](https://github.com/edheltzel/vscode-better-solarized), including highlight.js syntax highlighting.
-- Server-side initial stylesheet selection so `--theme` / `--light` / `--synthwave` render correctly from first paint.
+- Built-in WebSocket hot-reload: content updates in-place without full page reload and without any browser plugin: [de3cabe](https://github.com/markserv/markserv/commit/de3cabe)
+- Dark, light, synthwave, and solarized themes with in-browser toggle button (persists via localStorage): [d932127](https://github.com/markserv/markserv/commit/d932127)
+- `--hotreload` / `--no-hotreload` flag to enable/disable hot-reload: [de3cabe](https://github.com/markserv/markserv/commit/de3cabe)
+- `--light`, `--synthwave`, and `--theme` CLI flags for theme selection (e.g. `--theme solarized`): [d932127](https://github.com/markserv/markserv/commit/d932127)
+- Solarized Dark theme with colors from [Better Solarized Dark](https://github.com/edheltzel/vscode-better-solarized), including highlight.js syntax highlighting: [f55acc7](https://github.com/markserv/markserv/commit/f55acc7)
+- Server-side initial stylesheet selection so `--theme` / `--light` / `--synthwave` render correctly from first paint: [b7e60a8](https://github.com/markserv/markserv/commit/b7e60a8)
 
 ### Changed
 
-- Hot-reload uses `ws` package over WebSocket instead of `livereload` + `connect-livereload` on a separate port.
-- WebSocket port is auto-found via `get-port`, supporting multiple simultaneous instances.
-- HTTP port auto-finds a free port when no explicit `--port` is given, avoiding conflicts with other instances.
-- File watching uses Node.js built-in `fs.watch` (recursive) with 150ms debounce.
-- Updated README to document hot-reload and themes.
+- Hot-reload uses `ws` package over WebSocket instead of `livereload` + `connect-livereload` on a separate port: [de3cabe](https://github.com/markserv/markserv/commit/de3cabe)
+- WebSocket port is auto-found via `get-port`, supporting multiple simultaneous instances: [de3cabe](https://github.com/markserv/markserv/commit/de3cabe)
+- HTTP port auto-finds a free port when no explicit `--port` is given, avoiding conflicts with other instances: [73778b1](https://github.com/markserv/markserv/commit/73778b1)
+- File watching uses Node.js built-in `fs.watch` (recursive) with 150ms debounce: [de3cabe](https://github.com/markserv/markserv/commit/de3cabe)
+- Updated README to document hot-reload and themes: [b75d36a](https://github.com/markserv/markserv/commit/b75d36a)
 
 ### Fixed
 
-- Fixed path resolution when launched from external directories (e.g. from fstop or other tools).
-- Fixed misplaced folder icon in directory listing header.
+- Fixed path resolution when launched from external directories (e.g. from fstop or other tools): [77272b6](https://github.com/markserv/markserv/commit/77272b6)
+- Fixed misplaced folder icon in directory listing header: [4263dda](https://github.com/markserv/markserv/commit/4263dda)
 
 ### Removed
 
-- Removed `livereload` and `connect-livereload` dependencies.
-- Removed `--livereloadport` CLI flag (replaced by `--hotreload`).
+- Removed `livereload` and `connect-livereload` dependencies: [de3cabe](https://github.com/markserv/markserv/commit/de3cabe)
+- Removed `--livereloadport` CLI flag (replaced by `--hotreload`): [de3cabe](https://github.com/markserv/markserv/commit/de3cabe)
 
 ## [1.17.4] - 2019-12-28
 
 ### Added
 
-- Added test for LESS implant. [#99]
+- Added test for LESS implant: PR [#99](https://github.com/markserv/markserv/pull/99)
 
 ### Changed
 
-- Update to latest packages using `npm-check-updates`. Update new linting errors from latest XO package. [#99]
+- Update to latest packages using `npm-check-updates`. Update new linting errors from latest XO package: PR [#99](https://github.com/markserv/markserv/pull/99)
 
 ## [1.17.3] - 2019-12-28
 
 ### Added
 
-- Added test for file implant. [#98]
+- Added test for file implant: PR [#98](https://github.com/markserv/markserv/pull/98)
 
 ### Changed
 
-- Process MathJax with Markdown-It-MathJax. [#93]
-- Update all-contibutors table. [#98]
+- Process MathJax with Markdown-It-MathJax: PR [#93](https://github.com/markserv/markserv/pull/93)
+- Update all-contibutors table: PR [#98](https://github.com/markserv/markserv/pull/98)
 
 ### Removed
 
-- Removed unused Patreon links. [#98]
+- Removed unused Patreon links: PR [#98](https://github.com/markserv/markserv/pull/98)
 
 ### Fixed
 
-- Fixed Live-Reload for browsers without Plugin. [#92]
-- Documentation fixes. [#97], [#89]
+- Fixed Live-Reload for browsers without Plugin: PR [#92](https://github.com/markserv/markserv/pull/92)
+- Documentation fixes: PR [#97](https://github.com/markserv/markserv/pull/97), PR [#89](https://github.com/markserv/markserv/pull/89)
 
 ### Security
 
-- NPM audit fix --force. Resulted in AVA update to 2.x requiring package script test runner path change. [#98]
+- NPM audit fix --force. Resulted in AVA update to 2.x requiring package script test runner path change: PR [#98](https://github.com/markserv/markserv/pull/98)
 
 ## [1.17.2] - 2019-02-26
 
 ### Fixed
 
-- Missing CLI packages. [#79], [#81]
+- Missing CLI packages: PR [#79](https://github.com/markserv/markserv/pull/79), PR [#81](https://github.com/markserv/markserv/pull/81)
 
 ## [1.17.1] - 2019-02-23
 
 ### Fixed
 
-- Snyk security audit & fixed CLI launch bug. [#77]
+- Snyk security audit & fixed CLI launch bug: PR [#77](https://github.com/markserv/markserv/pull/77)
 
 ## [1.17.0] - 2019-02-23
 
 ### Added
 
-- Added contributors table to README. [#76]
+- Added contributors table to README: PR [#76](https://github.com/markserv/markserv/pull/76)
 
 ## [1.16.0] - 2019-02-23
 
 ### Changed
 
-- Updated CSS page width in stylesheets to reflect GitHubs styles. [#74]
-- Replace Commander with Meow. [#75]
+- Updated CSS page width in stylesheets to reflect GitHubs styles: PR [#74](https://github.com/markserv/markserv/pull/74)
+- Replace Commander with Meow: PR [#75](https://github.com/markserv/markserv/pull/75)
 
 ### Fixed
 
-- Fixed README CLI command. [#75]
+- Fixed README CLI command: PR [#75](https://github.com/markserv/markserv/pull/75)
 
 ## [1.15.1] - 2018-10-14
 
 ### Added
 
-- Added `markserv --livereloadport false` to disable LiveReload. [#65] 
-- Added `markserv --browser false` to disable Browser Launch. [#65] 
-- Added contributors to `package.json` [#65] 
+- Added `markserv --livereloadport false` to disable LiveReload: PR [#65](https://github.com/markserv/markserv/pull/65)
+- Added `markserv --browser false` to disable Browser Launch: PR [#65](https://github.com/markserv/markserv/pull/65)
+- Added contributors to `package.json`: PR [#65](https://github.com/markserv/markserv/pull/65)
 
 ### Fixed
 
-- Fix launch of relative files and dirs from `markserv` and `readme` commands. [#63]
+- Fix launch of relative files and dirs from `markserv` and `readme` commands: PR [#63](https://github.com/markserv/markserv/pull/63)
 
 ## [1.13.2] - 2018-09-14
 
@@ -186,13 +186,13 @@
 
 ### Changed
 
-- Updated README after changing github:filter/markserv to github/markserv/markserv (no PR)
+- Updated README after changing github:filter/markserv to github/markserv/markserv: [5cb8a25](https://github.com/markserv/markserv/commit/5cb8a25)
 
 ## [1.10.0] - 2018-05-22
 
 ### Changed
 
-- Updated README after changing github:filter/markserv to github/markserv/markserv (no PR)
+- Updated README after changing github:filter/markserv to github/markserv/markserv: [5cb8a25](https://github.com/markserv/markserv/commit/5cb8a25)
 
 ## [1.9.0] - 2018-05-21
 
@@ -224,4 +224,4 @@
 
 - Emojis require \:colon-syntax\: to render correctly on NPMJS.org
 	+ Thanks @ChenYingChou PR [#48](https://github.com/F1LT3R/markserv/pull/48/files)
-- Added ChangeLog
+- Added ChangeLog: [c3350fb](https://github.com/markserv/markserv/commit/c3350fb)
