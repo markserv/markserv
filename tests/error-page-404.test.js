@@ -52,7 +52,10 @@ test.cb('start service and receive error page (404)', t => {
 					return text.replace(/PID: \d+</, 'PID: N/A<')
 						.replace(/<p class="errorMsg">(.*?)<\/p>/, '')
 						.replace(/<pre>(.*?)<\/pre>/s, '')
-						.replace(/<title>404: (.*?)\/markserv\/beep\/boop\/bwwwaaaaahhhggg<\/title>/, '')
+						// The 404 title embeds the checkout path, which differs
+						// between the main repo and any worktree: strip it
+						// wholesale instead of matching a specific checkout
+						.replace(/<title>404: .*?\/beep\/boop\/bwwwaaaaahhhggg<\/title>/, '')
 						.replace(/markserv-width:' \+ '.*?'/, 'markserv-width:\' + \'\'')
 				}
 
