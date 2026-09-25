@@ -9,11 +9,11 @@
 
 ### Fixed
 
-- `npm test` on Node 24+ (legacy `util.isDate`/`util.isRegExp` removed): `xo` crashed before ava ever ran because `eslint-plugin-ava` → `deep-strict-equal` → `core-assert` call those removed APIs in `_deepEqual`. A `patch-package` patch (`patches/core-assert+0.2.1.patch`) replaces them with `instanceof Date` / `instanceof RegExp` (identical semantics) and is applied on `postinstall`.
+- `npm test` on Node 24+ (legacy `util.isDate`/`util.isRegExp` removed): `xo` crashed before ava ever ran because `eslint-plugin-ava` → `deep-strict-equal` → `core-assert` call those removed APIs in `_deepEqual`. A `patch-package` patch (`patches/core-assert+0.2.1.patch`) replaces them with `instanceof Date` / `instanceof RegExp` (identical semantics) and is applied on `postinstall`: [8920788](https://github.com/markserv/markserv/commit/8920788)
 
 ### Security
 
-- Path traversal (CWE-22): request paths and implant file reads (`{file:}`, `{markdown:}`, `{html:}`, `{less:}`) are now confined to the served root. Out-of-root request paths return `403`, hot-reload no longer pushes out-of-root content, and escaping implants are refused instead of inlined into rendered pages or hot-reload pushes (#139).
+- Path traversal (CWE-22): request paths and implant file reads (`{file:}`, `{markdown:}`, `{html:}`, `{less:}`) are now confined to the served root. Out-of-root request paths return `403`, hot-reload no longer pushes out-of-root content, and escaping implants are refused instead of inlined into rendered pages or hot-reload pushes (#139): PR [#147](https://github.com/markserv/markserv/pull/147)
 
 ## [1.20.0] - 2026-09-22
 
