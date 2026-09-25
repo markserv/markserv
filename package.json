@@ -5,6 +5,7 @@
   "preferGlobal": true,
   "scripts": {
     "test": "xo && npm run cover",
+    "postinstall": "patch-package",
     "cover": "nyc --reporter=lcov --reporter=html --reporter=text ava",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls -v"
   },
@@ -79,14 +80,13 @@
     "chalk": "^3.0.0",
     "commander": "^4.0.1",
     "connect": "^3.7.0",
-    "get-port": "^5.1.0",
     "deepmerge": "^4.2.2",
     "emoji-regex": "^8.0.0",
+    "get-port": "^5.1.0",
     "handlebars": "^4.5.3",
     "implant": "^2.0.3",
     "is-online": "^8.2.1",
     "less": "^3.10.3",
-    "ws": "^7.4.0",
     "markdown-it": "^10.0.0",
     "markdown-it-anchor": "^5.2.5",
     "markdown-it-emoji": "^1.4.0",
@@ -102,7 +102,8 @@
     "promptly": "^3.0.3",
     "send": "^0.17.1",
     "snyk": "^1.266.0",
-    "term-img": "^4.1.0"
+    "term-img": "^4.1.0",
+    "ws": "^7.4.0"
   },
   "devDependencies": {
     "all-contributors-cli": "^6.11.2",
@@ -110,6 +111,7 @@
     "coveralls": "^3.0.9",
     "husky": "^3.1.0",
     "nyc": "^15.0.0",
+    "patch-package": "^8.0.1",
     "request": "^2.88.0",
     "xo": "^0.25.3"
   },

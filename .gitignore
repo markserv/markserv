@@ -1,3 +1,9 @@
+.prompts/
+tmp/
+.tmp/
+.triage/
+.claude/
+.pi/
 # Logs
 logs
 *.log
@@ -48,3 +54,6 @@ tmp/
 
 # CI
 .coveralls.yml
+# GitHub triage output (local-only, never committed)
+.triage/
+.worktrees/

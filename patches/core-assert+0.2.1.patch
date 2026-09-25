@@ -1,0 +1,20 @@
+diff --git a/node_modules/core-assert/index.js b/node_modules/core-assert/index.js
+index 7671ae6..f3efccb 100644
+--- a/node_modules/core-assert/index.js
++++ b/node_modules/core-assert/index.js
+@@ -171,13 +171,13 @@ function _deepEqual(actual, expected, strict) {
+ 
+   // 7.2. If the expected value is a Date object, the actual value is
+   // equivalent if it is also a Date object that refers to the same time.
+-  } else if (util.isDate(actual) && util.isDate(expected)) {
++  } else if (actual instanceof Date && expected instanceof Date) {
+     return actual.getTime() === expected.getTime();
+ 
+   // 7.3 If the expected value is a RegExp object, the actual value is
+   // equivalent if it is also a RegExp object with the same source and
+   // properties (`global`, `multiline`, `lastIndex`, `ignoreCase`).
+-  } else if (util.isRegExp(actual) && util.isRegExp(expected)) {
++  } else if (actual instanceof RegExp && expected instanceof RegExp) {
+     return actual.source === expected.source &&
+            actual.global === expected.global &&
+            actual.multiline === expected.multiline &&
