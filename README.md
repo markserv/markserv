@@ -280,6 +280,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/alysonfs"><img src="https://avatars.githubusercontent.com/u/928412?v=4?s=100" width="100px;" alt="Alyson Felipe"/><br /><sub><b>Alyson Felipe</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/issues?q=author%3Aalysonfs" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://mel.9840002.xyz/"><img src="https://avatars.githubusercontent.com/u/261439380?v=4?s=100" width="100px;" alt="Mel"/><br /><sub><b>Mel</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/issues?q=author%3Aspace0mel" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/gagan-bansal"><img src="https://avatars.githubusercontent.com/u/3140578?v=4?s=100" width="100px;" alt="Gagan Bansal"/><br /><sub><b>Gagan Bansal</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/issues?q=author%3Agagan-bansal" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/rauaap"><img src="https://avatars.githubusercontent.com/u/89995622?v=4?s=100" width="100px;" alt="rauaap"/><br /><sub><b>rauaap</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/commits?author=rauaap" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
