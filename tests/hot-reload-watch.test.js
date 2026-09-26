@@ -64,7 +64,15 @@ const makeOpenWs = (flags, fail) => {
 	}
 }
 
-test.cb('hot reload pushes for a nested file (watchers cover subdirs)', t => {
+// The server tests below run serial: concurrent init() calls in one
+// file pull adjacent ephemeral ports (macOS hands them out
+// sequentially) and init guesses the ws port as httpPort + 1, so
+// parallel pipelines in the same file collide on the wss bind
+// (EADDRINUSE). Serial keeps the file's port pipelines exclusive;
+// cross-file races are covered by the wss error tolerance in
+// startHotReload plus the client handshake retry below.
+
+test.serial.cb('hot reload pushes for a nested file (watchers cover subdirs)', t => {
 	t.plan(2)
 
 	getPort().then(port => {
@@ -140,7 +148,7 @@ test.cb('hot reload pushes for a nested file (watchers cover subdirs)', t => {
 	})
 })
 
-test.cb('hot reload watches a directory created at runtime (lazy add)', t => {
+test.serial.cb('hot reload watches a directory created at runtime (lazy add)', t => {
 	t.plan(2)
 
 	getPort().then(port => {
@@ -222,7 +230,7 @@ test.cb('hot reload watches a directory created at runtime (lazy add)', t => {
 	})
 })
 
-test.cb('excluded directories created at runtime never get handles', t => {
+test.serial.cb('excluded directories created at runtime never get handles', t => {
 	t.plan(3)
 
 	getPort().then(port => {
@@ -303,7 +311,7 @@ test.cb('excluded directories created at runtime never get handles', t => {
 	})
 })
 
-test.cb('watchers are bounded and closed on shutdown', t => {
+test.serial.cb('watchers are bounded and closed on shutdown', t => {
 	t.plan(5)
 
 	getPort().then(port => {
