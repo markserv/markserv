@@ -8,7 +8,6 @@
 [![CHANGELOG](https://img.shields.io/badge/changelog-&nbsp;✔️-orange.svg?style=flat-square)](CHANGELOG.md)
 [![Build Status](https://travis-ci.org/markserv/markserv.svg?branch=master&style=flat-square)](https://travis-ci.org/markserv/markserv)
 [![Coverage Status](https://coveralls.io/repos/github/markserv/markserv/badge.svg?branch=master&style=flat-square)](https://coveralls.io/github/markserv/markserv?branch=master) [![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors) [![Npm Version](https://img.shields.io/npm/v/markserv.svg?style=flat-square)](https://www.npmjs.com/package/markserv)
-[![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg?style=flat-square)](https://github.com/sindresorhus/xo)
 [![Known Vulnerabilities](https://snyk.io/test/github/markserv/markserv/badge.svg?style=flat-square)](https://snyk.io/test/github/markserv/markserv)
 
 <p align="center">
@@ -280,6 +279,8 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/rcarrionr"><img src="https://avatars.githubusercontent.com/u/26934511?v=4?s=100" width="100px;" alt="Richard Carrion"/><br /><sub><b>Richard Carrion</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/commits?author=rcarrionr" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/alysonfs"><img src="https://avatars.githubusercontent.com/u/928412?v=4?s=100" width="100px;" alt="Alyson Felipe"/><br /><sub><b>Alyson Felipe</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/issues?q=author%3Aalysonfs" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://mel.9840002.xyz/"><img src="https://avatars.githubusercontent.com/u/261439380?v=4?s=100" width="100px;" alt="Mel"/><br /><sub><b>Mel</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/issues?q=author%3Aspace0mel" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/gagan-bansal"><img src="https://avatars.githubusercontent.com/u/3140578?v=4?s=100" width="100px;" alt="Gagan Bansal"/><br /><sub><b>Gagan Bansal</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/issues?q=author%3Agagan-bansal" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/rauaap"><img src="https://avatars.githubusercontent.com/u/89995622?v=4?s=100" width="100px;" alt="rauaap"/><br /><sub><b>rauaap</b></sub></a><br /><a href="https://github.com/f1lt3r/markserv/commits?author=rauaap" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
