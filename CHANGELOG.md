@@ -5,6 +5,13 @@
 
 ## [Unreleased]
 
+## [1.20.2] - 2026-09-26
+
+### Fixed
+
+- Hot reload on Linux (and fully dead hot reload on Node < 19): `fs.watch` with `recursive: true` is only supported on macOS and Windows — on Linux it is silently ignored, so edits to nested files never triggered a reload, and on Node < 19 it throws, which the existing try/catch swallowed, leaving hot reload dead at all levels. `lib/server.js` now uses a bounded set of non-recursive per-directory watchers: a `collectWatchDirs()` walk (exact-name prune of `node_modules`/`.git`, symlinks never followed) with one tracked handle per directory, lazy-add for runtime-created dirs, per-handle error tolerance, and all handles closed when the server stops — identical semantics on every platform with a bounded watcher count (anti-ENOSPC) (#128): PR [#150](https://github.com/markserv/markserv/pull/150)
+- Hot-reload WebSocket server no longer crashes when its port is taken between the port check and `listen` (EADDRINUSE, e.g. by a concurrent process): the bind now waits for the real `listening`/`error` event, retries on a freshly verified port, and keeps the advertised ws:// address accurate (#128): PR [#150](https://github.com/markserv/markserv/pull/150)
+
 ## [1.20.1] - 2026-09-25
 
 ### Fixed
