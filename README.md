@@ -161,7 +161,7 @@ The server response will be:
 
 ```html
 <h1>Include Markdown</h1>
-<h2>Foo Bar</h2>
+<h2>Qux</h2>
 ```
 
 ### Include HTML
