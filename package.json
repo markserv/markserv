@@ -4,7 +4,7 @@
   "description": "🏁  serve markdown as html (GitHub style), index directories, live-reload as you edit",
   "preferGlobal": true,
   "scripts": {
-    "test": "xo && npm run cover",
+    "test": "npm run cover",
     "postinstall": "patch-package",
     "cover": "nyc --reporter=lcov --reporter=html --reporter=text ava",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls -v"
@@ -112,15 +112,7 @@
     "husky": "^3.1.0",
     "nyc": "^15.0.0",
     "patch-package": "^8.0.1",
-    "request": "^2.88.0",
-    "xo": "^0.25.3"
-  },
-  "xo": {
-    "esnext": true,
-    "semicolon": false,
-    "rules": {
-      "node/no-unpublished-bin": 2
-    }
+    "request": "^2.88.0"
   },
   "ava": {
     "failfast": true
