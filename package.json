@@ -96,6 +96,7 @@
     "markdown-it-table-of-contents": "^0.4.4",
     "markdown-it-task-lists": "^2.1.1",
     "meow": "^6.0.0",
+    "mermaid": "^10.9.8",
     "micromatch": "^4.0.2",
     "mime": "^2.4.4",
     "open": "^6.0.0",

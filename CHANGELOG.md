@@ -5,6 +5,11 @@
 
 ## [Unreleased]
 
+### Added
+
+- Mermaid diagrams now render from a locally served copy of the library: the `mermaid` npm package's `dist/mermaid.min.js` is served through the existing `{markserv}` internal-URL mechanism via an exact-match media allow-list (the client-controllable URL suffix never reaches a path join, so it is a fixed set of named resources, not a directory bridge). Pages with diagrams work offline and no third-party CDN host sits in the page load path
+- `--mermaid-loose` flag: pages render mermaid with `securityLevel: 'loose'` instead of the default `'strict'`. Diagram links (`click` statements) with ordinary urls are clickable in both modes and update the page location on click; strict mode sanitizes link targets so dangerous url schemes (e.g. `javascript:`) stay inert, while loose mode permits them — intended for trusted, locally served markdown
+
 ## [1.20.2] - 2026-09-26
 
 ### Fixed

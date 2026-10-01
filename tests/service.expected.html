@@ -200,11 +200,13 @@ raw Markdown line up prettily. You can also use inline Markdown.</p>
 </script>
 <script>
 (function() {
-	// Lazy mermaid loader: costs nothing (no network) on pages without a
-	// mermaid fence, and degrades to the plain source text when the CDN is
-	// unreachable. The script is appended asynchronously and rendered via
-	// contentLoaded(), because startOnLoad hooks the window load event,
-	// which may already have fired by the time the CDN answers.
+	// Lazy mermaid loader: costs nothing on pages without a mermaid fence.
+	// The library is served locally by markserv (from the mermaid npm
+	// package, via the {markserv} media allow-list), so pages work offline;
+	// if the script fails to load the fence degrades to its source text.
+	// The script is appended asynchronously and rendered via contentLoaded(),
+	// because startOnLoad hooks the window load event, which may already
+	// have fired by the time the script answers.
 	var loading = false;
 	var sourceCache = new WeakMap();
 
@@ -237,7 +239,15 @@ raw Markdown line up prettily. You can also use inline Markdown.</p>
 		});
 
 		var theme = document.documentElement.getAttribute('data-theme') || 'dark';
-		mermaidLib.initialize({ theme: mermaidThemeFor(theme) });
+		mermaidLib.initialize({
+			theme: mermaidThemeFor(theme),
+			// Strict by default: mermaid sanitizes diagram link targets
+			// (dangerous url schemes like javascript: are inert). Plain url
+			// links are clickable either way and update the page location;
+			// --mermaid-loose lifts the sanitization (securityLevel 'loose'),
+			// for trusted, locally served markdown.
+			securityLevel: 'strict'
+		});
 		mermaidLib.contentLoaded();
 	};
 
@@ -254,12 +264,12 @@ raw Markdown line up prettily. You can also use inline Markdown.</p>
 
 		loading = true;
 		var script = document.createElement('script');
-		script.src = 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js';
+		script.src = '{markserv}media/mermaid.min.js';
 		script.onload = function() {
 			window.markservRenderMermaid();
 		};
 		script.onerror = function() {
-			// Offline or CDN unreachable: keep the diagram source as plain text
+			// Script failed to load: keep the diagram source as plain text
 			loading = false;
 		};
 		document.head.appendChild(script);
