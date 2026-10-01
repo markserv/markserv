@@ -1,13 +1,11 @@
-import fs from 'fs'
-import path from 'path'
-import request from 'request'
-import test from 'ava'
-import getPort from 'get-port'
-import markserv from '../lib/server'
+const fs = require('fs')
+const path = require('path')
+const {get} = require('./http.js')
+const test = require('ava')
+const getPort = require('get-port')
+const markserv = require('../lib/server.js')
 
-test.cb('start service and get text file', t => {
-	t.plan(3)
-
+test('start service and get text file', async t => {
 	const expected = String(
 		fs.readFileSync(
 			path.join(__dirname, 'implant-file.expected.html')
@@ -15,49 +13,30 @@ test.cb('start service and get text file', t => {
 	)
 
 	const dir = path.join(__dirname)
+	const port = await getPort()
 
-	getPort().then(port => {
-		const flags = {
-			port,
-			dir,
-			hotreload: false,
-			address: 'localhost',
-			silent: true,
-			browser: false,
-			templates: true
-		}
-
-		const done = () => {
-			t.end()
-		}
-
-		markserv.init(flags).then(service => {
-			const closeServer = () => {
-				service.httpServer.close(done)
-			}
-
-			const opts = {
-				url: `http://localhost:${port}/implant-file.render-fixture.md`,
-				timeout: 1000 * 2
-			}
-
-			request(opts, (err, res, body) => {
-				if (err) {
-					t.fail(err)
-					closeServer()
-				}
-
-				// Write expected:
-				// fs.writeFileSync(path.join(__dirname, 'implant-file.expected.html'), body)
-
-				t.true(body.includes(expected))
-				t.is(res.statusCode, 200)
-				t.pass()
-				closeServer()
-			})
-		}).catch(error => {
-			t.fail(error)
-			t.end()
-		})
+	const service = await markserv.init({
+		port,
+		dir,
+		hotreload: false,
+		address: 'localhost',
+		silent: true,
+		browser: false,
+		templates: true
 	})
+
+	try {
+		const res = await get({
+			url: `http://localhost:${port}/implant-file.render-fixture.md`,
+			timeout: 1000 * 2
+		})
+
+		// Write expected:
+		// fs.writeFileSync(path.join(__dirname, 'implant-file.expected.html'), res.body)
+
+		t.true(res.body.includes(expected))
+		t.is(res.statusCode, 200)
+	} finally {
+		await new Promise(resolve => service.httpServer.close(resolve))
+	}
 })

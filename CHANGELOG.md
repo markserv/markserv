@@ -10,6 +10,21 @@
 - Mermaid diagrams now render from a locally served copy of the library: the `mermaid` npm package's `dist/mermaid.min.js` is served through the existing `{markserv}` internal-URL mechanism via an exact-match media allow-list (the client-controllable URL suffix never reaches a path join, so it is a fixed set of named resources, not a directory bridge). Pages with diagrams work offline and no third-party CDN host sits in the page load path
 - `--mermaid-loose` flag: pages render mermaid with `securityLevel: 'loose'` instead of the default `'strict'`. Diagram links (`click` statements) with ordinary urls are clickable in both modes and update the page location on click; strict mode sanitizes link targets so dangerous url schemes (e.g. `javascript:`) stay inert, while loose mode permits them — intended for trusted, locally served markdown
 
+### Security
+
+- `npm audit` 31 → 2 (4 low / 14 moderate / 11 high / 2 critical → 2 high). The two remaining are the `markdown-it`/`linkify-it` DoS advisories and are deferred: fixing them requires the markdown-it 10 → 14.3.1+ major plus a full plugin-stack migration (markdown-it-anchor / task-lists / TOC / emoji / mathjax / highlightjs), which is a separate piece of work; the `linkify` advisory is additionally unreachable in markserv (`linkify: false`)
+- Removed the deprecated `request` dev dependency (2 critical: `form-data` unsafe boundary + CRLF injection; 4 moderate: `qs`, `tough-cookie`, `uuid`, `form-data` via `coveralls`): tests now use a small `tests/http.js` helper on core `http`. It sends request paths exactly as written (no client-side dot-segment normalization), which the path-traversal tests depend on — the server, not the client, must reject `/a.md/../../secret.md`
+- Removed `analyze-deps` and `is-online` production dependencies (moderate via the `got`/`package-json` chain): the upgrade prompt now queries the npm registry directly over core `https` — the request doubles as the connectivity probe the old `is-online` gate provided
+- Removed `markdown-it-include` (moderate; not used anywhere in `lib/`)
+- Bumped `send` 0.17 → 0.19 (open-redirect / Range DoS fixes) and added an `overrides` entry pinning `tmp` to `^0.2.6` (symlink-`dir` arbitrary-write + prefix/postfix path-traversal advisories)
+
+### Changed
+
+- `ava` dev dependency 2 → 5: the `test.cb` callback interface was removed in ava 4+, so the suite was migrated to async/await; this also drops the entire vulnerable dev-tool chain (cross-spawn / execa / boxen / term-size / update-notifier / trim-newlines / nested meow@3 / inquirer)
+- `nyc` 15 → 18 (patched `istanbul-lib-processinfo`)
+- Removed the `coveralls` dev dependency and `coveralls` npm script (its `request` dependency re-pulled the removed critical chain; the legacy travis `after_success` upload is no longer wired — re-point CI coverage upload if restored)
+- Removed the `patch-package` `core-assert` patch and the `postinstall` hook: the patched package no longer exists in the tree after the ava bump (supersedes the 1.20.1 Node-24 fix)
+
 ## [1.20.2] - 2026-09-26
 
 ### Fixed

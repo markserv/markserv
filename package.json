@@ -5,9 +5,7 @@
   "preferGlobal": true,
   "scripts": {
     "test": "npm run cover",
-    "postinstall": "patch-package",
-    "cover": "nyc --reporter=lcov --reporter=html --reporter=text ava",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls -v"
+    "cover": "nyc --reporter=lcov --reporter=html --reporter=text ava"
   },
   "keywords": [
     "code",
@@ -75,7 +73,6 @@
     "url": "http://github.com/markserv/markserv.git"
   },
   "dependencies": {
-    "analyze-deps": "^2.0.0",
     "bluebird": "^3.7.2",
     "chalk": "^3.0.0",
     "commander": "^4.0.1",
@@ -85,13 +82,11 @@
     "get-port": "^5.1.0",
     "handlebars": "^4.5.3",
     "implant": "^2.0.3",
-    "is-online": "^8.2.1",
     "less": "^3.10.3",
     "markdown-it": "^10.0.0",
     "markdown-it-anchor": "^5.2.5",
     "markdown-it-emoji": "^1.4.0",
     "markdown-it-highlightjs": "^3.0.0",
-    "markdown-it-include": "^1.1.0",
     "markdown-it-mathjax": "^2.0.0",
     "markdown-it-table-of-contents": "^0.4.4",
     "markdown-it-task-lists": "^2.1.1",
@@ -101,21 +96,24 @@
     "mime": "^2.4.4",
     "open": "^6.0.0",
     "promptly": "^3.0.3",
-    "send": "^0.17.1",
+    "send": "^0.19.0",
     "snyk": "^1.266.0",
     "term-img": "^4.1.0",
     "ws": "^7.4.0"
   },
   "devDependencies": {
     "all-contributors-cli": "^6.11.2",
-    "ava": "^2.4.0",
-    "coveralls": "^3.0.9",
+    "ava": "^5.3.1",
     "husky": "^3.1.0",
-    "nyc": "^15.0.0",
-    "patch-package": "^8.0.1",
-    "request": "^2.88.0"
+    "nyc": "^18.0.0"
+  },
+  "overrides": {
+    "tmp": "^0.2.6"
   },
   "ava": {
-    "failfast": true
+    "failfast": true,
+    "files": [
+      "tests/**/*.test.js"
+    ]
   }
 }
