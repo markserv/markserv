@@ -30,7 +30,8 @@ coverage
 .lock-wscript
 
 # Package Locks
-package-lock.json
+# (package-lock.json is committed for reproducible installs;
+# yarn.lock stays ignored — the project uses npm)
 yarn.lock
 
 # Compiled binary addons (http://nodejs.org/api/addons.html)

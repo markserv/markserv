@@ -133,7 +133,7 @@ test('in-root requests are unaffected (200)', async t => {
 		})
 
 		t.is(res.statusCode, 200)
-		t.true(res.body.includes('<h1 id="harmless">Harmless</h1>'))
+		t.true(res.body.includes('<h1 id="harmless" tabindex="-1">Harmless</h1>'))
 	} finally {
 		await new Promise(resolve => service.httpServer.close(resolve))
 	}
@@ -263,7 +263,7 @@ test('in-root implants still resolve (templates mode)', async t => {
 		t.is(res.statusCode, 200)
 		// {file:} inlines the raw source, {markdown:} the rendered html
 		t.true(res.body.includes('Just a doc in the served root.'))
-		t.true(res.body.includes('<h1 id="harmless">Harmless</h1>'))
+		t.true(res.body.includes('<h1 id="harmless" tabindex="-1">Harmless</h1>'))
 		t.false(res.body.includes(marker))
 	} finally {
 		await new Promise(resolve => service.httpServer.close(resolve))
