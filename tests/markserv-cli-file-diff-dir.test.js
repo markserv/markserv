@@ -1,114 +1,74 @@
-import fs from 'fs'
-import path from 'path'
-import request from 'request'
-import test from 'ava'
-import getPort from 'get-port'
-import cli from '../lib/cli'
+const fs = require('fs')
+const path = require('path')
+const {get} = require('./http.js')
+const test = require('ava')
+const getPort = require('get-port')
+const cli = require('../lib/cli.js')
 
-test.cb('start markserv via "cli" command opening file in different dir', t => {
-	t.plan(3)
-
+test('start markserv via "cli" command opening file in different dir', async t => {
 	const expected = String(
 		fs.readFileSync(
 			path.join(__dirname, 'markserv-cli-file-diff-dir.expected.html')
 		)
 	)
 
-	getPort().then(port => {
-		const cliOpts = {
-			input: ['tests/markserv-cli-file-diff-dir.expected.html'],
-			flags: {
-				port,
-				hotreload: false,
-				address: 'localhost',
-				silent: true,
-				browser: false
-			}
+	const port = await getPort()
+	const cliOpts = {
+		input: ['tests/markserv-cli-file-diff-dir.expected.html'],
+		flags: {
+			port,
+			hotreload: false,
+			address: 'localhost',
+			silent: true,
+			browser: false
 		}
+	}
 
-		const done = () => {
-			t.end()
-		}
+	const service = await cli.run(cliOpts)
 
-		cli.run(cliOpts).then(service => {
-			const closeServer = () => {
-				service.httpServer.close(done)
-			}
-
-			const opts = {
-				url: service.launchUrl,
-				timeout: 1000 * 2
-			}
-
-			request(opts, (err, res, body) => {
-				if (err) {
-					t.fail(err)
-					closeServer()
-				}
-
-				t.true(body.includes(expected))
-
-				t.is(res.statusCode, 200)
-				t.pass()
-				closeServer()
-			})
-		}).catch(error => {
-			t.fail(error)
-			t.end()
+	try {
+		const res = await get({
+			url: service.launchUrl,
+			timeout: 1000 * 2
 		})
-	})
+
+		t.true(res.body.includes(expected))
+		t.is(res.statusCode, 200)
+	} finally {
+		await new Promise(resolve => service.httpServer.close(resolve))
+	}
 })
 
-test.cb('start markserv via "cli" command opening file in different dir with preceeding ./', t => {
-	t.plan(3)
-
+test('start markserv via "cli" command opening file in different dir with preceeding ./', async t => {
 	const expected = String(
 		fs.readFileSync(
 			path.join(__dirname, 'markserv-cli-file-diff-dir.expected.html')
 		)
 	)
 
-	getPort().then(port => {
-		const cliOpts = {
-			input: ['./tests/markserv-cli-file-diff-dir.expected.html'],
-			flags: {
-				port,
-				hotreload: false,
-				address: 'localhost',
-				silent: true,
-				browser: false
-			}
+	const port = await getPort()
+	const cliOpts = {
+		input: ['./tests/markserv-cli-file-diff-dir.expected.html'],
+		flags: {
+			port,
+			hotreload: false,
+			address: 'localhost',
+			silent: true,
+			browser: false
 		}
+	}
 
-		const done = () => {
-			t.end()
-		}
+	const service = await cli.run(cliOpts)
 
-		cli.run(cliOpts).then(service => {
-			const closeServer = () => {
-				service.httpServer.close(done)
-			}
-
-			const opts = {
-				url: service.launchUrl,
-				timeout: 1000 * 2
-			}
-
-			request(opts, (err, res, body) => {
-				if (err) {
-					t.fail(err)
-					closeServer()
-				}
-
-				t.true(body.includes(expected))
-
-				t.is(res.statusCode, 200)
-				t.pass()
-				closeServer()
-			})
-		}).catch(error => {
-			t.fail(error)
-			t.end()
+	try {
+		const res = await get({
+			url: service.launchUrl,
+			timeout: 1000 * 2
 		})
-	})
+
+		t.true(res.body.includes(expected))
+		t.is(res.statusCode, 200)
+	} finally {
+		await new Promise(resolve => service.httpServer.close(resolve))
+	}
 })

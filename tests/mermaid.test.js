@@ -1,6 +1,6 @@
-import path from 'path'
-import test from 'ava'
-import markserv from '../lib/server'
+const path = require('path')
+const test = require('ava')
+const markserv = require('../lib/server.js')
 
 test('mermaid fence', async t => {
 	const markdown = await markserv.getFile(path.join(__dirname, 'mermaid.md'))

@@ -12,3 +12,4 @@ Options
 	--light  Use light theme (default: dark)
 	--synthwave  Use synthwave/retro-neon theme (default: dark)
 	--templates  Enable {file:}, {markdown:}, {html:}, {less:} templating (false)
+	--mermaid-loose  Render mermaid with securityLevel "loose" — lifts link-target sanitization (e.g. javascript: urls) in diagrams; plain url links work either way (false)

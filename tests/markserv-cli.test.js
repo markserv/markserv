@@ -1,60 +1,40 @@
-import fs from 'fs'
-import path from 'path'
-import request from 'request'
-import test from 'ava'
-import getPort from 'get-port'
-import readme from '../lib/readme'
+const fs = require('fs')
+const path = require('path')
+const {get} = require('./http.js')
+const test = require('ava')
+const getPort = require('get-port')
+const readme = require('../lib/readme.js')
 
-test.cb('start markserv via "readme" command', t => {
-	t.plan(3)
-
+test('start markserv via "readme" command', async t => {
 	const expected = String(
 		fs.readFileSync(
 			path.join(__dirname, 'markserv-cli.expected.html')
 		)
 	)
 
-	getPort().then(port => {
-		const cliOpts = {
-			input: [],
-			flags: {
-				port,
-				hotreload: false,
-				address: 'localhost',
-				silent: true,
-				browser: false
-			}
+	const port = await getPort()
+	const cliOpts = {
+		input: [],
+		flags: {
+			port,
+			hotreload: false,
+			address: 'localhost',
+			silent: true,
+			browser: false
 		}
+	}
 
-		const done = () => {
-			t.end()
-		}
+	const service = await readme.run(cliOpts)
 
-		readme.run(cliOpts).then(service => {
-			const closeServer = () => {
-				service.httpServer.close(done)
-			}
-
-			const opts = {
-				url: service.launchUrl,
-				timeout: 1000 * 2
-			}
-
-			request(opts, (err, res, body) => {
-				if (err) {
-					t.fail(err)
-					closeServer()
-				}
-
-				t.true(body.includes(expected))
-
-				t.is(res.statusCode, 200)
-				t.pass()
-				closeServer()
-			})
-		}).catch(error => {
-			t.fail(error)
-			t.end()
+	try {
+		const res = await get({
+			url: service.launchUrl,
+			timeout: 1000 * 2
 		})
-	})
+
+		t.true(res.body.includes(expected))
+		t.is(res.statusCode, 200)
+	} finally {
+		await new Promise(resolve => service.httpServer.close(resolve))
+	}
 })
