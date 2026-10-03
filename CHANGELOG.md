@@ -24,6 +24,7 @@
 - `nyc` 15 → 18 (patched `istanbul-lib-processinfo`)
 - Removed the `coveralls` dev dependency and `coveralls` npm script (its `request` dependency re-pulled the removed critical chain; the legacy travis `after_success` upload is no longer wired — re-point CI coverage upload if restored)
 - Removed the `patch-package` `core-assert` patch and the `postinstall` hook: the patched package no longer exists in the tree after the ava bump (supersedes the 1.20.1 Node-24 fix)
+- Removed the `snyk` production dependency: nothing in `lib/` uses it, yet every install downloaded the ~12 MB Snyk CLI and ran its `postinstall` binary bootstrap (pnpm 10+ blocks that script by default and prompts for approval). The `.snyk` policy file stays for the Snyk GitHub integration
 - Commit `package-lock.json` (un-ignored in `.gitignore`) so installs are reproducible; the committed lockfile matches the final dependency set (markdown-it 15 stack, mermaid, security cleanup). `yarn.lock` stays ignored — the project uses npm
 
 ### Upgraded
