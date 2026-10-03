@@ -296,3 +296,9 @@ a.button.back:hover {
     rgba(0, 0, 0, 0.03) 4px
   );
 }
+
+/* GitHub theme-specific images: ![](img.png#gh-dark-mode-only) */
+[data-theme="light"] .markdown-body img[src$="#gh-dark-mode-only"],
+:root:not([data-theme="light"]) .markdown-body img[src$="#gh-light-mode-only"] {
+  display: none;
+}

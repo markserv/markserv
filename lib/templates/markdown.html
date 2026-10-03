@@ -33,6 +33,33 @@
 	var serverTheme = '{{theme}}' || 'dark';
 	var current = localStorage.getItem('markserv-theme') || serverTheme;
 
+	// GitHub-style <picture><source media="(prefers-color-scheme: dark)">
+	// follows the OS preference, not the markserv theme toggle. Rewrite
+	// each source's media query so the prefers-color-scheme feature
+	// matches the active theme; the original query is kept in
+	// data-markserv-media so the rewrite can be redone on every toggle.
+	var colorSchemeRe = /\(\s*prefers-color-scheme\s*:\s*(dark|light)\s*\)/gi;
+	var always = '(min-width: 0px)';
+	var never = '(not (min-width: 0px))';
+
+	window.markservSyncPictures = function() {
+		var scheme = current === 'light' ? 'light' : 'dark';
+		var sources = document.querySelectorAll('.markdown-body picture source[media]');
+		sources.forEach(function(el) {
+			var original = el.getAttribute('data-markserv-media');
+			if (original === null) {
+				original = el.getAttribute('media');
+				if (!/prefers-color-scheme/i.test(original)) {
+					return
+				}
+				el.setAttribute('data-markserv-media', original);
+			}
+			el.setAttribute('media', original.replace(colorSchemeRe, function(m, value) {
+				return value.toLowerCase() === scheme ? always : never;
+			}));
+		});
+	};
+
 	function applyTheme(t) {
 		document.documentElement.setAttribute('data-theme', t);
 		themes.forEach(function(name) {
@@ -42,6 +69,7 @@
 		var btn = document.getElementById('theme-toggle');
 		if (btn) btn.textContent = icons[t] || icons.dark;
 		current = t;
+		window.markservSyncPictures();
 
 		// Re-render mermaid diagrams so they follow the new theme
 		// (mermaid bakes theme CSS into the SVG at render time)
@@ -167,6 +195,7 @@
 			var el = document.querySelector('.markdown-body');
 			if (el) {
 				el.innerHTML = e.data;
+				window.markservSyncPictures();
 				if (el.querySelector('pre.mermaid')) {
 					window.markservLoadMermaid();
 				}
