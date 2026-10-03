@@ -18,6 +18,10 @@
 </head>
 <body>
 <article class="markdown-body">
+<div class="site-search" id="site-search">
+	<input type="search" id="site-search-input" placeholder="Search this site…">
+	<ul id="site-search-results" class="site-search-results" hidden></ul>
+</div>
 <p>Colons can be used to align columns.</p>
 <table>
 <thead>
@@ -70,13 +74,17 @@ raw Markdown line up prettily. You can also use inline Markdown.</p>
 </tbody>
 </table>
 
-<footer><sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: 36707</sup></footer>
+<footer><sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: 94565</sup></footer>
 </article>
 <div class="width-control" id="width-control">
     <span id="width-tooltip"></span>
     <input type="range" id="width-slider" min="0" max="1920" value="978" step="1">
 </div>
 <button class="theme-toggle" id="theme-toggle" title="Toggle theme"></button>
+<div class="page-actions" id="page-actions">
+	<a class="page-action" href="/__markserv/export/tests/tables.md?format=html" title="Download this page as standalone HTML">Save as HTML</a>
+	<a class="page-action" href="/__markserv/export/tests/tables.md?format=md" title="Download the markdown source">Download .md</a>
+</div>
 <script>
 (function() {
 	var themes = ['dark', 'light', 'synthwave', 'solarized'];
@@ -118,7 +126,7 @@ raw Markdown line up prettily. You can also use inline Markdown.</p>
     if (!slider) return;
 
     var CSS_DEFAULT = 978;   // must match body { width } in markserv.css
-    var storageKey = 'markserv-width:' + '';
+    var storageKey = 'markserv-width:' + '/Users/user/repos/markserv/.worktrees/feature-search-export';
     var stored = localStorage.getItem(storageKey);
 
     function updateSliderMax() {
@@ -198,6 +206,94 @@ raw Markdown line up prettily. You can also use inline Markdown.</p>
     });
 })();
 </script>
+<script>
+(function() {
+	// Site search: debounced fetch of /__markserv/search, results
+	// rendered as DOM nodes (never innerHTML with search data) so
+	// file names and snippets can't inject markup. '/' focuses the
+	// input, Escape clears it.
+	var input = document.getElementById('site-search-input');
+	var list = document.getElementById('site-search-results');
+	if (!input || !list) return;
+
+	var timer = null;
+
+	function clear() {
+		list.innerHTML = '';
+		list.hidden = true;
+	}
+
+	function render(results) {
+		list.innerHTML = '';
+		var q = input.value.trim().toLowerCase();
+		results.forEach(function(r) {
+			var li = document.createElement('li');
+			var a = document.createElement('a');
+			a.href = '/' + r.path + (r.anchor ? '#' + r.anchor : '');
+			var title = document.createElement('strong');
+			title.textContent = r.title;
+			var pathEl = document.createElement('span');
+			pathEl.className = 'site-search-path';
+			pathEl.textContent = ' ' + r.path;
+			a.appendChild(title);
+			a.appendChild(pathEl);
+			var p = document.createElement('p');
+			if (r.snippet) {
+				var idx = q ? r.snippet.toLowerCase().indexOf(q) : -1;
+				if (idx >= 0) {
+					p.appendChild(document.createTextNode(r.snippet.slice(0, idx)));
+					var m = document.createElement('mark');
+					m.textContent = r.snippet.slice(idx, idx + q.length);
+					p.appendChild(m);
+					p.appendChild(document.createTextNode(r.snippet.slice(idx + q.length)));
+				} else {
+					p.textContent = r.snippet;
+				}
+			}
+			li.appendChild(a);
+			li.appendChild(p);
+			list.appendChild(li);
+		});
+		list.hidden = results.length === 0;
+	}
+
+	function doSearch() {
+		var q = input.value.trim();
+		if (!q) {
+			clear();
+			return;
+		}
+		fetch('/__markserv/search?q=' + encodeURIComponent(q))
+			.then(function(res) {
+				if (!res.ok) return [];
+				return res.json();
+			})
+			.then(render)
+			.catch(clear);
+	}
+
+	input.addEventListener('input', function() {
+		clearTimeout(timer);
+		timer = setTimeout(doSearch, 200);
+	});
+
+	input.addEventListener('keydown', function(e) {
+		if (e.key === 'Escape') {
+			input.value = '';
+			clear();
+			input.blur();
+		}
+	});
+
+	document.addEventListener('keydown', function(e) {
+		if (e.key === '/' && document.activeElement !== input) {
+			e.preventDefault();
+			input.focus();
+		}
+	});
+})();
+</script>
+
 <script>
 (function() {
 	// Lazy mermaid loader: costs nothing on pages without a mermaid fence.

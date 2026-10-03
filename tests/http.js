@@ -30,7 +30,7 @@ const get = opts => new Promise((resolve, reject) => {
 				body += chunk
 			})
 			res.on('end', () => {
-				resolve({statusCode: res.statusCode, body})
+				resolve({statusCode: res.statusCode, headers: res.headers, body})
 			})
 		})
 

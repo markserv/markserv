@@ -95,6 +95,12 @@ body .markdown-body {
   .width-control {
     display: none !important;
   }
+  .site-search {
+    display: none !important;
+  }
+  .page-actions {
+    display: none !important;
+  }
 }
 
 /* Directory listing icons */
@@ -295,4 +301,114 @@ a.button.back:hover {
     rgba(0, 0, 0, 0.03) 2px,
     rgba(0, 0, 0, 0.03) 4px
   );
+}
+
+/* --- Site search --- */
+.site-search {
+    position: relative;
+    margin: 0 0 16px;
+}
+
+#site-search-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px 12px;
+    border: 1px solid var(--markserv-btn-border);
+    border-radius: 6px;
+    background-color: var(--markserv-btn-bg);
+    color: var(--markserv-btn-color);
+    font-size: 14px;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    outline: none;
+}
+
+#site-search-input:focus {
+    border-color: var(--markserv-slider-thumb);
+}
+
+.site-search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    margin: 4px 0 0;
+    padding: 4px;
+    list-style: none;
+    max-height: 50vh;
+    overflow: auto;
+    border: 1px solid var(--markserv-border);
+    border-radius: 6px;
+    background-color: var(--markserv-btn-bg);
+    color: var(--markserv-btn-color);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.site-search-results li {
+    padding: 6px 8px;
+    border-radius: 4px;
+}
+
+.site-search-results li:hover {
+    background-color: var(--markserv-outline-color);
+    opacity: 0.9;
+}
+
+.site-search-results a {
+    color: var(--markserv-btn-color);
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.site-search-results .site-search-path {
+    color: var(--markserv-icon-color);
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+.site-search-results p {
+    margin: 4px 0 0;
+    font-size: 13px;
+    color: var(--markserv-icon-color);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.site-search-results mark {
+    background: var(--markserv-slider-thumb);
+    color: var(--markserv-bg);
+    border-radius: 2px;
+    padding: 0 1px;
+}
+
+/* --- Page actions (export buttons) --- */
+.page-actions {
+    position: fixed;
+    bottom: 32px;
+    right: 200px;
+    z-index: 9999;
+    display: flex;
+    gap: 6px;
+}
+
+.page-action {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 10px;
+    border: 1px solid var(--markserv-btn-border);
+    border-radius: 6px;
+    background-color: var(--markserv-btn-bg);
+    color: var(--markserv-btn-color);
+    font-size: 12px;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.page-action:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }

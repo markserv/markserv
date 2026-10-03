@@ -22,6 +22,8 @@
 - Hot-reload as you edit (no browser plugin required)
 - Directory indexes
 - MIME Type file support
+- [Site-wide search](#mag-search--export) with highlighted snippets and heading deep links
+- [One-click export](#mag-search--export): standalone HTML, markdown source, directory zips
 
 Supporting: [MathJax](tests/mathjax.md), [Chinese Characters](tests/测试.md), [Table of Contents](tests/toc.md), [Tables](tests/tables.md), [Heading Anchors](tests/links.md)
 
@@ -104,6 +106,35 @@ markserv --theme solarized README.md
 ```
 
 You can also toggle between themes in the browser using the theme button in the bottom-right corner. Your choice is saved in `localStorage` and persists across hot-reloads.
+
+## :mag: Search & Export
+
+### Search
+
+Every markdown and directory page carries a search box over the whole served root. Results show the file title, path, and a highlighted snippet; matching headings deep-link to their anchor. Press `/` anywhere on the page to focus the search box, `Esc` to clear it. The index is kept fresh by the built-in file watcher, and `--no-search` disables it (the endpoint then answers `503`).
+
+The search endpoint can be used directly:
+
+```shell
+$ curl 'http://localhost:8642/__markserv/search?q=todo'
+```
+
+### Export
+
+Markdown pages carry `Save as HTML` and `Download .md` buttons, and directory indexes carry `Download .zip`. The underlying endpoint also works from any client:
+
+```shell
+# Standalone HTML (page chrome stripped, theme baked in)
+$ curl -OJ 'http://localhost:8642/__markserv/export/README.md?format=html'
+
+# Raw markdown source
+$ curl -OJ 'http://localhost:8642/__markserv/export/README.md?format=md'
+
+# A directory as a zip archive (dotfiles and node_modules/.git pruned)
+$ curl -OJ 'http://localhost:8642/__markserv/export/tests/?format=zip'
+```
+
+Export targets are confined to the served root — path traversal is refused with `403`.
 
 ## :link: Markdown Links
 
