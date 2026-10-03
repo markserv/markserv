@@ -4,8 +4,8 @@ const test = require('ava')
 const getPort = require('get-port')
 const markserv = require('../lib/server.js')
 
-// The mermaid client library is served locally from the mermaid npm
-// package through the {markserv} media allow-list, and diagram link
+// The mermaid client library (v11 code-split ESM dist) is served
+// locally under the reserved /vendor/mermaid/ prefix, and diagram link
 // behavior is controlled by the mermaidLoose flag (strict by default).
 
 const startService = extraFlags => markserv.init({
@@ -31,7 +31,7 @@ test('served page defaults to mermaid strict security', async t => {
 		// (javascript: urls inert; plain urls still clickable)
 		t.true(res.body.includes("securityLevel: 'strict'"))
 		// The library is served locally, not from a CDN
-		t.true(res.body.includes('{markserv}media/mermaid.min.js'))
+		t.true(res.body.includes('/vendor/mermaid/mermaid.esm.min.mjs'))
 		t.false(res.body.includes('cdn.jsdelivr.net/npm/mermaid'))
 	} finally {
 		await new Promise(resolve => service.httpServer.close(resolve))
@@ -51,40 +51,56 @@ test('mermaidLoose flag serves the page with mermaid loose security', async t =>
 		t.is(res.statusCode, 200)
 		// --mermaid-loose: mermaid link-target sanitization lifted
 		t.true(res.body.includes("securityLevel: 'loose'"))
-		t.true(res.body.includes('{markserv}media/mermaid.min.js'))
+		t.true(res.body.includes('/vendor/mermaid/mermaid.esm.min.mjs'))
 	} finally {
 		await new Promise(resolve => service.httpServer.close(resolve))
 	}
 })
 
-test('serves the vendored mermaid dist via the media route', async t => {
+test('serves the vendored mermaid ESM shim and its chunks', async t => {
 	const port = await getPort()
 	const service = await startService({port})
 
 	try {
-		const res = await get({
-			url: `http://localhost:${port}/%7Bmarkserv%7Dmedia/mermaid.min.js`,
-			timeout: 1000 * 10
+		const shim = await get({
+			url: `http://localhost:${port}/vendor/mermaid/mermaid.esm.min.mjs`,
+			timeout: 1000 * 5
 		})
 
-		t.is(res.statusCode, 200)
-		// The full minified library, not an error page
-		t.true(res.body.length > 1000000)
-		t.true(res.body.includes('mermaid'))
+		t.is(shim.statusCode, 200)
+		// The ESM shim, not an error page
+		t.true(shim.body.includes('export'))
+		t.true(shim.body.includes('import'))
+
+		// One of the shim's chunk imports resolves through the same
+		// reserved prefix (the code-split dist is servable end-to-end)
+		const chunkMatch = shim.body.match(/from"\.\/(chunks\/[^"]+\.mjs)"/)
+		t.truthy(chunkMatch, 'shim references a local chunk')
+
+		const chunk = await get({
+			url: `http://localhost:${port}/vendor/mermaid/${chunkMatch[1]}`,
+			timeout: 1000 * 5
+		})
+
+		t.is(chunk.statusCode, 200)
+		// Chunk files are ESM (re-export shims or code) — served, not an
+		// error page
+		t.true(chunk.body.length > 0)
+		t.true(/import|export/.test(chunk.body))
 	} finally {
 		await new Promise(resolve => service.httpServer.close(resolve))
 	}
 })
 
-test('{markserv} media suffixes are not a path bridge into node_modules', async t => {
+test('/vendor/mermaid/ suffixes are not a path bridge into node_modules', async t => {
 	const port = await getPort()
 	const service = await startService({port})
 
 	try {
-		// The media/ key is exact-match only; a traversal suffix falls
-		// through to the lib/-confined handler and is refused
+		// The prefix is confined to the mermaid dist root; a traversal
+		// suffix escapes it and is refused
 		const res = await get({
-			url: `http://localhost:${port}/%7Bmarkserv%7Dmedia/..%2F..%2Fpackage.json`,
+			url: `http://localhost:${port}/vendor/mermaid/../../package.json`,
 			timeout: 1000 * 2
 		})
 

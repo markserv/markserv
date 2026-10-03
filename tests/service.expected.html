@@ -201,12 +201,13 @@ raw Markdown line up prettily. You can also use inline Markdown.</p>
 <script>
 (function() {
 	// Lazy mermaid loader: costs nothing on pages without a mermaid fence.
-	// The library is served locally by markserv (from the mermaid npm
-	// package, via the {markserv} media allow-list), so pages work offline;
-	// if the script fails to load the fence degrades to its source text.
-	// The script is appended asynchronously and rendered via contentLoaded(),
-	// because startOnLoad hooks the window load event, which may already
-	// have fired by the time the script answers.
+	// The library is served locally by markserv (the mermaid npm
+	// package's ESM dist, under /vendor/mermaid/), so pages work
+	// offline; if the module fails to load the fence degrades to its
+	// source text. The module is appended asynchronously and rendered
+	// via contentLoaded(), because startOnLoad hooks the window load
+	// event, which may already have fired by the time the module
+	// answers.
 	var loading = false;
 	var sourceCache = new WeakMap();
 
@@ -263,11 +264,15 @@ raw Markdown line up prettily. You can also use inline Markdown.</p>
 		}
 
 		loading = true;
+		// mermaid v11 is a code-split ESM build with no UMD global:
+		// import the locally served shim as a module and expose the API
+		// on window for markservRenderMermaid()
 		var script = document.createElement('script');
-		script.src = '{markserv}media/mermaid.min.js';
-		script.onload = function() {
-			window.markservRenderMermaid();
-		};
+		script.type = 'module';
+		script.textContent =
+			"import * as m from '/vendor/mermaid/mermaid.esm.min.mjs';" +
+			'window.mermaid = m.default || m;' +
+			'window.markservRenderMermaid();';
 		script.onerror = function() {
 			// Script failed to load: keep the diagram source as plain text
 			loading = false;
