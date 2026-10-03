@@ -12,7 +12,7 @@
 
 ### Security
 
-- `npm audit` 31 → 2 (4 low / 14 moderate / 11 high / 2 critical → 2 high). The two remaining are the `markdown-it`/`linkify-it` DoS advisories and are deferred: fixing them requires the markdown-it 10 → 14.3.1+ major plus a full plugin-stack migration (markdown-it-anchor / task-lists / TOC / emoji / mathjax / highlightjs), which is a separate piece of work; the `linkify` advisory is additionally unreachable in markserv (`linkify: false`)
+- `npm audit`: all 31 findings on the production/fixable stack resolved (2 critical, 11 high, 14 moderate, 4 low → none). As of 2026-10-02, npm audit additionally reports 6 highs in the ava dev toolchain (freshly published braces/micromatch/fast-glob/globby/chokidar DoS/ReDoS advisories) with no fixed upstream version yet — dev-only exposure when running the test suite. The `micromatch` production dependency (unused anywhere in `lib/`) has been removed
 - Removed the deprecated `request` dev dependency (2 critical: `form-data` unsafe boundary + CRLF injection; 4 moderate: `qs`, `tough-cookie`, `uuid`, `form-data` via `coveralls`): tests now use a small `tests/http.js` helper on core `http`. It sends request paths exactly as written (no client-side dot-segment normalization), which the path-traversal tests depend on — the server, not the client, must reject `/a.md/../../secret.md`
 - Removed `analyze-deps` and `is-online` production dependencies (moderate via the `got`/`package-json` chain): the upgrade prompt now queries the npm registry directly over core `https` — the request doubles as the connectivity probe the old `is-online` gate provided
 - Removed `markdown-it-include` (moderate; not used anywhere in `lib/`)
@@ -24,6 +24,14 @@
 - `nyc` 15 → 18 (patched `istanbul-lib-processinfo`)
 - Removed the `coveralls` dev dependency and `coveralls` npm script (its `request` dependency re-pulled the removed critical chain; the legacy travis `after_success` upload is no longer wired — re-point CI coverage upload if restored)
 - Removed the `patch-package` `core-assert` patch and the `postinstall` hook: the patched package no longer exists in the tree after the ava bump (supersedes the 1.20.1 Node-24 fix)
+- Commit `package-lock.json` (un-ignored in `.gitignore`) so installs are reproducible; the committed lockfile matches the final dependency set (markdown-it 15 stack, mermaid, security cleanup). `yarn.lock` stays ignored — the project uses npm
+
+### Upgraded
+
+- mermaid 10.9.8 → 11.17.2: fixes CVE-2025-54881 (XSS via unsanitized sequence-diagram labels — tracked by Snyk; `npm audit` does not flag it because NVD has not published the advisory; fixed in 11.10.0). v11 dropped the UMD global build in favor of a code-split ESM dist, so the page loader now injects an inline `<script type="module">` that imports the locally served `/vendor/mermaid/mermaid.esm.min.mjs` shim plus its `./chunks/`, and `lib/server.js` exposes that tree under a reserved `/vendor/mermaid/` prefix confined to the package's dist root (the client-controllable suffix cannot reach outside it; traversal → 403)
+- markdown-it 10 → 15 with the plugin stack moved to current majors (markdown-it-anchor 5 → 10, markdown-it-emoji 1 → 3, markdown-it-highlightjs 3 → 4, markdown-it-table-of-contents 0.4 → 1.2; task-lists and mathjax were already current). This clears the last two fixable npm audit findings (the markdown-it/linkify-it DoS advisories, fixed in markdown-it 14.3.1+/15 and linkify-it 5+; the `linkify` one was additionally unreachable with `linkify: false`)
+- markdown-it-emoji 3 API: the single default plugin became named sets (`bare`/`full`/`light`); markserv uses `full` (the v1-equivalent set)
+- Visible output changes from the upgrade (test snapshots re-baselined accordingly): headings gain `tabindex="-1"` (markdown-it-anchor 10 — a keyboard-accessibility improvement); the TOC is no longer wrapped in a `<p>` and strips emoji from entry text (table-of-contents 1.2); some emoji gain/lose their variation selector per the v3 full set (e.g. `🕹` → `🕹️`); heading ids for emoji-shortcode headings are now computed from the resolved text (e.g. `:checkered_flag:` → `#heading--four` instead of `#heading-checkered_flag-four`) — external links to such heading anchors need updating
 
 ## [1.20.2] - 2026-09-26
 
