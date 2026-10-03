@@ -399,6 +399,23 @@ a.button.back:hover {
     padding: 0 1px;
 }
 
+.site-search-status {
+    list-style: none;
+    padding: 6px 8px;
+    font-size: 12px;
+    color: var(--markserv-icon-color);
+    opacity: 0.8;
+    pointer-events: none;
+}
+
+mark.markserv-search-match {
+    background: var(--markserv-slider-thumb);
+    color: var(--markserv-bg);
+    border-radius: 2px;
+    padding: 0 1px;
+    outline: 2px solid var(--markserv-slider-thumb);
+}
+
 /* --- Page actions (export buttons) --- */
 .page-actions {
     position: fixed;

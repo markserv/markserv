@@ -179,13 +179,43 @@
 		list.hidden = true;
 	}
 
-	function render(results) {
+	function statusRow(id, text) {
+		var li = document.createElement('li');
+		if (id) {
+			li.id = id;
+		}
+
+		li.className = 'site-search-status';
+		li.textContent = text;
+		return li;
+	}
+
+	function render(body) {
 		list.innerHTML = '';
+		list.hidden = false;
 		var q = input.value.trim().toLowerCase();
+		var data = (body && body.results) ? body : {results: body || []};
+		var results = data.results;
+		var matches = data.matches || 0;
+		var files = data.files || 0;
+
+		if (results.length === 0) {
+			// A search ran with zero hits — the list stays visible
+			list.appendChild(statusRow(null, 'No matches'));
+			return;
+		}
+
+		list.appendChild(statusRow('site-search-status',
+			matches + (matches === 1 ? ' match' : ' matches') +
+			' across ' + files + (files === 1 ? ' file' : ' files')));
+
 		results.forEach(function(r) {
 			var li = document.createElement('li');
 			var a = document.createElement('a');
-			a.href = '/' + r.path + (r.anchor ? '#' + r.anchor : '');
+			a.href = (r.matchNo === null)
+				? '/' + r.path + '#' + r.anchor
+				: '/' + r.path + '?markservSearch=' + encodeURIComponent(q) +
+					(r.matchNo > 1 ? '&markservGoto=' + r.matchNo : '');
 			var title = document.createElement('strong');
 			title.textContent = r.title;
 			var pathEl = document.createElement('span');
@@ -210,7 +240,6 @@
 			li.appendChild(p);
 			list.appendChild(li);
 		});
-		list.hidden = results.length === 0;
 	}
 
 	function doSearch() {
@@ -259,6 +288,66 @@
 			input.focus();
 		}
 	});
+})();
+</script>
+<script>
+(function() {
+	// Search jump-to: one-shot ?markservSearch=<term>[&markservGoto=<n>]
+	// (set by a search result row's link). Wrap every occurrence of
+	// the term in the page body in <mark class="markserv-search-match">,
+	// scroll the n-th mark into view, then clean the URL so a refresh
+	// does not re-highlight (one-shot by design; hot reload replaces
+	// the body and drops any active highlights).
+	var params = new URLSearchParams(location.search);
+	var term = params.get('markservSearch');
+	if (!term) return;
+	var goto = parseInt(params.get('markservGoto'), 10);
+	if (!goto || goto < 1) goto = 1;
+
+	var body = document.querySelector('.markdown-body');
+	if (body) {
+		var lower = term.toLowerCase();
+		// Collect the text nodes up front: wrapping mutates the tree,
+		// and a walker must not visit (and re-wrap) the nodes it
+		// creates.
+		var walker = document.createTreeWalker(body, NodeFilter.SHOW_TEXT, null);
+		var nodes = [];
+		var n;
+		while ((n = walker.nextNode()) !== null) {
+			nodes.push(n)
+		}
+
+		nodes.forEach(function(node) {
+			// Fast path: nodes without the term are left untouched
+			if (node.nodeValue.toLowerCase().indexOf(lower) === -1) {
+				return
+			}
+
+			// Split-and-wrap each occurrence (repeat until none left)
+			var current = node
+			while (true) {
+				var idx = current.nodeValue.toLowerCase().indexOf(lower);
+				if (idx === -1) {
+					break
+				}
+
+				var matchNode = current.splitText(idx)
+				var rest = matchNode.splitText(term.length)
+				var mark = document.createElement('mark')
+				mark.className = 'markserv-search-match'
+				matchNode.parentNode.insertBefore(mark, matchNode)
+				mark.appendChild(matchNode)
+				current = rest
+			}
+		})
+	}
+
+	var marks = document.querySelectorAll('.markdown-body mark.markserv-search-match');
+	if (marks.length) {
+		marks[Math.min(goto, marks.length) - 1].scrollIntoView({block: 'center'});
+	}
+
+	history.replaceState(null, '', location.pathname + location.hash);
 })();
 </script>
 {{/unless}}

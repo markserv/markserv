@@ -30,7 +30,7 @@
 	<li class="icon document isfile"><a href="file2.txt">file2.txt</a></li> 
 </ul>
 
-<footer><sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: 47706</sup></footer>
+<footer><sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: 31429</sup></footer>
 </article>
 <div class="width-control" id="width-control">
     <span id="width-tooltip"></span>
@@ -173,13 +173,43 @@
 		list.hidden = true;
 	}
 
-	function render(results) {
+	function statusRow(id, text) {
+		var li = document.createElement('li');
+		if (id) {
+			li.id = id;
+		}
+
+		li.className = 'site-search-status';
+		li.textContent = text;
+		return li;
+	}
+
+	function render(body) {
 		list.innerHTML = '';
+		list.hidden = false;
 		var q = input.value.trim().toLowerCase();
+		var data = (body && body.results) ? body : {results: body || []};
+		var results = data.results;
+		var matches = data.matches || 0;
+		var files = data.files || 0;
+
+		if (results.length === 0) {
+			// A search ran with zero hits — the list stays visible
+			list.appendChild(statusRow(null, 'No matches'));
+			return;
+		}
+
+		list.appendChild(statusRow('site-search-status',
+			matches + (matches === 1 ? ' match' : ' matches') +
+			' across ' + files + (files === 1 ? ' file' : ' files')));
+
 		results.forEach(function(r) {
 			var li = document.createElement('li');
 			var a = document.createElement('a');
-			a.href = '/' + r.path + (r.anchor ? '#' + r.anchor : '');
+			a.href = (r.matchNo === null)
+				? '/' + r.path + '#' + r.anchor
+				: '/' + r.path + '?markservSearch=' + encodeURIComponent(q) +
+					(r.matchNo > 1 ? '&markservGoto=' + r.matchNo : '');
 			var title = document.createElement('strong');
 			title.textContent = r.title;
 			var pathEl = document.createElement('span');
@@ -204,7 +234,6 @@
 			li.appendChild(p);
 			list.appendChild(li);
 		});
-		list.hidden = results.length === 0;
 	}
 
 	function doSearch() {
