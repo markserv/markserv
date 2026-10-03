@@ -22,8 +22,8 @@
 - Hot-reload as you edit (no browser plugin required)
 - Directory indexes
 - MIME Type file support
-- [Site-wide search](#mag-search--export) with highlighted snippets and heading deep links
-- [One-click export](#mag-search--export): standalone HTML, markdown source, directory zips
+- [Site-wide search](#mag-search--export) with scope selector, highlighted snippets and heading deep links
+- [One-click export](#mag-search--export): standalone HTML, markdown source, directory zips, and static-HTML site bundles
 
 Supporting: [MathJax](tests/mathjax.md), [Chinese Characters](tests/测试.md), [Table of Contents](tests/toc.md), [Tables](tests/tables.md), [Heading Anchors](tests/links.md)
 
@@ -111,17 +111,18 @@ You can also toggle between themes in the browser using the theme button in the 
 
 ### Search
 
-Every markdown and directory page carries a search box over the whole served root. Results show the file title, path, and a highlighted snippet; matching headings deep-link to their anchor. Press `/` anywhere on the page to focus the search box, `Esc` to clear it. The index is kept fresh by the built-in file watcher, and `--no-search` disables it (the endpoint then answers `503`).
+Every markdown and directory page carries a search box. Results show the file title, path, and a highlighted snippet; matching headings deep-link to their anchor. Press `/` anywhere on the page to focus the search box, `Esc` to clear it. The scope selector next to the box limits the search to *This page*, *This folder* (directory pages), or *Whole site*. With `--templates`, the index stores each page's rendered, implanted content, so search matches what the page actually shows. The index is kept fresh by the built-in file watcher, and `--no-search` disables it (the endpoint then answers `503`).
 
-The search endpoint can be used directly:
+The search endpoint can be used directly (`path` scopes the search to a file or directory prefix):
 
 ```shell
 $ curl 'http://localhost:8642/__markserv/search?q=todo'
+$ curl 'http://localhost:8642/__markserv/search?q=todo&path=docs/'
 ```
 
 ### Export
 
-Markdown pages carry `Save as HTML` and `Download .md` buttons, and directory indexes carry `Download .zip`. The underlying endpoint also works from any client:
+Markdown pages carry `Save as HTML` and `Download .md` buttons, and directory indexes carry `Download .zip` and `Save as HTML` (a zip of rendered HTML pages — the root index exports the whole tree). The underlying endpoint also works from any client:
 
 ```shell
 # Standalone HTML (page chrome stripped, theme baked in)
@@ -132,6 +133,10 @@ $ curl -OJ 'http://localhost:8642/__markserv/export/README.md?format=md'
 
 # A directory as a zip archive (dotfiles and node_modules/.git pruned)
 $ curl -OJ 'http://localhost:8642/__markserv/export/tests/?format=zip'
+
+# A directory as browsable static HTML (pages link-rewritten,
+# assets copied verbatim, README.md promoted to index.html)
+$ curl -OJ 'http://localhost:8642/__markserv/export/tests/?format=site'
 ```
 
 Export targets are confined to the served root — path traversal is refused with `403`.

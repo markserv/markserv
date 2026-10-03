@@ -307,10 +307,13 @@ a.button.back:hover {
 .site-search {
     position: relative;
     margin: 0 0 16px;
+    display: flex;
+    gap: 6px;
+    align-items: stretch;
 }
 
 #site-search-input {
-    width: 100%;
+    flex: 1;
     box-sizing: border-box;
     padding: 8px 12px;
     border: 1px solid var(--markserv-btn-border);
@@ -324,6 +327,20 @@ a.button.back:hover {
 
 #site-search-input:focus {
     border-color: var(--markserv-slider-thumb);
+}
+
+.site-search-scope {
+    flex: 0 0 auto;
+    max-width: 130px;
+    padding: 8px 6px;
+    border: 1px solid var(--markserv-btn-border);
+    border-radius: 6px;
+    background-color: var(--markserv-btn-bg);
+    color: var(--markserv-btn-color);
+    font-size: 13px;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    cursor: pointer;
+    outline: none;
 }
 
 .site-search-results {

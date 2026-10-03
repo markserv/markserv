@@ -20,6 +20,10 @@
 <article class="markdown-body">
 <div class="site-search" id="site-search">
 	<input type="search" id="site-search-input" placeholder="Search this site…">
+	<select id="site-search-scope" class="site-search-scope" title="Search scope">
+		<option value="/tests/tables.md" selected>This page</option>
+		<option value="all">Whole site</option>
+	</select>
 	<ul id="site-search-results" class="site-search-results" hidden></ul>
 </div>
 <p>Colons can be used to align columns.</p>
@@ -74,7 +78,7 @@ raw Markdown line up prettily. You can also use inline Markdown.</p>
 </tbody>
 </table>
 
-<footer><sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: 94565</sup></footer>
+<footer><sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: 47706</sup></footer>
 </article>
 <div class="width-control" id="width-control">
     <span id="width-tooltip"></span>
@@ -263,7 +267,9 @@ raw Markdown line up prettily. You can also use inline Markdown.</p>
 			clear();
 			return;
 		}
-		fetch('/__markserv/search?q=' + encodeURIComponent(q))
+		var scope = document.getElementById('site-search-scope');
+		fetch('/__markserv/search?q=' + encodeURIComponent(q) +
+			'&path=' + encodeURIComponent(scope ? scope.value : 'all'))
 			.then(function(res) {
 				if (!res.ok) return [];
 				return res.json();
@@ -284,6 +290,16 @@ raw Markdown line up prettily. You can also use inline Markdown.</p>
 			input.blur();
 		}
 	});
+
+	// Scope change re-runs the current search (if any)
+	var scopeEl = document.getElementById('site-search-scope');
+	if (scopeEl) {
+		scopeEl.addEventListener('change', function() {
+			if (input.value.trim()) {
+				doSearch();
+			}
+		});
+	}
 
 	document.addEventListener('keydown', function(e) {
 		if (e.key === '/' && document.activeElement !== input) {

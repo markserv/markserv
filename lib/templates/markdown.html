@@ -21,6 +21,10 @@
 {{#unless standalone}}
 <div class="site-search" id="site-search">
 	<input type="search" id="site-search-input" placeholder="Search this site…">
+	<select id="site-search-scope" class="site-search-scope" title="Search scope">
+		<option value="{{pagePath}}" selected>This page</option>
+		<option value="all">Whole site</option>
+	</select>
 	<ul id="site-search-results" class="site-search-results" hidden></ul>
 </div>
 {{/unless}}
@@ -215,7 +219,9 @@
 			clear();
 			return;
 		}
-		fetch('/__markserv/search?q=' + encodeURIComponent(q))
+		var scope = document.getElementById('site-search-scope');
+		fetch('/__markserv/search?q=' + encodeURIComponent(q) +
+			'&path=' + encodeURIComponent(scope ? scope.value : 'all'))
 			.then(function(res) {
 				if (!res.ok) return [];
 				return res.json();
@@ -236,6 +242,16 @@
 			input.blur();
 		}
 	});
+
+	// Scope change re-runs the current search (if any)
+	var scopeEl = document.getElementById('site-search-scope');
+	if (scopeEl) {
+		scopeEl.addEventListener('change', function() {
+			if (input.value.trim()) {
+				doSearch();
+			}
+		});
+	}
 
 	document.addEventListener('keydown', function(e) {
 		if (e.key === '/' && document.activeElement !== input) {

@@ -52,6 +52,7 @@
     "lib/readme.js",
     "lib/search.js",
     "lib/server.js",
+    "lib/site-export.js",
     "lib/splash.js",
     "lib/icons",
     "lib/templates/directory.html",
