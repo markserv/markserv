@@ -20,10 +20,7 @@
 <article class="markdown-body">
 <div class="site-search" id="site-search">
 	<input type="search" id="site-search-input" placeholder="Search this site…">
-	<select id="site-search-scope" class="site-search-scope" title="Search scope">
-		<option value="/tests/tables.md" selected>This page</option>
-		<option value="all">Whole site</option>
-	</select>
+	<label class="site-search-global" data-scope="tests"><input type="checkbox" id="site-search-global"> Global</label>
 	<ul id="site-search-results" class="site-search-results" hidden></ul>
 </div>
 <p>Colons can be used to align columns.</p>
@@ -78,7 +75,7 @@ raw Markdown line up prettily. You can also use inline Markdown.</p>
 </tbody>
 </table>
 
-<footer><sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: 31429</sup></footer>
+<footer><sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: 52383</sup></footer>
 </article>
 <div class="width-control" id="width-control">
     <span id="width-tooltip"></span>
@@ -86,139 +83,30 @@ raw Markdown line up prettily. You can also use inline Markdown.</p>
 </div>
 <button class="theme-toggle" id="theme-toggle" title="Toggle theme"></button>
 <div class="page-actions" id="page-actions">
-	<a class="page-action" href="/__markserv/export/tests/tables.md?format=html" title="Download this page as standalone HTML">Save as HTML</a>
-	<a class="page-action" href="/__markserv/export/tests/tables.md?format=md" title="Download the markdown source">Download .md</a>
+	<div class="export-menu" id="export-menu">
+		<button class="export-trigger" type="button" title="Export options">Export ▾</button>
+		<ul class="export-options">
+			<li><a href="/__markserv/export/tests/tables.md?format=html" title="Export this page as a standalone HTML page">Export HTML page</a></li>
+			<li><a href="/__markserv/export/tests/tables.md?format=html-assets" title="Export this page plus its linked assets as a zip">Export page + assets (zip)</a></li>
+			<li><a href="/__markserv/export/tests/tables.md?format=md" title="Export the markdown source">Export Markdown source</a></li>
+		</ul>
+	</div>
 </div>
-<script>
-(function() {
-	var themes = ['dark', 'light', 'synthwave', 'solarized'];
-	var icons = {dark: '\u{1F319}', light: '\u{2600}\u{FE0F}', synthwave: '\u{1F9D1}\u{200D}\u{1F3A4}', solarized: '\u{262F}\u{FE0F}'};
-	var serverTheme = 'dark' || 'dark';
-	var current = localStorage.getItem('markserv-theme') || serverTheme;
-
-	function applyTheme(t) {
-		document.documentElement.setAttribute('data-theme', t);
-		themes.forEach(function(name) {
-			var el = document.getElementById('theme-' + name);
-			if (el) el.disabled = (name !== t);
-		});
-		var btn = document.getElementById('theme-toggle');
-		if (btn) btn.textContent = icons[t] || icons.dark;
-		current = t;
-
-		// Re-render mermaid diagrams so they follow the new theme
-		// (mermaid bakes theme CSS into the SVG at render time)
-		if (window.markservRenderMermaid) {
-			window.markservRenderMermaid();
-		}
-	}
-
-	applyTheme(current);
-
-	document.getElementById('theme-toggle').addEventListener('click', function() {
-		var idx = themes.indexOf(current);
-		var next = themes[(idx + 1) % themes.length];
-		localStorage.setItem('markserv-theme', next);
-		applyTheme(next);
-	});
-})();
-</script>
-<script>
-(function() {
-    var slider = document.getElementById('width-slider');
-    var tooltip = document.getElementById('width-tooltip');
-    if (!slider) return;
-
-    var CSS_DEFAULT = 978;   // must match body { width } in markserv.css
-    var storageKey = 'markserv-width:' + '/Users/user/repos/markserv/.worktrees/feature-search-export';
-    var stored = localStorage.getItem(storageKey);
-
-    function updateSliderMax() {
-        // Slider max = current viewport width so user can slide up to full-bleed
-        slider.max = window.innerWidth;
-    }
-
-    function applyWidth(px) {
-        if (px === CSS_DEFAULT) {
-            // Matches stylesheet default — remove inline style so CSS rules apply normally
-            document.body.style.width = '';
-        } else {
-            document.body.style.width = px + 'px';
-        }
-        slider.value = Math.min(px, parseInt(slider.max, 10));
-    }
-
-    // Initialize
-    updateSliderMax();
-    if (stored) {
-        applyWidth(parseInt(stored, 10));
-    } else {
-        // No stored value — keep the 978px stylesheet default; slider reflects it
-        slider.value = Math.min(CSS_DEFAULT, parseInt(slider.max, 10));
-    }
-
-    function positionTooltip() {
-        if (!tooltip) return;
-        var val = parseInt(slider.value, 10);
-        var min = parseInt(slider.min, 10);
-        var max = parseInt(slider.max, 10);
-        var pct = (val - min) / (max - min);
-        var sliderW = slider.offsetWidth;
-        var thumbW = 14;
-        var offset = thumbW / 2 + pct * (sliderW - thumbW);
-        tooltip.textContent = val + 'px';
-        tooltip.style.left = offset + 'px';
-        tooltip.style.transform = 'translateX(-50%)';
-    }
-
-    // Slider input → live update
-    slider.addEventListener('input', function() {
-        var val = parseInt(slider.value, 10);
-        applyWidth(val);
-        localStorage.setItem(storageKey, String(val));
-        if (tooltip) tooltip.classList.add('visible');
-        positionTooltip();
-    });
-
-    slider.addEventListener('mousedown', function() {
-        if (tooltip) tooltip.classList.add('visible');
-        positionTooltip();
-    });
-
-    window.addEventListener('mouseup', function() {
-        if (tooltip) tooltip.classList.remove('visible');
-    });
-
-    slider.addEventListener('focus', function() {
-        if (tooltip) tooltip.classList.add('visible');
-        positionTooltip();
-    });
-
-    slider.addEventListener('blur', function() {
-        if (tooltip) tooltip.classList.remove('visible');
-    });
-
-    // Double-click to reset to default width
-    slider.addEventListener('dblclick', function() {
-        applyWidth(CSS_DEFAULT);
-        localStorage.removeItem(storageKey);
-    });
-
-    // On window resize, update slider max to reflect new viewport
-    window.addEventListener('resize', function() {
-        updateSliderMax();
-    });
-})();
-</script>
 <script>
 (function() {
 	// Site search: debounced fetch of /__markserv/search, results
 	// rendered as DOM nodes (never innerHTML with search data) so
 	// file names and snippets can't inject markup. '/' focuses the
-	// input, Escape clears it.
+	// input, Escape clears it. Results are grouped per file (a
+	// non-link header row, then one row per instance); the Global
+	// checkbox switches the scope between the current folder
+	// (the label's data-scope) and the whole site ('all').
 	var input = document.getElementById('site-search-input');
 	var list = document.getElementById('site-search-results');
 	if (!input || !list) return;
+
+	var globalInput = document.getElementById('site-search-global');
+	var globalLabel = globalInput ? globalInput.closest('label') : null;
 
 	var timer = null;
 
@@ -257,35 +145,44 @@ raw Markdown line up prettily. You can also use inline Markdown.</p>
 			matches + (matches === 1 ? ' match' : ' matches') +
 			' across ' + files + (files === 1 ? ' file' : ' files')));
 
-		results.forEach(function(r) {
+		results.forEach(function(r, i) {
+			// Results are contiguous per file — a new path starts a
+			// file group (non-link header row with title + path)
+			if (i === 0 || results[i - 1].path !== r.path) {
+				var fileLi = document.createElement('li');
+				fileLi.className = 'site-search-file';
+				var fileTitle = document.createElement('strong');
+				fileTitle.textContent = r.title;
+				var filePathEl = document.createElement('span');
+				filePathEl.className = 'site-search-path';
+				filePathEl.textContent = ' ' + r.path;
+				fileLi.appendChild(fileTitle);
+				fileLi.appendChild(filePathEl);
+				list.appendChild(fileLi);
+			}
+
+			// Instance row: the whole row is the link; the snippet's
+			// first query occurrence is wrapped in <mark>
 			var li = document.createElement('li');
+			li.className = 'site-search-instance';
 			var a = document.createElement('a');
 			a.href = (r.matchNo === null)
 				? '/' + r.path + '#' + r.anchor
 				: '/' + r.path + '?markservSearch=' + encodeURIComponent(q) +
 					(r.matchNo > 1 ? '&markservGoto=' + r.matchNo : '');
-			var title = document.createElement('strong');
-			title.textContent = r.title;
-			var pathEl = document.createElement('span');
-			pathEl.className = 'site-search-path';
-			pathEl.textContent = ' ' + r.path;
-			a.appendChild(title);
-			a.appendChild(pathEl);
-			var p = document.createElement('p');
 			if (r.snippet) {
 				var idx = q ? r.snippet.toLowerCase().indexOf(q) : -1;
 				if (idx >= 0) {
-					p.appendChild(document.createTextNode(r.snippet.slice(0, idx)));
+					a.appendChild(document.createTextNode(r.snippet.slice(0, idx)));
 					var m = document.createElement('mark');
 					m.textContent = r.snippet.slice(idx, idx + q.length);
-					p.appendChild(m);
-					p.appendChild(document.createTextNode(r.snippet.slice(idx + q.length)));
+					a.appendChild(m);
+					a.appendChild(document.createTextNode(r.snippet.slice(idx + q.length)));
 				} else {
-					p.textContent = r.snippet;
+					a.textContent = r.snippet;
 				}
 			}
 			li.appendChild(a);
-			li.appendChild(p);
 			list.appendChild(li);
 		});
 	}
@@ -296,9 +193,13 @@ raw Markdown line up prettily. You can also use inline Markdown.</p>
 			clear();
 			return;
 		}
-		var scope = document.getElementById('site-search-scope');
+		// Global checked → whole site; unchecked → the current
+		// folder (the label's data-scope, '' = the root folder)
+		var scope = (globalInput && globalInput.checked)
+			? 'all'
+			: (globalLabel ? globalLabel.getAttribute('data-scope') || '' : 'all');
 		fetch('/__markserv/search?q=' + encodeURIComponent(q) +
-			'&path=' + encodeURIComponent(scope ? scope.value : 'all'))
+			'&path=' + encodeURIComponent(scope))
 			.then(function(res) {
 				if (!res.ok) return [];
 				return res.json();
@@ -320,10 +221,9 @@ raw Markdown line up prettily. You can also use inline Markdown.</p>
 		}
 	});
 
-	// Scope change re-runs the current search (if any)
-	var scopeEl = document.getElementById('site-search-scope');
-	if (scopeEl) {
-		scopeEl.addEventListener('change', function() {
+	// Global checkbox change re-runs the current search (if any)
+	if (globalInput) {
+		globalInput.addEventListener('change', function() {
 			if (input.value.trim()) {
 				doSearch();
 			}
@@ -396,6 +296,153 @@ raw Markdown line up prettily. You can also use inline Markdown.</p>
 	}
 
 	history.replaceState(null, '', location.pathname + location.hash);
+})();
+</script>
+<script>
+(function() {
+	var themes = ['dark', 'light', 'synthwave', 'solarized'];
+	var icons = {dark: '\u{1F319}', light: '\u{2600}\u{FE0F}', synthwave: '\u{1F9D1}\u{200D}\u{1F3A4}', solarized: '\u{262F}\u{FE0F}'};
+	var serverTheme = 'dark' || 'dark';
+	// localStorage is guarded: exported pages may be opened from
+	// origins where storage throws (some file:// contexts)
+	var safeStorage = {
+		getItem: function(k) {
+			try { return localStorage.getItem(k) } catch (e) { return null }
+		},
+		setItem: function(k, v) {
+			try { localStorage.setItem(k, v) } catch (e) {}
+		},
+		removeItem: function(k) {
+			try { localStorage.removeItem(k) } catch (e) {}
+		}
+	};
+	var current = safeStorage.getItem('markserv-theme') || serverTheme;
+
+	function applyTheme(t) {
+		document.documentElement.setAttribute('data-theme', t);
+		themes.forEach(function(name) {
+			var el = document.getElementById('theme-' + name);
+			if (el) el.disabled = (name !== t);
+		});
+		var btn = document.getElementById('theme-toggle');
+		if (btn) btn.textContent = icons[t] || icons.dark;
+		current = t;
+
+		// Re-render mermaid diagrams so they follow the new theme
+		// (mermaid bakes theme CSS into the SVG at render time)
+		if (window.markservRenderMermaid) {
+			window.markservRenderMermaid();
+		}
+	}
+
+	applyTheme(current);
+
+	document.getElementById('theme-toggle').addEventListener('click', function() {
+		var idx = themes.indexOf(current);
+		var next = themes[(idx + 1) % themes.length];
+		safeStorage.setItem('markserv-theme', next);
+		applyTheme(next);
+	});
+})();
+</script>
+<script>
+(function() {
+    var slider = document.getElementById('width-slider');
+    var tooltip = document.getElementById('width-tooltip');
+    if (!slider) return;
+
+    var CSS_DEFAULT = 978;   // must match body { width } in markserv.css
+    var storageKey = 'markserv-width:' + '/Users/user/repos/markserv/.worktrees/feature-search-export';
+    // localStorage is guarded: exported pages may be opened from
+    // origins where storage throws (some file:// contexts)
+    var safeStorage = {
+        getItem: function(k) {
+            try { return localStorage.getItem(k) } catch (e) { return null }
+        },
+        setItem: function(k, v) {
+            try { localStorage.setItem(k, v) } catch (e) {}
+        },
+        removeItem: function(k) {
+            try { localStorage.removeItem(k) } catch (e) {}
+        }
+    };
+    var stored = safeStorage.getItem(storageKey);
+
+    function updateSliderMax() {
+        // Slider max = current viewport width so user can slide up to full-bleed
+        slider.max = window.innerWidth;
+    }
+
+    function applyWidth(px) {
+        if (px === CSS_DEFAULT) {
+            // Matches stylesheet default — remove inline style so CSS rules apply normally
+            document.body.style.width = '';
+        } else {
+            document.body.style.width = px + 'px';
+        }
+        slider.value = Math.min(px, parseInt(slider.max, 10));
+    }
+
+    // Initialize
+    updateSliderMax();
+    if (stored) {
+        applyWidth(parseInt(stored, 10));
+    } else {
+        // No stored value — keep the 978px stylesheet default; slider reflects it
+        slider.value = Math.min(CSS_DEFAULT, parseInt(slider.max, 10));
+    }
+
+    function positionTooltip() {
+        if (!tooltip) return;
+        var val = parseInt(slider.value, 10);
+        var min = parseInt(slider.min, 10);
+        var max = parseInt(slider.max, 10);
+        var pct = (val - min) / (max - min);
+        var sliderW = slider.offsetWidth;
+        var thumbW = 14;
+        var offset = thumbW / 2 + pct * (sliderW - thumbW);
+        tooltip.textContent = val + 'px';
+        tooltip.style.left = offset + 'px';
+        tooltip.style.transform = 'translateX(-50%)';
+    }
+
+    // Slider input → live update
+    slider.addEventListener('input', function() {
+        var val = parseInt(slider.value, 10);
+        applyWidth(val);
+        safeStorage.setItem(storageKey, String(val));
+        if (tooltip) tooltip.classList.add('visible');
+        positionTooltip();
+    });
+
+    slider.addEventListener('mousedown', function() {
+        if (tooltip) tooltip.classList.add('visible');
+        positionTooltip();
+    });
+
+    window.addEventListener('mouseup', function() {
+        if (tooltip) tooltip.classList.remove('visible');
+    });
+
+    slider.addEventListener('focus', function() {
+        if (tooltip) tooltip.classList.add('visible');
+        positionTooltip();
+    });
+
+    slider.addEventListener('blur', function() {
+        if (tooltip) tooltip.classList.remove('visible');
+    });
+
+    // Double-click to reset to default width
+    slider.addEventListener('dblclick', function() {
+        applyWidth(CSS_DEFAULT);
+        safeStorage.removeItem(storageKey);
+    });
+
+    // On window resize, update slider max to reflect new viewport
+    window.addEventListener('resize', function() {
+        updateSliderMax();
+    });
 })();
 </script>
 

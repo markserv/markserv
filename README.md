@@ -111,7 +111,7 @@ You can also toggle between themes in the browser using the theme button in the 
 
 ### Search
 
-Every markdown and directory page carries a search box. Results show the file title, path, and a highlighted snippet; matching headings deep-link to their anchor. Press `/` anywhere on the page to focus the search box, `Esc` to clear it. The scope selector next to the box limits the search to *This page*, *This folder* (directory pages), or *Whole site*. With `--templates`, the index stores each page's rendered, implanted content, so search matches what the page actually shows. The index is kept fresh by the built-in file watcher, and `--no-search` disables it (the endpoint then answers `503`).
+Every markdown and directory page carries a search box. Results are grouped by file — a title and path header per file, then one row per matching instance with a highlighted snippet; matching headings deep-link to their anchor. Press `/` anywhere on the page to focus the search box, `Esc` to clear it. The `Global` checkbox next to the box switches the scope: unchecked searches the current folder, checked searches the whole site. With `--templates`, the index stores each page's rendered, implanted content, so search matches what the page actually shows. The index is kept fresh by the built-in file watcher, and `--no-search` disables it (the endpoint then answers `503`).
 
 The search endpoint can be used directly (`path` scopes the search to a file or directory prefix):
 
@@ -122,11 +122,16 @@ $ curl 'http://localhost:8642/__markserv/search?q=todo&path=docs/'
 
 ### Export
 
-Markdown pages carry `Save as HTML` and `Download .md` buttons, and directory indexes carry `Download .zip` and `Save as HTML` (a zip of rendered HTML pages — the root index exports the whole tree). The underlying endpoint also works from any client:
+Markdown pages carry an `Export` hover menu (`Export HTML page` / `Export page + assets (zip)` / `Export Markdown source`), and directory indexes carry `Export site (HTML pages, zip)` and `Export raw folder (zip)` (the root index exports the whole tree). The underlying endpoint also works from any client:
 
 ```shell
-# Standalone HTML (page chrome stripped, theme baked in)
+# Standalone HTML (standalone page — styles inlined, reading
+# chrome (width slider, theme toggle) kept)
 $ curl -OJ 'http://localhost:8642/__markserv/export/README.md?format=html'
+
+# A page and its linked assets as a zip (ship the bundle
+# straight to a web server)
+$ curl -OJ 'http://localhost:8642/__markserv/export/README.md?format=html-assets'
 
 # Raw markdown source
 $ curl -OJ 'http://localhost:8642/__markserv/export/README.md?format=md'
@@ -139,7 +144,11 @@ $ curl -OJ 'http://localhost:8642/__markserv/export/tests/?format=zip'
 $ curl -OJ 'http://localhost:8642/__markserv/export/tests/?format=site'
 ```
 
-Export targets are confined to the served root — path traversal is refused with `403`.
+Export targets are confined to the served root — path traversal is refused with `403`. `--no-exports` disables the export endpoint and the page export menu (the endpoint then answers `503`). Exports also work without a running server:
+
+```shell
+$ markserv export <dir> <target>   # <target>: an output directory (unpacked bundle) or a .zip path
+```
 
 ## :link: Markdown Links
 

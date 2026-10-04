@@ -329,9 +329,11 @@ a.button.back:hover {
     border-color: var(--markserv-slider-thumb);
 }
 
-.site-search-scope {
+.site-search-global {
     flex: 0 0 auto;
-    max-width: 130px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
     padding: 8px 6px;
     border: 1px solid var(--markserv-btn-border);
     border-radius: 6px;
@@ -340,7 +342,11 @@ a.button.back:hover {
     font-size: 13px;
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
     cursor: pointer;
-    outline: none;
+    user-select: none;
+}
+
+.site-search-global input {
+    margin: 0;
 }
 
 .site-search-results {
@@ -392,6 +398,34 @@ a.button.back:hover {
     white-space: nowrap;
 }
 
+.site-search-file {
+    padding: 6px 8px 2px;
+    margin-top: 4px;
+    list-style: none;
+    pointer-events: none;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--markserv-btn-color);
+}
+
+.site-search-file .site-search-path {
+    font-weight: 400;
+}
+
+.site-search-instance a {
+    display: block;
+    color: var(--markserv-icon-color);
+    font-size: 13px;
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.site-search-instance a:hover {
+    color: var(--markserv-btn-color);
+}
+
 .site-search-results mark {
     background: var(--markserv-slider-thumb);
     color: var(--markserv-bg);
@@ -416,33 +450,62 @@ mark.markserv-search-match {
     outline: 2px solid var(--markserv-slider-thumb);
 }
 
-/* --- Page actions (export buttons) --- */
+/* --- Page actions (export menu) --- */
 .page-actions {
     position: fixed;
     bottom: 32px;
     right: 200px;
     z-index: 9999;
-    display: flex;
-    gap: 6px;
 }
 
-.page-action {
+.export-menu {
+    position: relative;
+}
+
+.export-trigger {
     display: inline-flex;
     align-items: center;
-    padding: 6px 10px;
+    padding: 6px 12px;
     border: 1px solid var(--markserv-btn-border);
     border-radius: 6px;
     background-color: var(--markserv-btn-bg);
     color: var(--markserv-btn-color);
     font-size: 12px;
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-    text-decoration: none;
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.page-action:hover {
-    transform: scale(1.05);
+.export-options {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 4px);
+    right: 0;
+    margin: 0;
+    padding: 4px;
+    list-style: none;
+    min-width: 230px;
+    border: 1px solid var(--markserv-border);
+    border-radius: 6px;
+    background-color: var(--markserv-btn-bg);
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.export-menu:hover .export-options,
+.export-menu:focus-within .export-options {
+    display: block;
+}
+
+.export-options a {
+    display: block;
+    padding: 6px 8px;
+    border-radius: 4px;
+    color: var(--markserv-btn-color);
+    text-decoration: none;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.export-options a:hover {
+    background-color: var(--markserv-outline-color);
 }

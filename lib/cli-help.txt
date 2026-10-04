@@ -1,5 +1,6 @@
 Usage
 $ markserv <file/dir>
+$ markserv export <dir> <target>  Export a directory as a static site bundle (dir or .zip target)
 $ readme (serve closest README.md file)
 
 Options
@@ -13,3 +14,5 @@ Options
 	--synthwave  Use synthwave/retro-neon theme (default: dark)
 	--templates  Enable {file:}, {markdown:}, {html:}, {less:} templating (false)
 	--mermaid-loose  Render mermaid with securityLevel "loose" — lifts link-target sanitization (e.g. javascript: urls) in diagrams; plain url links work either way (false)
+	--search, -S  Site search index and endpoint (true), disable with --no-search
+	--exports, -x  Export endpoints and the page export menu (true), disable with --no-exports
