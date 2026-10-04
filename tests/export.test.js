@@ -221,13 +221,18 @@ test('export directory as site (format=site)', async t => {
 		t.false(indexHtml.includes('{markserv}'))
 		t.true(indexHtml.includes('<style id="theme-dark">'))
 
-		// Rewritten back/nested links
+		// Rewritten back/nested links (page-relative — a nested
+		// page's link must resolve from that page's location)
 		t.true(read('guide.html').includes('href="README.html"'))
 		t.true(read('notes.html').includes('href="guide.html#start"'))
-		t.true(read('sub/deep.html').includes('href="guide.html"'))
+		t.true(read('sub/deep.html').includes('href="../guide.html"'))
 
-		// Verbatim asset
+		// Referenced verbatim asset (referenced from README.md)
 		t.is(read('img.txt'), 'not-an-image\n')
+
+		// Static-bundle membership: unreferenced files stay out of
+		// the bundle (a package.json in the export would be a leak)
+		t.false(fs.existsSync(path.join(outDir, 'package.json')))
 	} finally {
 		await new Promise(resolve => service.httpServer.close(resolve))
 	}
@@ -256,7 +261,10 @@ test('site export name collision keeps both files (unit)', async t => {
 			exclusions: ['node_modules'],
 			markdownExts: ['.md'],
 			listFiles: searchLib.listFiles,
-			renderPage: async () => '<p>rendered</p>'
+			// The rendered page references a.html, so the raw a.html
+			// ships (referenced asset) and collides with the rendered
+			// page's name
+			renderPage: async () => '<p>rendered <a href="a.html">asset</a></p>'
 		}
 	)
 
@@ -275,6 +283,9 @@ test('collectAssets: include/skip rules (unit)', t => {
 	const html = [
 		'<img src="img/dot.png" alt="dot">',
 		'<source src="img/dot.png">',
+		'<script src="app.js"></script>',
+		'<script>inline, no src</script>',
+		'<link rel="stylesheet" href="style.css">',
 		'<a href="linked.md#sec">doc</a>',
 		'<a href="img/missing.png">missing</a>',
 		'<a href="https://example.com/x.png">external</a>',
@@ -289,10 +300,11 @@ test('collectAssets: include/skip rules (unit)', t => {
 		markdownExts: ['.md']
 	})
 
-	// Only the existing in-root image is an asset (the <source>
-	// duplicate is deduped); documents and every other reference
+	// Only the existing in-root assets are collected: the image
+	// (the <source> duplicate is deduped) plus the referenced
+	// script and stylesheet; documents and every other reference
 	// are skipped with a reason
-	t.deepEqual(assets.map(a => a.rel), ['img/dot.png'])
+	t.deepEqual(assets.map(a => a.rel).sort(), ['app.js', 'img/dot.png', 'style.css'])
 	const byReason = {}
 	skipped.forEach(s => {
 		byReason[s.reason] = (byReason[s.reason] || 0) + 1
@@ -352,8 +364,8 @@ test('decision-8 rewrite: page-relative .html links (unit)', t => {
 	t.true(out.includes('href="https://x/y.md"'))
 	t.true(out.includes('href="/root.md"'))
 
-	// Default (site export) form: bundle-root-relative names —
-	// the unchanged behavior the site-export asserts pin
+	// API default form: bundle-root-relative names (legacy;
+	// buildSite and single-page exports use pageRelative)
 	const out2 = siteExportLib.rewriteLinks(
 		'<a href="../other/doc.md">up</a>',
 		{currentDir: 'tests/export-assets-fixtures', bundleMdSet: mdSet}
@@ -460,8 +472,79 @@ test('served pages carry the export menu (default flags)', async t => {
 
 		const dir = await get({url: `http://localhost:${port}/tests/testdir/`, timeout: 1000 * 2})
 		t.true(dir.body.includes('id="export-menu"'))
-		t.true(dir.body.includes('Export site (HTML pages, zip)'))
-		t.true(dir.body.includes('Export raw folder (zip)'))
+		t.true(dir.body.includes('Export Static (HTML pages, zip)'))
+		t.true(dir.body.includes('Export Raw (zip)'))
+	} finally {
+		await new Promise(resolve => service.httpServer.close(resolve))
+	}
+})
+
+test('static export: deep nested templates, only pages + referenced assets', async t => {
+	// --templates: the index stores rendered, implanted content and
+	// the export renders from that cache — implanted assets and
+	// deep directory nesting must both survive the export
+	const port = await getPort()
+	const service = await startService({port, templates: true})
+
+	try {
+		const res = await get({
+			url: `http://localhost:${port}/__markserv/export/tests/static-nested-fixtures/?format=site`,
+			timeout: 1000 * 10
+		})
+
+		t.is(res.statusCode, 200)
+		t.is(res.headers['content-type'], 'application/zip')
+		t.is(res.headers['content-disposition'], 'attachment; filename="static-nested-fixtures.zip"')
+		t.is(res.buffer.slice(0, 2).toString(), 'PK')
+
+		const zipPath = path.join(__dirname, '..', '.tmp', 'static-nested-test.zip')
+		const outDir = fs.mkdtempSync(path.join(__dirname, '..', '.tmp', 'static-nested-'))
+		fs.writeFileSync(zipPath, res.buffer)
+		child_process.execFileSync('unzip', ['-o', '-q', zipPath, '-d', outDir])
+
+		const names = new Set()
+		const walk = dir => {
+			fs.readdirSync(dir).forEach(name => {
+				const p = path.join(dir, name)
+				if (fs.statSync(p).isDirectory()) {
+					walk(p)
+				} else {
+					names.add(path.relative(outDir, p))
+				}
+			})
+		}
+		walk(outDir)
+
+		// Rendered pages (every markdown file, deep nesting intact)
+		for (const name of [
+			'index.html', 'README.html', 'partial.html', 'LICENSE.html',
+			'deep/a/b/page.html'
+		]) {
+			t.true(names.has(name), name + ' missing from the bundle')
+		}
+
+		// Referenced assets only (img, css, js — referenced by the
+		// pages, incl. the cross-directory ../../ reference)
+		t.true(names.has('img/logo.png'))
+		t.true(names.has('style.css'))
+		t.true(names.has('app.js'))
+
+		// Unreferenced files stay out of the bundle — a package.json
+		// in a static export would be a source leak
+		t.false(names.has('package.json'))
+		t.false(names.has('LICENSE'))
+		t.false(names.has('img/unreferenced.png'))
+
+		const read = rel => fs.readFileSync(path.join(outDir, rel), 'utf8')
+
+		// The implanted partial's content is in the exported index
+		t.true(read('index.html').includes('only exists inside the implanted partial'))
+		// Page-relative document links (root + nested pages)
+		t.true(read('index.html').includes('href="deep/a/b/page.html"'))
+		t.true(read('index.html').includes('href="LICENSE.html"'))
+		t.true(read('deep/a/b/page.html').includes('href="../../../README.html"'))
+		// Styles inlined (self-contained pages)
+		t.false(read('index.html').includes('{markserv}'))
 	} finally {
 		await new Promise(resolve => service.httpServer.close(resolve))
 	}
@@ -481,6 +564,9 @@ test('CLI export to a directory (offline)', t => {
 	for (const name of ['index.html', 'guide.html', 'notes.html', 'sub/deep.html', 'img.txt']) {
 		t.true(fs.existsSync(path.join(outDir, name)), name + ' missing')
 	}
+
+	// Static-bundle membership: unreferenced files stay out
+	t.false(fs.existsSync(path.join(outDir, 'package.json')))
 })
 
 test('CLI export to a .zip target', t => {
@@ -492,6 +578,7 @@ test('CLI export to a .zip target', t => {
 	for (const name of ['index.html', 'guide.html', 'notes.html', 'sub/deep.html', 'img.txt']) {
 		t.true(listing.includes(name), name + ' not in zip')
 	}
+	t.false(listing.includes('package.json'))
 })
 
 test('CLI export refuses a non-empty target directory', t => {

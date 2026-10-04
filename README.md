@@ -122,7 +122,7 @@ $ curl 'http://localhost:8642/__markserv/search?q=todo&path=docs/'
 
 ### Export
 
-Markdown pages carry an `Export` hover menu (`Export HTML page` / `Export page + assets (zip)` / `Export Markdown source`), and directory indexes carry `Export site (HTML pages, zip)` and `Export raw folder (zip)` (the root index exports the whole tree). The underlying endpoint also works from any client:
+Markdown pages carry an `Export` hover menu (`Export HTML page` / `Export page + assets (zip)` / `Export Markdown source`), and directory indexes carry `Export Static (HTML pages, zip)` and `Export Raw (zip)` (the root index exports the whole tree). The underlying endpoint also works from any client:
 
 ```shell
 # Standalone HTML (standalone page — styles inlined, reading
@@ -136,6 +136,12 @@ $ curl -OJ 'http://localhost:8642/__markserv/export/README.md?format=html-assets
 # Raw markdown source
 $ curl -OJ 'http://localhost:8642/__markserv/export/README.md?format=md'
 
+# A directory as a static bundle — rendered HTML pages (links
+# rewritten) plus only the assets they reference; unreferenced
+# files (LICENSE, package.json, source) stay out of the bundle;
+# README.md is promoted to index.html
+$ curl -OJ 'http://localhost:8642/__markserv/export/tests/?format=site'
+
 # A directory as a zip archive (dotfiles and node_modules/.git pruned)
 $ curl -OJ 'http://localhost:8642/__markserv/export/tests/?format=zip'
 
@@ -144,7 +150,7 @@ $ curl -OJ 'http://localhost:8642/__markserv/export/tests/?format=zip'
 $ curl -OJ 'http://localhost:8642/__markserv/export/tests/?format=site'
 ```
 
-Export targets are confined to the served root — path traversal is refused with `403`. `--no-exports` disables the export endpoint and the page export menu (the endpoint then answers `503`). Exports also work without a running server:
+Export targets are confined to the served root — path traversal is refused with `403`. `--no-exports` disables the export endpoint and the page export menu (the endpoint then answers `503`). Exported pages always open with the theme and default width they were exported with; the width slider and theme toggle remain available to the reader, but the adjustments are session-local (an export never reads from or writes to localStorage). Exports also work without a running server:
 
 ```shell
 $ markserv export <dir> <target>   # <target>: an output directory (unpacked bundle) or a .zip path

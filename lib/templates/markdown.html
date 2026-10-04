@@ -258,8 +258,13 @@
 	var themes = ['dark', 'light', 'synthwave', 'solarized'];
 	var icons = {dark: '\u{1F319}', light: '\u{2600}\u{FE0F}', synthwave: '\u{1F9D1}\u{200D}\u{1F3A4}', solarized: '\u{262F}\u{FE0F}'};
 	var serverTheme = '{{theme}}' || 'dark';
-	// localStorage is guarded: exported pages may be opened from
-	// origins where storage throws (some file:// contexts)
+	// Standalone (exported) pages always open with the baked-in
+	// theme and never touch localStorage — persisted tweaks from
+	// another page (served or exported, same origin) must not bleed
+	// into the exported document. Served pages keep the persisted
+	// theme; storage access is guarded for origins where it throws
+	// (some file:// contexts).
+	var standalone = {{#if standalone}}true{{else}}false{{/if}};
 	var safeStorage = {
 		getItem: function(k) {
 			try { return localStorage.getItem(k) } catch (e) { return null }
@@ -271,7 +276,7 @@
 			try { localStorage.removeItem(k) } catch (e) {}
 		}
 	};
-	var current = safeStorage.getItem('markserv-theme') || serverTheme;
+	var current = (standalone ? null : safeStorage.getItem('markserv-theme')) || serverTheme;
 
 	function applyTheme(t) {
 		document.documentElement.setAttribute('data-theme', t);
@@ -295,7 +300,7 @@
 	document.getElementById('theme-toggle').addEventListener('click', function() {
 		var idx = themes.indexOf(current);
 		var next = themes[(idx + 1) % themes.length];
-		safeStorage.setItem('markserv-theme', next);
+		if (!standalone) safeStorage.setItem('markserv-theme', next);
 		applyTheme(next);
 	});
 })();
@@ -308,8 +313,11 @@
 
     var CSS_DEFAULT = 978;   // must match body { width } in markserv.css
     var storageKey = 'markserv-width:' + '{{rootDir}}';
-    // localStorage is guarded: exported pages may be opened from
-    // origins where storage throws (some file:// contexts)
+    // Standalone (exported) pages always open at the CSS default
+    // width and never touch localStorage — see the theme IIFE.
+    // Served pages keep the persisted width; storage access is
+    // guarded for origins where it throws (some file:// contexts).
+    var standalone = {{#if standalone}}true{{else}}false{{/if}};
     var safeStorage = {
         getItem: function(k) {
             try { return localStorage.getItem(k) } catch (e) { return null }
@@ -321,7 +329,7 @@
             try { localStorage.removeItem(k) } catch (e) {}
         }
     };
-    var stored = safeStorage.getItem(storageKey);
+    var stored = standalone ? null : safeStorage.getItem(storageKey);
 
     function updateSliderMax() {
         // Slider max = current viewport width so user can slide up to full-bleed
@@ -365,7 +373,7 @@
     slider.addEventListener('input', function() {
         var val = parseInt(slider.value, 10);
         applyWidth(val);
-        safeStorage.setItem(storageKey, String(val));
+        if (!standalone) safeStorage.setItem(storageKey, String(val));
         if (tooltip) tooltip.classList.add('visible');
         positionTooltip();
     });
@@ -391,7 +399,7 @@
     // Double-click to reset to default width
     slider.addEventListener('dblclick', function() {
         applyWidth(CSS_DEFAULT);
-        safeStorage.removeItem(storageKey);
+        if (!standalone) safeStorage.removeItem(storageKey);
     });
 
     // On window resize, update slider max to reflect new viewport

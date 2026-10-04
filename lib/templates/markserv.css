@@ -491,6 +491,18 @@ mark.markserv-search-match {
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
+/* Hover bridge: a transparent extension below the menu closes the
+   4px visual gap, so moving the mouse up to the menu never loses
+   :hover (the menu would otherwise dismiss mid-travel) */
+.export-options::before {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: 6px;
+}
+
 .export-menu:hover .export-options,
 .export-menu:focus-within .export-options {
     display: block;
