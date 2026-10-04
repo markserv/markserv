@@ -37,6 +37,13 @@ test('start service and get directory listing', async t => {
 		const bodyNoPid = normalize(res.body)
 		const expectedNoPid = normalize(expected)
 		t.is(bodyNoPid, expectedNoPid)
+
+		// P06: the Global checkbox scopes the search to this
+		// directory (the old scope <select> is gone)
+		t.true(res.body.includes('id="site-search-global"'))
+		t.true(res.body.includes('data-scope="tests/testdir"'))
+		t.false(res.body.includes('site-search-scope'))
+
 		t.is(res.statusCode, 200)
 	} finally {
 		await new Promise(resolve => service.httpServer.close(resolve))

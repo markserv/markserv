@@ -95,6 +95,12 @@ body .markdown-body {
   .width-control {
     display: none !important;
   }
+  .site-search {
+    display: none !important;
+  }
+  .page-actions {
+    display: none !important;
+  }
 }
 
 /* Directory listing icons */
@@ -295,4 +301,223 @@ a.button.back:hover {
     rgba(0, 0, 0, 0.03) 2px,
     rgba(0, 0, 0, 0.03) 4px
   );
+}
+
+/* --- Site search --- */
+.site-search {
+    position: relative;
+    margin: 0 0 16px;
+    display: flex;
+    gap: 6px;
+    align-items: stretch;
+}
+
+#site-search-input {
+    flex: 1;
+    box-sizing: border-box;
+    padding: 8px 12px;
+    border: 1px solid var(--markserv-btn-border);
+    border-radius: 6px;
+    background-color: var(--markserv-btn-bg);
+    color: var(--markserv-btn-color);
+    font-size: 14px;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    outline: none;
+}
+
+#site-search-input:focus {
+    border-color: var(--markserv-slider-thumb);
+}
+
+.site-search-global {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 6px;
+    border: 1px solid var(--markserv-btn-border);
+    border-radius: 6px;
+    background-color: var(--markserv-btn-bg);
+    color: var(--markserv-btn-color);
+    font-size: 13px;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    cursor: pointer;
+    user-select: none;
+}
+
+.site-search-global input {
+    margin: 0;
+}
+
+.site-search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    margin: 4px 0 0;
+    padding: 4px;
+    list-style: none;
+    max-height: 50vh;
+    overflow: auto;
+    border: 1px solid var(--markserv-border);
+    border-radius: 6px;
+    background-color: var(--markserv-btn-bg);
+    color: var(--markserv-btn-color);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.site-search-results li {
+    padding: 6px 8px;
+    border-radius: 4px;
+}
+
+.site-search-results li:hover {
+    background-color: var(--markserv-outline-color);
+    opacity: 0.9;
+}
+
+.site-search-results a {
+    color: var(--markserv-btn-color);
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.site-search-results .site-search-path {
+    color: var(--markserv-icon-color);
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+.site-search-results p {
+    margin: 4px 0 0;
+    font-size: 13px;
+    color: var(--markserv-icon-color);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.site-search-file {
+    padding: 6px 8px 2px;
+    margin-top: 4px;
+    list-style: none;
+    pointer-events: none;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--markserv-btn-color);
+}
+
+.site-search-file .site-search-path {
+    font-weight: 400;
+}
+
+.site-search-instance a {
+    display: block;
+    color: var(--markserv-icon-color);
+    font-size: 13px;
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.site-search-instance a:hover {
+    color: var(--markserv-btn-color);
+}
+
+.site-search-results mark {
+    background: var(--markserv-slider-thumb);
+    color: var(--markserv-bg);
+    border-radius: 2px;
+    padding: 0 1px;
+}
+
+.site-search-status {
+    list-style: none;
+    padding: 6px 8px;
+    font-size: 12px;
+    color: var(--markserv-icon-color);
+    opacity: 0.8;
+    pointer-events: none;
+}
+
+mark.markserv-search-match {
+    background: var(--markserv-slider-thumb);
+    color: var(--markserv-bg);
+    border-radius: 2px;
+    padding: 0 1px;
+    outline: 2px solid var(--markserv-slider-thumb);
+}
+
+/* --- Page actions (export menu) --- */
+.page-actions {
+    position: fixed;
+    bottom: 32px;
+    right: 200px;
+    z-index: 9999;
+}
+
+.export-menu {
+    position: relative;
+}
+
+.export-trigger {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border: 1px solid var(--markserv-btn-border);
+    border-radius: 6px;
+    background-color: var(--markserv-btn-bg);
+    color: var(--markserv-btn-color);
+    font-size: 12px;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.export-options {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 4px);
+    right: 0;
+    margin: 0;
+    padding: 4px;
+    list-style: none;
+    min-width: 230px;
+    border: 1px solid var(--markserv-border);
+    border-radius: 6px;
+    background-color: var(--markserv-btn-bg);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* Hover bridge: a transparent extension below the menu closes the
+   4px visual gap, so moving the mouse up to the menu never loses
+   :hover (the menu would otherwise dismiss mid-travel) */
+.export-options::before {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: 6px;
+}
+
+.export-menu:hover .export-options,
+.export-menu:focus-within .export-options {
+    display: block;
+}
+
+.export-options a {
+    display: block;
+    padding: 6px 8px;
+    border-radius: 4px;
+    color: var(--markserv-btn-color);
+    text-decoration: none;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.export-options a:hover {
+    background-color: var(--markserv-outline-color);
 }

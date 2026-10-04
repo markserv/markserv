@@ -25,12 +25,20 @@ const get = opts => new Promise((resolve, reject) => {
 			method: 'GET',
 			timeout
 		}, res => {
-			let body = ''
+			// Binary-safe: accumulate raw chunks; body is the utf8
+			// string (existing contract) and buffer the raw bytes
+			// (zip and other binary exports)
+			const chunks = []
 			res.on('data', chunk => {
-				body += chunk
+				chunks.push(chunk)
 			})
 			res.on('end', () => {
-				resolve({statusCode: res.statusCode, body})
+				resolve({
+					statusCode: res.statusCode,
+					headers: res.headers,
+					body: chunks.map(c => c.toString('utf8')).join(''),
+					buffer: Buffer.concat(chunks)
+				})
 			})
 		})
 

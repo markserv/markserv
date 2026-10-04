@@ -17,24 +17,56 @@
 <body class="dir">
 <article class="markdown-body">
 <h1 class="icon folder isfolder"><a href="/">./</a><a href="/tests/">tests/</a><a href="/tests/testdir/">testdir/</a></h1>
+<div class="site-search" id="site-search">
+	<input type="search" id="site-search-input" placeholder="Search this site…">
+	<label class="site-search-global" data-scope="tests/testdir"><input type="checkbox" id="site-search-global"> Global</label>
+	<ul id="site-search-results" class="site-search-results" hidden></ul>
+</div>
 <ul>
 	<li class="icon markdown isfile"><a href="file1.md">file1.md</a></li> 
 	<li class="icon document isfile"><a href="file2.txt">file2.txt</a></li> 
 </ul>
 
-<footer><sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: 58957</sup></footer>
+<footer><sup><hr> Served by <a href="https://www.npmjs.com/package/markserv">MarkServ</a> | PID: 93136</sup></footer>
 </article>
 <div class="width-control" id="width-control">
     <span id="width-tooltip"></span>
     <input type="range" id="width-slider" min="0" max="1920" value="978" step="1">
 </div>
 <button class="theme-toggle" id="theme-toggle" title="Toggle theme"></button>
+<div class="page-actions" id="page-actions">
+	<div class="export-menu" id="export-menu">
+		<button class="export-trigger" type="button" title="Export options">Export ▾</button>
+		<ul class="export-options">
+			<li><a href="/__markserv/export/tests/testdir/?format=site" title="Export this directory as a static bundle: only the rendered HTML pages plus the assets they reference (zip)">Export Static (HTML pages, zip)</a></li>
+			<li><a href="/__markserv/export/tests/testdir/?format=zip" title="Export this directory as a zip of the raw files">Export Raw (zip)</a></li>
+		</ul>
+	</div>
+</div>
 <script>
 (function() {
 	var themes = ['dark', 'light', 'synthwave', 'solarized'];
 	var icons = {dark: '\u{1F319}', light: '\u{2600}\u{FE0F}', synthwave: '\u{1F9D1}\u{200D}\u{1F3A4}', solarized: '\u{262F}\u{FE0F}'};
 	var serverTheme = 'dark' || 'dark';
-	var current = localStorage.getItem('markserv-theme') || serverTheme;
+	// Standalone (exported) pages always open with the baked-in
+	// theme and never touch localStorage — persisted tweaks from
+	// another page (served or exported, same origin) must not bleed
+	// into the exported document. Served pages keep the persisted
+	// theme; storage access is guarded for origins where it throws
+	// (some file:// contexts).
+	var standalone = false;
+	var safeStorage = {
+		getItem: function(k) {
+			try { return localStorage.getItem(k) } catch (e) { return null }
+		},
+		setItem: function(k, v) {
+			try { localStorage.setItem(k, v) } catch (e) {}
+		},
+		removeItem: function(k) {
+			try { localStorage.removeItem(k) } catch (e) {}
+		}
+	};
+	var current = (standalone ? null : safeStorage.getItem('markserv-theme')) || serverTheme;
 
 	function applyTheme(t) {
 		document.documentElement.setAttribute('data-theme', t);
@@ -52,7 +84,7 @@
 	document.getElementById('theme-toggle').addEventListener('click', function() {
 		var idx = themes.indexOf(current);
 		var next = themes[(idx + 1) % themes.length];
-		localStorage.setItem('markserv-theme', next);
+		if (!standalone) safeStorage.setItem('markserv-theme', next);
 		applyTheme(next);
 	});
 })();
@@ -64,8 +96,24 @@
     if (!slider) return;
 
     var CSS_DEFAULT = 978;   // must match body { width } in markserv.css
-    var storageKey = 'markserv-width:' + '';
-    var stored = localStorage.getItem(storageKey);
+    var storageKey = 'markserv-width:' + '/Users/user/repos/markserv/.worktrees/feature-search-export';
+    // Standalone (exported) pages always open at the CSS default
+    // width and never touch localStorage — see the theme IIFE.
+    // Served pages keep the persisted width; storage access is
+    // guarded for origins where it throws (some file:// contexts).
+    var standalone = false;
+    var safeStorage = {
+        getItem: function(k) {
+            try { return localStorage.getItem(k) } catch (e) { return null }
+        },
+        setItem: function(k, v) {
+            try { localStorage.setItem(k, v) } catch (e) {}
+        },
+        removeItem: function(k) {
+            try { localStorage.removeItem(k) } catch (e) {}
+        }
+    };
+    var stored = standalone ? null : safeStorage.getItem(storageKey);
 
     function updateSliderMax() {
         // Slider max = current viewport width so user can slide up to full-bleed
@@ -109,7 +157,7 @@
     slider.addEventListener('input', function() {
         var val = parseInt(slider.value, 10);
         applyWidth(val);
-        localStorage.setItem(storageKey, String(val));
+        if (!standalone) safeStorage.setItem(storageKey, String(val));
         if (tooltip) tooltip.classList.add('visible');
         positionTooltip();
     });
@@ -135,7 +183,7 @@
     // Double-click to reset to default width
     slider.addEventListener('dblclick', function() {
         applyWidth(CSS_DEFAULT);
-        localStorage.removeItem(storageKey);
+        if (!standalone) safeStorage.removeItem(storageKey);
     });
 
     // On window resize, update slider max to reflect new viewport
@@ -144,5 +192,152 @@
     });
 })();
 </script>
+<script>
+(function() {
+	// Site search: debounced fetch of /__markserv/search, results
+	// rendered as DOM nodes (never innerHTML with search data) so
+	// file names and snippets can't inject markup. '/' focuses the
+	// input, Escape clears it. Results are grouped per file (a
+	// non-link header row, then one row per instance); the Global
+	// checkbox switches the scope between the current folder
+	// (the label's data-scope) and the whole site ('all').
+	var input = document.getElementById('site-search-input');
+	var list = document.getElementById('site-search-results');
+	if (!input || !list) return;
+
+	var globalInput = document.getElementById('site-search-global');
+	var globalLabel = globalInput ? globalInput.closest('label') : null;
+
+	var timer = null;
+
+	function clear() {
+		list.innerHTML = '';
+		list.hidden = true;
+	}
+
+	function statusRow(id, text) {
+		var li = document.createElement('li');
+		if (id) {
+			li.id = id;
+		}
+
+		li.className = 'site-search-status';
+		li.textContent = text;
+		return li;
+	}
+
+	function render(body) {
+		list.innerHTML = '';
+		list.hidden = false;
+		var q = input.value.trim().toLowerCase();
+		var data = (body && body.results) ? body : {results: body || []};
+		var results = data.results;
+		var matches = data.matches || 0;
+		var files = data.files || 0;
+
+		if (results.length === 0) {
+			// A search ran with zero hits — the list stays visible
+			list.appendChild(statusRow(null, 'No matches'));
+			return;
+		}
+
+		list.appendChild(statusRow('site-search-status',
+			matches + (matches === 1 ? ' match' : ' matches') +
+			' across ' + files + (files === 1 ? ' file' : ' files')));
+
+		results.forEach(function(r, i) {
+			// Results are contiguous per file — a new path starts a
+			// file group (non-link header row with title + path)
+			if (i === 0 || results[i - 1].path !== r.path) {
+				var fileLi = document.createElement('li');
+				fileLi.className = 'site-search-file';
+				var fileTitle = document.createElement('strong');
+				fileTitle.textContent = r.title;
+				var filePathEl = document.createElement('span');
+				filePathEl.className = 'site-search-path';
+				filePathEl.textContent = ' ' + r.path;
+				fileLi.appendChild(fileTitle);
+				fileLi.appendChild(filePathEl);
+				list.appendChild(fileLi);
+			}
+
+			// Instance row: the whole row is the link; the snippet's
+			// first query occurrence is wrapped in <mark>
+			var li = document.createElement('li');
+			li.className = 'site-search-instance';
+			var a = document.createElement('a');
+			a.href = (r.matchNo === null)
+				? '/' + r.path + '#' + r.anchor
+				: '/' + r.path + '?markservSearch=' + encodeURIComponent(q) +
+					(r.matchNo > 1 ? '&markservGoto=' + r.matchNo : '');
+			if (r.snippet) {
+				var idx = q ? r.snippet.toLowerCase().indexOf(q) : -1;
+				if (idx >= 0) {
+					a.appendChild(document.createTextNode(r.snippet.slice(0, idx)));
+					var m = document.createElement('mark');
+					m.textContent = r.snippet.slice(idx, idx + q.length);
+					a.appendChild(m);
+					a.appendChild(document.createTextNode(r.snippet.slice(idx + q.length)));
+				} else {
+					a.textContent = r.snippet;
+				}
+			}
+			li.appendChild(a);
+			list.appendChild(li);
+		});
+	}
+
+	function doSearch() {
+		var q = input.value.trim();
+		if (!q) {
+			clear();
+			return;
+		}
+		// Global checked → whole site; unchecked → the current
+		// folder (the label's data-scope, '' = the root folder)
+		var scope = (globalInput && globalInput.checked)
+			? 'all'
+			: (globalLabel ? globalLabel.getAttribute('data-scope') || '' : 'all');
+		fetch('/__markserv/search?q=' + encodeURIComponent(q) +
+			'&path=' + encodeURIComponent(scope))
+			.then(function(res) {
+				if (!res.ok) return [];
+				return res.json();
+			})
+			.then(render)
+			.catch(clear);
+	}
+
+	input.addEventListener('input', function() {
+		clearTimeout(timer);
+		timer = setTimeout(doSearch, 200);
+	});
+
+	input.addEventListener('keydown', function(e) {
+		if (e.key === 'Escape') {
+			input.value = '';
+			clear();
+			input.blur();
+		}
+	});
+
+	// Global checkbox change re-runs the current search (if any)
+	if (globalInput) {
+		globalInput.addEventListener('change', function() {
+			if (input.value.trim()) {
+				doSearch();
+			}
+		});
+	}
+
+	document.addEventListener('keydown', function(e) {
+		if (e.key === '/' && document.activeElement !== input) {
+			e.preventDefault();
+			input.focus();
+		}
+	});
+})();
+</script>
+
 </body>
 </html>

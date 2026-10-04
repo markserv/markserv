@@ -50,7 +50,9 @@
     "lib/cli-defs.js",
     "lib/cli-help.txt",
     "lib/readme.js",
+    "lib/search.js",
     "lib/server.js",
+    "lib/site-export.js",
     "lib/splash.js",
     "lib/icons",
     "lib/templates/directory.html",
@@ -73,6 +75,7 @@
     "url": "http://github.com/markserv/markserv.git"
   },
   "dependencies": {
+    "archiver": "^7.0.1",
     "bluebird": "^3.7.2",
     "chalk": "^3.0.0",
     "commander": "^4.0.1",
