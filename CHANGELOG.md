@@ -33,6 +33,10 @@
 - markdown-it-emoji 3 API: the single default plugin became named sets (`bare`/`full`/`light`); markserv uses `full` (the v1-equivalent set)
 - Visible output changes from the upgrade (test snapshots re-baselined accordingly): headings gain `tabindex="-1"` (markdown-it-anchor 10 — a keyboard-accessibility improvement); the TOC is no longer wrapped in a `<p>` and strips emoji from entry text (table-of-contents 1.2); some emoji gain/lose their variation selector per the v3 full set (e.g. `🕹` → `🕹️`); heading ids for emoji-shortcode headings are now computed from the resolved text (e.g. `:checkered_flag:` → `#heading--four` instead of `#heading-checkered_flag-four`) — external links to such heading anchors need updating
 
+### Fixed
+
+- Starting markserv while another instance (or anything else) holds port 8642 no longer crashes with an unhandled `EADDRINUSE`: without `--port`, markserv takes the next free port from 8642 upward. The CLI's `--port` default of `'8642'` meant the existing free-port lookup never ran. An explicit `--port` that is in use now exits with a one-line error instead of a stack trace. The hot-reload ws server now binds on the same address as the HTTP server, so a second instance's port scan sees the first instance's ws port (on macOS a wildcard `::` listener does not block a `localhost` bind, which previously let a second instance's HTTP port silently co-land on the first instance's ws port and break its hot reload)
+
 ## [1.20.2] - 2026-09-26
 
 ### Fixed
