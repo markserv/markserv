@@ -10,6 +10,10 @@
 - Mermaid diagrams now render from a locally served copy of the library: the `mermaid` npm package's `dist/mermaid.min.js` is served through the existing `{markserv}` internal-URL mechanism via an exact-match media allow-list (the client-controllable URL suffix never reaches a path join, so it is a fixed set of named resources, not a directory bridge). Pages with diagrams work offline and no third-party CDN host sits in the page load path: PR [#152](https://github.com/markserv/markserv/pull/152)
 - `--mermaid-loose` flag: pages render mermaid with `securityLevel: 'loose'` instead of the default `'strict'`. Diagram links (`click` statements) with ordinary urls are clickable in both modes and update the page location on click; strict mode sanitizes link targets so dangerous url schemes (e.g. `javascript:`) stay inert, while loose mode permits them — intended for trusted, locally served markdown: PR [#152](https://github.com/markserv/markserv/pull/152)
 
+### Fixed
+
+- Theme-specific images now follow the markserv theme instead of the OS color scheme: GitHub's `<picture><source media="(prefers-color-scheme: dark)">` pattern and the `#gh-dark-mode-only` / `#gh-light-mode-only` image URL fragments. The light theme counts as light; dark, synthwave and solarized count as dark
+
 ### Security
 
 - `npm audit`: all 31 findings on the production/fixable stack resolved (2 critical, 11 high, 14 moderate, 4 low → none). As of 2026-10-02, npm audit additionally reports 6 highs in the ava dev toolchain (freshly published braces/micromatch/fast-glob/globby/chokidar DoS/ReDoS advisories) with no fixed upstream version yet — dev-only exposure when running the test suite. The `micromatch` production dependency (unused anywhere in `lib/`) has been removed: PR [#152](https://github.com/markserv/markserv/pull/152)
