@@ -35,7 +35,7 @@
 
 ### Fixed
 
-- Starting markserv while another instance (or anything else) holds port 8642 no longer crashes with an unhandled `EADDRINUSE`: without `--port`, markserv takes the next free port from 8642 upward. The CLI's `--port` default of `'8642'` meant the existing free-port lookup never ran. An explicit `--port` that is in use now exits with a one-line error instead of a stack trace
+- Starting markserv while another instance (or anything else) holds port 8642 no longer crashes with an unhandled `EADDRINUSE`: without `--port`, markserv takes the next free port from 8642 upward. The CLI's `--port` default of `'8642'` meant the existing free-port lookup never ran. An explicit `--port` that is in use now exits with a one-line error instead of a stack trace. The hot-reload ws server now binds on the same address as the HTTP server, so a second instance's port scan sees the first instance's ws port (on macOS a wildcard `::` listener does not block a `localhost` bind, which previously let a second instance's HTTP port silently co-land on the first instance's ws port and break its hot reload)
 
 ## [1.20.2] - 2026-09-26
 
