@@ -5,6 +5,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- `--exit-on-tab-close` flag: the instance exits when the browser tab it opened is closed — a 30 s poll asks the scriptable browsers (Brave, Chrome, Safari; macOS only) whether any tab for the instance's URL is still open, and only a positive absence stops the instance (an unenumerable browser keeps it running, and only running browsers are ever queried). Built for fstop's per-document preview launches, where each open document holds its own server until its tab closes, so ports are returned as documents are closed
+
 ### Fixed
 
 - An explicit `--port` that is in use at bind time is now retried on the same port 10 times at 100 ms intervals before exiting with the one-line error: ports held only transiently — a previous instance still closing, a kernel hand-off of a just-released port — no longer fail the start. The retry targets the requested port itself rather than falling back to a new one, because the caller's URL is pinned to the requested port
