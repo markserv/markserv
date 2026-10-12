@@ -110,3 +110,33 @@ test.serial('two instances without --port coexist on distinct ports', async t =>
 		await stop(first)
 	}
 })
+
+test.serial('explicit --port retries the same port while a transient holder lets go', async t => {
+	// The failure case the retry exists for: a caller reserves a port
+	// and spawns markserv with --port while the port's previous holder
+	// has not fully let go. The holder releases mid-retry and markserv
+	// must land on that same port — a different port would leave the
+	// caller's URL pointing nowhere, so there is no fallback.
+	const port = 8743
+	const blocker = await hold(port)
+
+	const init = markserv.init({
+		dir: fixtureDir,
+		port,
+		hotreload: false,
+		address: 'localhost',
+		silent: true
+	})
+
+	// Let markserv lose a few bind attempts, then free the port.
+	await new Promise(resolve => setTimeout(resolve, 300))
+	await close(blocker)
+
+	try {
+		const service = await init
+		t.is(service.httpServer.address().port, port)
+		await stop(service)
+	} catch (error) {
+		t.fail(`markserv gave up on the just-freed port ${port}: ${error.message}`)
+	}
+})

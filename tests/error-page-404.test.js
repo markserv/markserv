@@ -2,7 +2,6 @@ const fs = require('fs')
 const path = require('path')
 const {get} = require('./http.js')
 const test = require('ava')
-const getPort = require('get-port')
 const markserv = require('../lib/server.js')
 
 test('start service and receive error page (404)', async t => {
@@ -13,7 +12,7 @@ test('start service and receive error page (404)', async t => {
 	)
 
 	const dir = path.join(__dirname, '..')
-	const port = await getPort()
+	const port = 8746 // dedicated port: a random getPort() races across parallel test files (see port-in-use.test.js)
 
 	const service = await markserv.init({
 		dir,

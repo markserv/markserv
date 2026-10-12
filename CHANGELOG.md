@@ -3,6 +3,12 @@
 - Markserv uses [Semantic Versioning](http://semver.org/)
 - Markserv [Keeps a ChangeLog](https://keepachangelog.com/en/1.0.0/)
 
+## [Unreleased]
+
+### Fixed
+
+- An explicit `--port` that is in use at bind time is now retried on the same port 10 times at 100 ms intervals before exiting with the one-line error: ports held only transiently — a previous instance still closing, a kernel hand-off of a just-released port — no longer fail the start. The retry targets the requested port itself rather than falling back to a new one, because the caller's URL is pinned to the requested port
+
 ## [1.21.0] - 2026-10-06
 
 ### Added

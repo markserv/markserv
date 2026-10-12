@@ -1,7 +1,6 @@
 const path = require('path')
 const {get} = require('./http.js')
 const test = require('ava')
-const getPort = require('get-port')
 const markserv = require('../lib/server.js')
 
 // The mermaid client library (v11 code-split ESM dist) is served
@@ -17,7 +16,7 @@ const startService = extraFlags => markserv.init({
 })
 
 test('served page defaults to mermaid strict security', async t => {
-	const port = await getPort()
+	const port = 8774 // dedicated port: a random getPort() races across parallel test files (see port-in-use.test.js)
 	const service = await startService({port})
 
 	try {
@@ -39,7 +38,7 @@ test('served page defaults to mermaid strict security', async t => {
 })
 
 test('mermaidLoose flag serves the page with mermaid loose security', async t => {
-	const port = await getPort()
+	const port = 8776
 	const service = await startService({port, mermaidLoose: true})
 
 	try {
@@ -58,7 +57,7 @@ test('mermaidLoose flag serves the page with mermaid loose security', async t =>
 })
 
 test('serves the vendored mermaid ESM shim and its chunks', async t => {
-	const port = await getPort()
+	const port = 8778
 	const service = await startService({port})
 
 	try {
@@ -93,7 +92,7 @@ test('serves the vendored mermaid ESM shim and its chunks', async t => {
 })
 
 test('/vendor/mermaid/ suffixes are not a path bridge into node_modules', async t => {
-	const port = await getPort()
+	const port = 8780
 	const service = await startService({port})
 
 	try {

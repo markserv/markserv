@@ -2,7 +2,6 @@ const fs = require('fs')
 const path = require('path')
 const {get} = require('./http.js')
 const test = require('ava')
-const getPort = require('get-port')
 const cli = require('../lib/cli.js')
 
 test('start markserv via "cli" command opening file in different dir', async t => {
@@ -12,7 +11,7 @@ test('start markserv via "cli" command opening file in different dir', async t =
 		)
 	)
 
-	const port = await getPort()
+	const port = 8760 // dedicated port: a random getPort() races across parallel test files (see port-in-use.test.js)
 	const cliOpts = {
 		input: ['tests/markserv-cli-file-diff-dir.expected.html'],
 		flags: {
@@ -46,7 +45,7 @@ test('start markserv via "cli" command opening file in different dir with precee
 		)
 	)
 
-	const port = await getPort()
+	const port = 8762
 	const cliOpts = {
 		input: ['./tests/markserv-cli-file-diff-dir.expected.html'],
 		flags: {
