@@ -59,7 +59,7 @@ test.serial('without --port, takes the next free port after one in use', async t
 		})
 		const {port} = service.httpServer.address()
 		await close(service.httpServer)
-		t.true(port > taken && port <= 8742)
+		t.true(port > taken)
 	} finally {
 		await close(blocker)
 	}
@@ -87,7 +87,7 @@ test.serial('two instances without --port coexist on distinct ports', async t =>
 		// ports, so the first instance of this file may start above
 		// 8642 even when it is free — what matters is that both
 		// instances stay within the default range and on distinct ports.
-		t.true(firstHttp >= 8642 && firstHttp <= 8742, `expected the default range, got ${firstHttp}`)
+		t.true(firstHttp >= 8642, `expected the default start port or above, got ${firstHttp}`)
 
 		const second = await markserv.init({
 			dir: fixtureDir,
@@ -101,7 +101,6 @@ test.serial('two instances without --port coexist on distinct ports', async t =>
 			const secondWs = second.hotReloadServer.address().port
 			t.true(secondHttp !== firstHttp, 'second http port must differ')
 			t.true(secondHttp !== firstWs, `second http port must not steal the first instance's ws port ${firstWs}`)
-			t.true(secondHttp <= 8742, `expected a port within the default range, got ${secondHttp}`)
 			t.true(secondWs !== firstWs, 'second ws port must differ')
 		} finally {
 			await stop(second)
@@ -138,5 +137,36 @@ test.serial('explicit --port retries the same port while a transient holder lets
 		await stop(service)
 	} catch (error) {
 		t.fail(`markserv gave up on the just-freed port ${port}: ${error.message}`)
+	}
+})
+
+test.serial('without --port, the scan continues upward past the old window cap', async t => {
+	// Hold the entire former scan window (8642-8742) and assert the
+	// scan continues sequentially upward (8743 and above, but well
+	// below the ephemeral pool): the capped scan fell back to a
+	// random ephemeral port when the window was full.
+	const holders = []
+	for (let port = 8642; port <= 8742; port++) {
+		holders.push(await hold(port))
+	}
+
+	try {
+		const service = await markserv.init({
+			dir: fixtureDir,
+			hotreload: false,
+			address: 'localhost',
+			silent: true
+		})
+
+		try {
+			const {port} = service.httpServer.address()
+			t.true(port >= 8743 && port < 49152, `expected the sequential scan above the old window, got ${port}`)
+		} finally {
+			await close(service.httpServer)
+		}
+	} finally {
+		for (const blocker of holders) {
+			await close(blocker)
+		}
 	}
 })

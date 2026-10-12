@@ -9,6 +9,10 @@
 
 - `--exit-on-tab-close` flag: the instance exits when the browser tab it opened is closed — a 30 s poll asks the scriptable browsers (Brave, Chrome, Safari; macOS only) whether any tab for the instance's URL is still open, and only a positive absence stops the instance (an unenumerable browser keeps it running, and only running browsers are ever queried). Built for fstop's per-document preview launches, where each open document holds its own server until its tab closes, so ports are returned as documents are closed
 
+### Changed
+
+- The next-free-port scan no longer stops at 8742: without `--port`, markserv now scans the full port space from 8642 upward instead of a 101-port window (when the window was full, get-port's fallback jumped to a random ephemeral port). Long-lived preview fleets — fstop's per-document instances, one per open tab — are no longer limited to ~100 concurrent instances per machine, and the scan stays sequential and deterministic
+
 ### Fixed
 
 - An explicit `--port` that is in use at bind time is now retried on the same port 10 times at 100 ms intervals before exiting with the one-line error: ports held only transiently — a previous instance still closing, a kernel hand-off of a just-released port — no longer fail the start. The retry targets the requested port itself rather than falling back to a new one, because the caller's URL is pinned to the requested port
