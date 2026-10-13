@@ -1,7 +1,6 @@
 const fs = require('fs')
 const path = require('path')
 const test = require('ava')
-const getPort = require('get-port')
 const WebSocket = require('ws')
 const markserv = require('../lib/server.js')
 
@@ -71,7 +70,7 @@ const openWs = (flags, attempts) => new Promise((resolve, reject) => {
 // startHotReload plus the client handshake retry below.
 
 test.serial('hot reload pushes for a nested file (watchers cover subdirs)', async t => {
-	const port = await getPort()
+	const port = 8748 // dedicated port: a random getPort() races across parallel test files (see port-in-use.test.js)
 	const flags = {
 		dir: fixtureRoot,
 		port,
@@ -114,7 +113,7 @@ test.serial('hot reload pushes for a nested file (watchers cover subdirs)', asyn
 })
 
 test.serial('hot reload watches a directory created at runtime (lazy add)', async t => {
-	const port = await getPort()
+	const port = 8750
 	const flags = {
 		dir: fixtureRoot,
 		port,
@@ -166,7 +165,7 @@ test.serial('hot reload watches a directory created at runtime (lazy add)', asyn
 })
 
 test.serial('excluded directories created at runtime never get handles', async t => {
-	const port = await getPort()
+	const port = 8752
 	const flags = {
 		dir: fixtureRoot,
 		port,
@@ -220,7 +219,7 @@ test.serial('excluded directories created at runtime never get handles', async t
 })
 
 test.serial('watchers are bounded and closed on shutdown', async t => {
-	const port = await getPort()
+	const port = 8754
 	const flags = {
 		dir: fixtureRoot,
 		port,

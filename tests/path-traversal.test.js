@@ -2,7 +2,6 @@ const fs = require('fs')
 const path = require('path')
 const {get} = require('./http.js')
 const test = require('ava')
-const getPort = require('get-port')
 const WebSocket = require('ws')
 const markserv = require('../lib/server.js')
 
@@ -34,7 +33,7 @@ const openWs = (url, attempts) => new Promise((resolve, reject) => {
 })
 
 test('traversal of an out-of-root file is refused (403)', async t => {
-	const port = await getPort()
+	const port = 8782 // dedicated port: a random getPort() races across parallel test files (see port-in-use.test.js)
 	const service = await markserv.init({
 		dir: servedDir,
 		port,
@@ -59,7 +58,7 @@ test('traversal of an out-of-root file is refused (403)', async t => {
 })
 
 test('traversal to a missing out-of-root file leaks nothing (403)', async t => {
-	const port = await getPort()
+	const port = 8784
 	const service = await markserv.init({
 		dir: servedDir,
 		port,
@@ -84,7 +83,7 @@ test('traversal to a missing out-of-root file leaks nothing (403)', async t => {
 })
 
 test('{markserv} urls cannot escape lib/', async t => {
-	const port = await getPort()
+	const port = 8786
 	const service = await markserv.init({
 		dir: servedDir,
 		port,
@@ -117,7 +116,7 @@ test('{markserv} urls cannot escape lib/', async t => {
 })
 
 test('in-root requests are unaffected (200)', async t => {
-	const port = await getPort()
+	const port = 8788
 	const service = await markserv.init({
 		dir: servedDir,
 		port,
@@ -140,7 +139,7 @@ test('in-root requests are unaffected (200)', async t => {
 })
 
 test('in-root 404 keeps the existing error page shape', async t => {
-	const port = await getPort()
+	const port = 8790
 	const service = await markserv.init({
 		dir: servedDir,
 		port,
@@ -166,7 +165,7 @@ test('in-root 404 keeps the existing error page shape', async t => {
 })
 
 test.serial('hot reload does not push content for out-of-root paths', async t => {
-	const port = await getPort()
+	const port = 8792
 	const aMdPath = path.join(servedDir, 'a.md')
 	const aMdOriginal = fs.readFileSync(aMdPath, 'utf8')
 
@@ -217,7 +216,7 @@ test.serial('hot reload does not push content for out-of-root paths', async t =>
 })
 
 test('implants cannot read out-of-root files (templates mode)', async t => {
-	const port = await getPort()
+	const port = 8794
 	const service = await markserv.init({
 		dir: servedDir,
 		port,
@@ -244,7 +243,7 @@ test('implants cannot read out-of-root files (templates mode)', async t => {
 })
 
 test('in-root implants still resolve (templates mode)', async t => {
-	const port = await getPort()
+	const port = 8796
 	const service = await markserv.init({
 		dir: servedDir,
 		port,
@@ -271,7 +270,7 @@ test('in-root implants still resolve (templates mode)', async t => {
 })
 
 test.serial('hot reload implants cannot push out-of-root content', async t => {
-	const port = await getPort()
+	const port = 8798
 	const hotImplantPath = path.join(servedDir, 'hot-implant.md')
 	const hotImplantOriginal = fs.readFileSync(hotImplantPath, 'utf8')
 

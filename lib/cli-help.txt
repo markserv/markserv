@@ -6,6 +6,7 @@ Options
 	--port, -p,  HTTP port [port] (next free from 8642 when omitted)
 	--hotreload, -l  Hot-reload via WebSocket (true), disable with --no-hotreload
 	--browser, -b  Launch browser (true)
+	--exit-on-tab-close, -x  Exit when the opened browser tab closes (macOS; Brave, Chrome, or Safari) (false)
 	--silent, -i  Silent (false)
 	--address, -a  Serve on ip/address [address] (localhost)
 	--verbose, -v  Verbose output (false)
