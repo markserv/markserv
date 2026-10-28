@@ -18,6 +18,7 @@
 
 - Markdown content rendered as HTML
 - GitHub flavor CSS and Syntax Highlighting
+- Footnotes and GitHub alerts, enabled by default
 - [Just in Time Templating](#stopwatch-just-in-time-templating): Markdown, HTML &amp; LESS
 - Hot-reload as you edit (no browser plugin required)
 - Directory indexes
@@ -104,6 +105,40 @@ markserv --theme solarized README.md
 ```
 
 You can also toggle between themes in the browser using the theme button in the bottom-right corner. Your choice is saved in `localStorage` and persists across hot-reloads.
+
+## Footnotes and GitHub Alerts
+
+Add a footnote reference with `[^label]` and define its content anywhere in the document:
+
+```markdown
+Here is a statement with a footnote.[^source]
+Refer to the same note again.[^source]
+
+[^source]: Supporting details, including **formatted text** and links.
+```
+
+References link to the note at the bottom of the document. Each note has a backlink to every place it was referenced.
+
+GitHub alerts turn a blockquote starting with an alert marker into a themed callout:
+
+```markdown
+> [!NOTE]
+> Useful information to keep in mind.
+
+> [!TIP]
+> A helpful suggestion.
+
+> [!IMPORTANT]
+> Essential information for success.
+
+> [!WARNING]
+> Something that needs careful attention.
+
+> [!CAUTION]
+> A risk to consider before proceeding.
+```
+
+All five alert types work in dark, light, synthwave, and solarized themes. Ordinary blockquotes and fenced code keep their usual rendering.
 
 ## :link: Markdown Links
 
