@@ -140,6 +140,8 @@ GitHub alerts turn a blockquote starting with an alert marker into a themed call
 
 All five alert types work in dark, light, synthwave, and solarized themes. Ordinary blockquotes and fenced code keep their usual rendering.
 
+See the [field guide example](examples/footnotes-and-alerts.md) for all five alerts and two linked footnotes in one document.
+
 ## :link: Markdown Links
 
 You can link to an external Markdown file in the same way that you use GitHub Wiki links. You can use the example code here to see how external links work.
