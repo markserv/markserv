@@ -3,6 +3,13 @@
 - Markserv uses [Semantic Versioning](http://semver.org/)
 - Markserv [Keeps a ChangeLog](https://keepachangelog.com/en/1.0.0/)
 
+## [Unreleased]
+
+### Added
+
+- Footnotes with linked references and return links, including repeated references to the same note and independently targeted notes in Markdown includes (`--templates`).
+- GitHub-style `NOTE`, `TIP`, `IMPORTANT`, `WARNING`, and `CAUTION` alerts, using the existing styles in all four themes. Both extensions are enabled by default.
+
 ## [1.21.1] - 2026-10-12
 
 ### Added

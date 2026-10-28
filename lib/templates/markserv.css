@@ -59,6 +59,11 @@ body .markdown-body {
   padding: 30px;
 }
 
+/* Theme footnote sections already supply the separator border. */
+.markdown-body .footnotes-sep {
+  display: none;
+}
+
 @media screen and (max-width: 1024px) {
   body {
     width: 98%;

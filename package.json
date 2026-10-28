@@ -86,6 +86,8 @@
     "markdown-it": "^15.0.2",
     "markdown-it-anchor": "^10.0.0",
     "markdown-it-emoji": "^3.1.0",
+    "markdown-it-footnote": "^4.0.0",
+    "markdown-it-github-alerts": "^1.0.1",
     "markdown-it-highlightjs": "^4.3.0",
     "markdown-it-mathjax": "^2.0.0",
     "markdown-it-table-of-contents": "^1.2.0",
