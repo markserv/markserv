@@ -3,6 +3,12 @@
 - Markserv uses [Semantic Versioning](http://semver.org/)
 - Markserv [Keeps a ChangeLog](https://keepachangelog.com/en/1.0.0/)
 
+## [Unreleased]
+
+### Added
+
+- `--plugin <path|package>` flag (repeatable): loads extra markdown-it plugins, applied after the built-in ones so they can wrap built-in renderer rules. Specs resolve from the current directory; a module that is missing or doesn't export a plugin function stops startup with a one-line error
+
 ## [1.21.1] - 2026-10-12
 
 ### Added

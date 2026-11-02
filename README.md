@@ -212,6 +212,24 @@ a {
 </style>
 ```
 
+## :electric_plug: Markdown-it Plugins
+
+Load extra [markdown-it](https://github.com/markdown-it/markdown-it) plugins with `--plugin`. It takes a file path or an installed package name, resolved from the current directory, and can be repeated:
+
+```shell
+markserv --plugin markdown-it-footnote --plugin ./my-plugin.js docs/
+```
+
+The module must export a plugin function, the same thing you would pass to `md.use()`. To pass options, wrap the plugin in your own module:
+
+```js
+// my-plugin.js
+const container = require('markdown-it-container')
+module.exports = md => md.use(container, 'warning')
+```
+
+Plugins run after markserv's built-in ones, so they can wrap built-in renderer rules such as the highlighted `fence`.
+
 ## :crossed_flags: Flags
 
 To list the options/flags for the markserv CLI tool:
